@@ -17,6 +17,8 @@ PortableItem::~PortableItem()
     for(auto ent : _this->img_in_queue)
         delete ent.second;
     _this->img_in_queue.clear();
+    _this->msg_in_queue.clear();
+    _this->pc_in_queue.clear();
 }
 
 void PortableItem::starting()
@@ -43,6 +45,34 @@ bool PortableItem::waitForImage(void *input)
 
     std::unique_lock<std::mutex> lock(_this->mtx);
     _this->cond.wait(lock, [&]{return _this->img_in_queue[input]->available() || _this->is_stopped;});
+
+    return !_this->is_stopped;
+}
+
+bool PortableItem::waitForMessage(void *input)
+{
+    // Give other threads a chance too
+    std::this_thread::yield();
+
+    if(_this->msg_in_queue.find(input) == _this->msg_in_queue.end())
+        return false;
+
+    std::unique_lock<std::mutex> lock(_this->mtx);
+    _this->cond.wait(lock, [&]{return _this->msg_in_queue[input]->available() || _this->is_stopped;});
+
+    return !_this->is_stopped;
+}
+
+bool PortableItem::waitForPointcloud(void *input)
+{
+    // Give other threads a chance too
+    std::this_thread::yield();
+
+    if(_this->pc_in_queue.find(input) == _this->pc_in_queue.end())
+        return false;
+
+    std::unique_lock<std::mutex> lock(_this->mtx);
+    _this->cond.wait(lock, [&]{return _this->pc_in_queue[input]->available() || _this->is_stopped;});
 
     return !_this->is_stopped;
 }
@@ -128,7 +158,12 @@ void *PortableItem::addMessageOutput(std::string name)
 
 void *PortableItem::addMessageInput(std::string name)
 {
-    return PortableItemBase::addMessageInput(name);
+    void *in;
+
+    in = PortableItemBase::addMessageInput(name);
+    _this->msg_in_queue[in] = new InputQueue<Message>();
+
+    return in;
 }
 
 void PortableItem::outputMessage(void *output, Message message)
@@ -140,6 +175,21 @@ void PortableItem::newMessageReceived(void *, Message)
 {
 }
 
+void *PortableItem::addPointcloudOutput(std::string name)
+{
+    return PortableItemBase::addPointcloudOutput(name);
+}
+
+void *PortableItem::addPointcloudInput(std::string name)
+{
+    void *in;
+
+    in = PortableItemBase::addPointcloudInput(name);
+    _this->pc_in_queue[in] = new InputQueue<Pointcloud>();
+
+    return in;
+}
+
 void PortableItem::stopped()
 {
 }
@@ -149,7 +199,7 @@ void *PortableItem::addImageInput(std::string name)
     void *in;
 
     in = PortableItemBase::addImageInput(name);
-    _this->img_in_queue[in] = new ImageQueue();
+    _this->img_in_queue[in] = new InputQueue<PortableImage>();
 
     return in;
 }
@@ -194,11 +244,30 @@ void PortableItem::unpause()
     this->wake();
 }
 
-void PortableItem::pushImageIn(PortableImage img, void *input)
+void PortableItem::pushImageIn(void *input, PortableImage img)
 {
     if(_this->img_in_queue.size() < MAX_QUEUE_SIZE)
     {
         _this->img_in_queue[input]->push(img);
+        _this->cond.notify_all();
+    }
+}
+
+void PortableItem::pushMessageIn(void *input, Message msg)
+{
+    if(_this->msg_in_queue.size() < MAX_QUEUE_SIZE)
+    {
+        _this->msg_in_queue[input]->push(msg);
+        _this->cond.notify_all();
+    }
+    PortableItemBase::pushMessageIn(input, msg);
+}
+
+void PortableItem::pushPointcloudIn(void *input, Pointcloud pc)
+{
+    if(_this->pc_in_queue.size() < MAX_QUEUE_SIZE)
+    {
+        _this->pc_in_queue[input]->push(pc);
         _this->cond.notify_all();
     }
 }

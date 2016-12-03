@@ -10,18 +10,18 @@ void AbstractRobotItemPrivate::imageInputStateChanged()
 {
     ItemInput *in;
     ImageStream *stream;
-    StreamToImageInputMapper *map;
+    StreamToInputMapper *map;
 
     in = qobject_cast<ItemInput*>(sender());
     if(in == nullptr)
         return;
 
-    map = this->img_in_mappers.value(in, nullptr);
+    map = this->in_mappers.value(in, nullptr);
     if(map != nullptr)
     {
         disconnect(map->conn1);
         disconnect(map->conn2);
-        this->img_in_mappers.remove(in);
+        this->in_mappers.remove(in);
         delete map;
     }
 
@@ -29,31 +29,31 @@ void AbstractRobotItemPrivate::imageInputStateChanged()
     if(stream == nullptr)
         return;
 
-    map = new StreamToImageInputMapper(this);
+    map = new StreamToInputMapper(this);
     map->input = in;
     map->conn1 = connect(stream, &ImageStream::newImage,
-                         map, &StreamToImageInputMapper::inputMapper);
-    map->conn2 = connect(map, &StreamToImageInputMapper::newImage,
+                         map, &StreamToInputMapper::imgInputMapper);
+    map->conn2 = connect(map, &StreamToInputMapper::newImage,
                          _this, &AbstractRobotItem::pushImageIn);
-    this->img_in_mappers.insert(in, map);
+    this->in_mappers.insert(in, map);
 }
 
 void AbstractRobotItemPrivate::messageInputStateChanged()
 {
     ItemInput *in;
     MessageStream *stream;
-    StreamToMessageInputMapper *map;
+    StreamToInputMapper *map;
 
     in = qobject_cast<ItemInput*>(sender());
     if(in == nullptr)
         return;
 
-    map = this->msg_in_mappers.value(in, nullptr);
+    map = this->in_mappers.value(in, nullptr);
     if(map != nullptr)
     {
         disconnect(map->conn1);
         disconnect(map->conn2);
-        this->msg_in_mappers.remove(in);
+        this->in_mappers.remove(in);
         delete map;
     }
 
@@ -61,13 +61,45 @@ void AbstractRobotItemPrivate::messageInputStateChanged()
     if(stream == nullptr)
         return;
 
-    map = new StreamToMessageInputMapper(this);
+    map = new StreamToInputMapper(this);
     map->input = in;
     map->conn1 = connect(stream, &MessageStream::newMessage,
-                         map, &StreamToMessageInputMapper::inputMapper);
-    map->conn2 = connect(map, &StreamToMessageInputMapper::newMessage,
-                         _this, &AbstractRobotItem::newMessageReceived);
-    this->msg_in_mappers.insert(in, map);
+                         map, &StreamToInputMapper::msgInputMapper);
+    map->conn2 = connect(map, &StreamToInputMapper::newMessage,
+                         _this, &AbstractRobotItem::pushMessageIn);
+    this->in_mappers.insert(in, map);
+}
+
+void AbstractRobotItemPrivate::pointcloudInputStateChanged()
+{
+    ItemInput *in;
+    PointStream *stream;
+    StreamToInputMapper *map;
+
+    in = qobject_cast<ItemInput*>(sender());
+    if(in == nullptr)
+        return;
+
+    map = this->in_mappers.value(in, nullptr);
+    if(map != nullptr)
+    {
+        disconnect(map->conn1);
+        disconnect(map->conn2);
+        this->in_mappers.remove(in);
+        delete map;
+    }
+
+    stream = qobject_cast<PointStream*>(in->data());
+    if(stream == nullptr)
+        return;
+
+    map = new StreamToInputMapper(this);
+    map->input = in;
+    map->conn1 = connect(stream, &PointStream::newPoints,
+                         map, &StreamToInputMapper::pcInputMapper);
+    map->conn2 = connect(map, &StreamToInputMapper::newPointcloud,
+                         _this, &AbstractRobotItem::pushPointcloudIn);
+    this->in_mappers.insert(in, map);
 }
 
 void AbstractRobotItemPrivate::trimChangedSlot(int value)

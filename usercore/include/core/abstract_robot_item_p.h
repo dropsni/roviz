@@ -13,8 +13,7 @@ public:
     QPushButton *collapse_btn;
     QHBoxLayout *main_layout, *main_image_layout, *main_control_layout;
     QMap<void*, ImageWidget*> out_widgets;
-    QMap<ItemInput*, StreamToImageInputMapper*> img_in_mappers;
-    QMap<ItemInput*, StreamToMessageInputMapper*> msg_in_mappers;
+    QMap<ItemInput*, StreamToInputMapper*> in_mappers;
     QList<QSlider*> sliders;
     QMap<QSlider*, SliderLabel*> slider_to_label;
     QWidget *control_base;
@@ -23,6 +22,7 @@ public:
     bool config_present, conf_loaded;
 
     AbstractRobotItemPrivate(AbstractRobotItem *q);
+    void inputStateChanged(ItemInput *in, ImageStream *stream);
 
 public slots:
     /**
@@ -34,6 +34,11 @@ public slots:
      * @brief The message input was connected or disconnected
      */
     void messageInputStateChanged(void);
+
+    /**
+     * @brief The pointcloud input was connected or disconnected
+     */
+    void pointcloudInputStateChanged(void);
 
     /**
      * @brief Wrapper that calls trimChanged()

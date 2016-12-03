@@ -23,9 +23,10 @@
 #include "item/item_input.h"
 #include "item/item_output.h"
 #include "core/image_stream.h"
-#include "core/stream_to_image_input_mapper.h"
-#include "core/stream_to_message_input_mapper.h"
+#include "core/stream_to_input_mapper.h"
 #include "gui/config_dialog.h"
+#include "core/message_stream.h"
+#include "core/point_stream.h"
 #include "core/message_stream.h"
 
 class AbstractRobotItemPrivate;
@@ -81,6 +82,9 @@ protected:
     virtual void *addMessageOutput(std::string name);
     virtual void *addMessageInput(std::string name);
     virtual void outputMessage(void *output, Message message);
+    virtual void *addPointcloudInput(std::string name);
+    virtual void *addPointcloudOutput(std::string name);
+    virtual void pushMessageIn(void *input, const Message msg);
 
 public slots:
     virtual void start(void);
@@ -90,7 +94,8 @@ public slots:
     virtual void unpause(void) = 0;
 
 protected slots:
-    virtual void pushImageIn(const PortableImage img, void *input) = 0;
+    virtual void pushImageIn(void *input, const PortableImage img) = 0;
+    virtual void pushPointcloudIn(void *input, const Pointcloud pc) = 0;
     virtual void newMessageReceived(void *input, Message message) = 0;
     ///@}
 

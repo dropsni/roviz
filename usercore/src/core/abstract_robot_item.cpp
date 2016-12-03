@@ -251,6 +251,32 @@ void AbstractRobotItem::outputMessage(void *output, Message message)
     emit stream->newMessage(message);
 }
 
+void *AbstractRobotItem::addPointcloudInput(std::string name)
+{
+    ItemInput *in;
+
+    in = this->addInput(qMetaTypeId<PointStream*>(), QString::fromStdString(name));
+    connect(in, &ItemInput::dataChanged,
+            _this.data(), &AbstractRobotItemPrivate::pointcloudInputStateChanged);
+
+    return in;
+}
+
+void *AbstractRobotItem::addPointcloudOutput(std::string name)
+{
+    ItemOutput *out;
+
+    out = this->addOutput(qMetaTypeId<PointStream*>(), QString::fromStdString(name));
+    this->setOutputData(out, new PointStream(this));
+
+    return out;
+}
+
+void AbstractRobotItem::pushMessageIn(void *input, const Message msg)
+{
+    this->newMessageReceived(input, msg);
+}
+
 void AbstractRobotItem::start()
 {
     // TODO The itemframework should have an 'initialization complete' signal

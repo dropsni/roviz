@@ -65,7 +65,7 @@
 #include <chrono>
 #include "portable_item_global.h"
 #include "portable_image.h"
-#include "portable/image_queue.h"
+#include "portable/input_queue.h"
 
 class PortableItemPrivate;
 
@@ -188,6 +188,39 @@ protected:
      * \sa running
      */
     bool waitForImage(void *input);
+
+    /**
+     * @brief Wait until a message is available at the input
+     * @param input The input handle returned from addMessageInput()
+     * @return true - New message is available
+     *         false - The item was stopped, the thread _HAS TO_ exit
+     *
+     * This function implements the pause/stop mechanism. It doesn't return
+     * as long as the item is paused and returns false if it is stopped. It
+     * is important that the thread exits when this happens!
+     *
+     * \sa waitFor
+     * \sa wait
+     * \sa running
+     * \sa newMessageReceived
+     */
+    bool waitForMessage(void *input);
+
+    /**
+     * @brief Wait until a pointcloud is available at the input
+     * @param input The input handle returned from addPointcloudInput()
+     * @return true - New pointcloud is available
+     *         false - The item was stopped, the thread _HAS TO_ exit
+     *
+     * This function implements the pause/stop mechanism. It doesn't return
+     * as long as the item is paused and returns false if it is stopped. It
+     * is important that the thread exits when this happens!
+     *
+     * \sa waitFor
+     * \sa wait
+     * \sa running
+     */
+    bool waitForPointcloud(void *input);
 
     /**
      * @brief Sleep until a condition comes true
@@ -369,6 +402,24 @@ protected:
     virtual void newMessageReceived(void *input, Message message) override;
 
     /**
+     * @brief Add a pointcloud output
+     * @param name Name of the output
+     * @return Handle to that output
+     *
+     * \sa addPointcloudInput
+     */
+    void *addPointcloudOutput(std::string name) override;
+
+    /**
+     * @brief Add a pointcloud input
+     * @param name Name of the input
+     * @return Handle to that input
+     *
+     * \sa addPointcloudOutput
+     */
+    void *addPointcloudInput(std::string name) override;
+
+    /**
      * @brief Add a trim value
      * @param name Name of the value
      * @param min Minimum value
@@ -481,7 +532,25 @@ private:
      *
      * Called by the base class to add a new image to the queue of an input.
      */
-    void pushImageIn(PortableImage img, void *input) override;
+    void pushImageIn(void *input, PortableImage img) override;
+
+    /**
+     * @brief Add a message to the input queue
+     * @param msg The message
+     * @param input The input handle returned from addMessageInput()
+     *
+     * Called by the base class to add a new message to the queue of an input.
+     */
+    void pushMessageIn(void *input, Message msg) override;
+
+    /**
+     * @brief Add a pointcloud to the input queue
+     * @param pc The pointcloud
+     * @param input The input handle returned from addPointcloudInput()
+     *
+     * Called by the base class to add a new pointcloud to the queue of an input.
+     */
+    void pushPointcloudIn(void *input, Pointcloud pc) override;
 
     /**
      * @brief Pause execution
