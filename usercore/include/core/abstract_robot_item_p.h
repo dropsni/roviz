@@ -22,7 +22,6 @@ public:
     bool config_present, conf_loaded;
 
     AbstractRobotItemPrivate(AbstractRobotItem *q);
-    void inputStateChanged(ItemInput *in, ImageStream *stream);
 
 public slots:
     /**
