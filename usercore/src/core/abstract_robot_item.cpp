@@ -117,7 +117,7 @@ ImageOutput AbstractRobotItem::addImageOutput(std::string name)
     return ImageOutput(out);
 }
 
-void AbstractRobotItem::pushImageOut(const PortableImage img, ImageOutput output)
+void AbstractRobotItem::pushImageOut(PortableImage img, ImageOutput output)
 {
     ItemOutput *out;
     ImageStream *stream;
@@ -272,7 +272,7 @@ PointcloudOutput AbstractRobotItem::addPointcloudOutput(std::string name)
     return PointcloudOutput(out);
 }
 
-void AbstractRobotItem::pushPointcloudOut(const Pointcloud pc, PointcloudOutput output)
+void AbstractRobotItem::pushPointcloudOut(Pointcloud pc, PointcloudOutput output)
 {
     ItemOutput *out;
     PointStream *stream;
@@ -288,7 +288,7 @@ void AbstractRobotItem::pushPointcloudOut(const Pointcloud pc, PointcloudOutput 
     emit stream->newPoints(pc);
 }
 
-void AbstractRobotItem::pushMessageIn(const Message msg, MessageInput input)
+void AbstractRobotItem::pushMessageIn(Message msg, MessageInput input)
 {
     this->newMessageReceived(msg, input);
 }

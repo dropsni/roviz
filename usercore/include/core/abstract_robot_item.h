@@ -70,7 +70,7 @@ protected:
     virtual bool running(void) = 0;
     virtual ImageInput addImageInput(std::string name);
     virtual ImageOutput addImageOutput(std::string name);
-    virtual void pushImageOut(const PortableImage img, ImageOutput output);
+    virtual void pushImageOut(PortableImage img, ImageOutput output);
     virtual Trim addTrim(std::string name, int min, int max);
     virtual Trim addTrim(std::string name, double min, double max, int steps);
     virtual double trimValue(Trim trim);
@@ -83,10 +83,10 @@ protected:
     virtual MessageOutput addMessageOutput(std::string name);
     virtual MessageInput addMessageInput(std::string name);
     virtual void pushMessageOut(Message message, MessageOutput output);
-    virtual void pushMessageIn(const Message msg, MessageInput input);
+    virtual void pushMessageIn(Message msg, MessageInput input);
     virtual PointcloudInput addPointcloudInput(std::string name);
     virtual PointcloudOutput addPointcloudOutput(std::string name);
-    virtual void pushPointcloudOut(const Pointcloud pc, PointcloudOutput output);
+    virtual void pushPointcloudOut(Pointcloud pc, PointcloudOutput output);
 
 public slots:
     virtual void start(void);
