@@ -25,17 +25,17 @@ void PortableItem::starting()
 {
 }
 
-PortableImage PortableItem::nextImage(void *input)
+PortableImage PortableItem::nextImage(ImageInput input)
 {
     return _this->img_in_queue[input]->next();
 }
 
-PortableImage PortableItem::newestImage(void *input)
+PortableImage PortableItem::newestImage(ImageInput input)
 {
     return _this->img_in_queue[input]->newest();
 }
 
-bool PortableItem::waitForImage(void *input)
+bool PortableItem::waitForImage(ImageInput input)
 {
     // Give other threads a chance too
     std::this_thread::yield();
@@ -49,7 +49,7 @@ bool PortableItem::waitForImage(void *input)
     return !_this->is_stopped;
 }
 
-bool PortableItem::waitForMessage(void *input)
+bool PortableItem::waitForMessage(MessageInput input)
 {
     // Give other threads a chance too
     std::this_thread::yield();
@@ -63,7 +63,7 @@ bool PortableItem::waitForMessage(void *input)
     return !_this->is_stopped;
 }
 
-bool PortableItem::waitForPointcloud(void *input)
+bool PortableItem::waitForPointcloud(PointcloudInput input)
 {
     // Give other threads a chance too
     std::this_thread::yield();
@@ -122,7 +122,7 @@ std::mutex &PortableItem::mutex()
     return _this->mtx;
 }
 
-void PortableItem::trimChanged(void *, double )
+void PortableItem::trimChanged(Trim, double )
 {
 }
 
@@ -151,14 +151,14 @@ void PortableItem::addConfig(std::string name, std::vector<std::string> possibil
     PortableItemBase::addConfig(name, possibilities, index);
 }
 
-void *PortableItem::addMessageOutput(std::string name)
+MessageOutput PortableItem::addMessageOutput(std::string name)
 {
     return PortableItemBase::addMessageOutput(name);
 }
 
-void *PortableItem::addMessageInput(std::string name)
+MessageInput PortableItem::addMessageInput(std::string name)
 {
-    void *in;
+    MessageInput in;
 
     in = PortableItemBase::addMessageInput(name);
     _this->msg_in_queue[in] = new InputQueue<Message>();
@@ -166,23 +166,23 @@ void *PortableItem::addMessageInput(std::string name)
     return in;
 }
 
-void PortableItem::outputMessage(void *output, Message message)
+void PortableItem::outputMessage(MessageOutput output, Message message)
 {
     PortableItemBase::outputMessage(output, message);
 }
 
-void PortableItem::newMessageReceived(void *, Message)
+void PortableItem::newMessageReceived(MessageInput, Message)
 {
 }
 
-void *PortableItem::addPointcloudOutput(std::string name)
+PointcloudOutput PortableItem::addPointcloudOutput(std::string name)
 {
     return PortableItemBase::addPointcloudOutput(name);
 }
 
-void *PortableItem::addPointcloudInput(std::string name)
+PointcloudInput PortableItem::addPointcloudInput(std::string name)
 {
-    void *in;
+    PointcloudInput in;
 
     in = PortableItemBase::addPointcloudInput(name);
     _this->pc_in_queue[in] = new InputQueue<Pointcloud>();
@@ -194,9 +194,9 @@ void PortableItem::stopped()
 {
 }
 
-void *PortableItem::addImageInput(std::string name)
+ImageInput PortableItem::addImageInput(std::string name)
 {
-    void *in;
+    ImageInput in;
 
     in = PortableItemBase::addImageInput(name);
     _this->img_in_queue[in] = new InputQueue<PortableImage>();
@@ -204,27 +204,27 @@ void *PortableItem::addImageInput(std::string name)
     return in;
 }
 
-void *PortableItem::addImageOutput(std::string name)
+ImageOutput PortableItem::addImageOutput(std::string name)
 {
     return PortableItemBase::addImageOutput(name);
 }
 
-void PortableItem::pushImageOut(PortableImage img, void *output)
+void PortableItem::pushImageOut(PortableImage img, ImageOutput output)
 {
     PortableItemBase::pushImageOut(img, output);
 }
 
-void *PortableItem::addTrim(std::string name, int min, int max)
+Trim PortableItem::addTrim(std::string name, int min, int max)
 {
     return PortableItemBase::addTrim(name, min, max);
 }
 
-void *PortableItem::addTrim(std::string name, double min, double max, int steps)
+Trim PortableItem::addTrim(std::string name, double min, double max, int steps)
 {
     return PortableItemBase::addTrim(name, min, max, steps);
 }
 
-double PortableItem::trimValue(void *trim)
+double PortableItem::trimValue(Trim trim)
 {
     return PortableItemBase::trimValue(trim);
 }
@@ -244,7 +244,7 @@ void PortableItem::unpause()
     this->wake();
 }
 
-void PortableItem::pushImageIn(void *input, PortableImage img)
+void PortableItem::pushImageIn(ImageInput input, PortableImage img)
 {
     if(_this->img_in_queue.size() < MAX_QUEUE_SIZE)
     {
@@ -253,7 +253,7 @@ void PortableItem::pushImageIn(void *input, PortableImage img)
     }
 }
 
-void PortableItem::pushMessageIn(void *input, Message msg)
+void PortableItem::pushMessageIn(MessageInput input, Message msg)
 {
     if(_this->msg_in_queue.size() < MAX_QUEUE_SIZE)
     {
@@ -263,7 +263,7 @@ void PortableItem::pushMessageIn(void *input, Message msg)
     PortableItemBase::pushMessageIn(input, msg);
 }
 
-void PortableItem::pushPointcloudIn(void *input, Pointcloud pc)
+void PortableItem::pushPointcloudIn(PointcloudInput input, Pointcloud pc)
 {
     if(_this->pc_in_queue.size() < MAX_QUEUE_SIZE)
     {

@@ -24,9 +24,9 @@ protected:
     void trimChanged(void *trim, int value);
 
 private:
-    void *input;
-    void *output;
-    void *delay_trim;
+    ImageInput input;
+    ImageOutput output;
+    Trim delay_trim;
     std::queue<PortableImage> queue;
     unsigned int delay;
     std::mutex mtx;

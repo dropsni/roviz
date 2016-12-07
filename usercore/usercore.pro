@@ -47,7 +47,8 @@ HEADERS     +=  \
                 include/core/pointcloud_p.h \
                 include/core/message.h \
                 include/core/message_p.h \
-                include/portable/input_queue.h
+                include/portable/input_queue.h \
+    include/portable/strong_typedef.h
 
 RESOURCES   +=  resources.qrc
 LIBS        += -lopencv_core

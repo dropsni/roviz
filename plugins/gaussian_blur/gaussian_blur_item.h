@@ -23,9 +23,9 @@ protected:
     void thread(void) override;
 
 private:
-    void *input;
-    void *output;
-    void *trim;
+    ImageInput input;
+    ImageOutput output;
+    Trim trim;
 };
 
 #endif // GAUSSIANBLUR_ITEM_H

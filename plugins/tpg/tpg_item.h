@@ -26,13 +26,14 @@ public:
 private:
     void starting(void) override;
     void thread(void) override;
-    void trimChanged(void *trim, double value) override;
+    void trimChanged(Trim trim, double value) override;
 
     QImage test_pattern;
     PortableImageMutable out_img;
     QTimer timer;
     int timeout;
-    void *output, *trim;
+    ImageOutput output;
+    Trim trim;
     bool timer_expired;
 
 private slots:

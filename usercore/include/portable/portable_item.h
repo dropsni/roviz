@@ -156,7 +156,7 @@ protected:
      * \sa addImageInput
      * \sa newestImage
      */
-    PortableImage nextImage(void *input);
+    PortableImage nextImage(ImageInput input);
 
     /**
      * @brief Returns the newest image in the input queue
@@ -168,7 +168,7 @@ protected:
      * \sa addImageInput
      * \sa nextImage
      */
-    PortableImage newestImage(void *input);
+    PortableImage newestImage(ImageInput input);
 
     /**
      * @brief Wait until an image is available at the input
@@ -187,7 +187,7 @@ protected:
      * \sa wait
      * \sa running
      */
-    bool waitForImage(void *input);
+    bool waitForImage(ImageInput input);
 
     /**
      * @brief Wait until a message is available at the input
@@ -204,7 +204,7 @@ protected:
      * \sa running
      * \sa newMessageReceived
      */
-    bool waitForMessage(void *input);
+    bool waitForMessage(MessageInput input);
 
     /**
      * @brief Wait until a pointcloud is available at the input
@@ -220,7 +220,7 @@ protected:
      * \sa wait
      * \sa running
      */
-    bool waitForPointcloud(void *input);
+    bool waitForPointcloud(PointcloudInput input);
 
     /**
      * @brief Sleep until a condition comes true
@@ -341,7 +341,7 @@ protected:
      *
      * \sa addImageOutput
      */
-    void *addImageInput(std::string name) override;
+    ImageInput addImageInput(std::string name) override;
 
     /**
      * @brief Add an image output
@@ -351,7 +351,7 @@ protected:
      * \sa addImageInput
      * \sa pushImageOut
      */
-    void *addImageOutput(std::string name) override;
+    ImageOutput addImageOutput(std::string name) override;
 
     /**
      * @brief Send an image out through an output
@@ -363,7 +363,7 @@ protected:
      *
      * \sa addImageOutput
      */
-    void pushImageOut(PortableImage img, void *output) override;
+    void pushImageOut(PortableImage img, ImageOutput output) override;
 
     /**
      * @brief Add a message output
@@ -373,7 +373,7 @@ protected:
      * \sa outputMessage
      * \sa addMessageInput
      */
-    void *addMessageOutput(std::string name) override;
+    MessageOutput addMessageOutput(std::string name) override;
 
     /**
      * @brief Add a message input
@@ -383,7 +383,7 @@ protected:
      * \sa newMessageReceived
      * \sa addMessageOutput
      */
-    void *addMessageInput(std::string name) override;
+    MessageInput addMessageInput(std::string name) override;
 
     /**
      * @brief Write a message to the output
@@ -392,14 +392,14 @@ protected:
      *
      * You have to manually set the type of each message by altering the 'type' field.
      */
-    void outputMessage(void *output, Message message) override;
+    void outputMessage(MessageOutput output, Message message) override;
 
     /**
      * @brief Called when a new message arrived at an input
      * @param input The input that received the message
      * @param message The message that was received
      */
-    virtual void newMessageReceived(void *input, Message message) override;
+    virtual void newMessageReceived(MessageInput input, Message message) override;
 
     /**
      * @brief Add a pointcloud output
@@ -408,7 +408,7 @@ protected:
      *
      * \sa addPointcloudInput
      */
-    void *addPointcloudOutput(std::string name) override;
+    PointcloudOutput addPointcloudOutput(std::string name) override;
 
     /**
      * @brief Add a pointcloud input
@@ -417,7 +417,7 @@ protected:
      *
      * \sa addPointcloudOutput
      */
-    void *addPointcloudInput(std::string name) override;
+    PointcloudInput addPointcloudInput(std::string name) override;
 
     /**
      * @brief Add a trim value
@@ -432,7 +432,7 @@ protected:
      * \sa trimValue
      * \sa trimChanged
      */
-    void *addTrim(std::string name, int min, int max) override;
+    Trim addTrim(std::string name, int min, int max) override;
 
     /**
      * @brief Add a trim value
@@ -445,14 +445,14 @@ protected:
      * A trim value is a value, that can be adjusted (trimmed) at runtime. The
      * user can changed it e.g. through a slider on a GUI.
      */
-    void *addTrim(std::string name, double min, double max, int steps) override;
+    Trim addTrim(std::string name, double min, double max, int steps) override;
 
     /**
      * @brief Get the value of a trim value
      * @param trim Handle to the trim value returned from addTrim()
      * @return The value the trim value currently has
      */
-    double trimValue(void *trim) override;
+    double trimValue(Trim trim) override;
 
     /**
      * @brief Called, when the trim value changed
@@ -462,7 +462,7 @@ protected:
      * This function will be called in the main thread, _not_ the thread that
      * the thread() function lives in.
      */
-    virtual void trimChanged(void *trim, double value) override;
+    virtual void trimChanged(Trim trim, double value) override;
 
     /**
      * @brief Add a string config
@@ -532,7 +532,7 @@ private:
      *
      * Called by the base class to add a new image to the queue of an input.
      */
-    void pushImageIn(void *input, PortableImage img) override;
+    void pushImageIn(ImageInput input, PortableImage img) override;
 
     /**
      * @brief Add a message to the input queue
@@ -541,7 +541,7 @@ private:
      *
      * Called by the base class to add a new message to the queue of an input.
      */
-    void pushMessageIn(void *input, Message msg) override;
+    void pushMessageIn(MessageInput input, Message msg) override;
 
     /**
      * @brief Add a pointcloud to the input queue
@@ -550,7 +550,7 @@ private:
      *
      * Called by the base class to add a new pointcloud to the queue of an input.
      */
-    void pushPointcloudIn(void *input, Pointcloud pc) override;
+    void pushPointcloudIn(PointcloudInput input, Pointcloud pc) override;
 
     /**
      * @brief Pause execution

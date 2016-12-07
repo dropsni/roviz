@@ -92,7 +92,7 @@ void AbstractRobotItem::restart()
     this->start();
 }
 
-void *AbstractRobotItem::addImageInput(std::string name)
+ImageInput AbstractRobotItem::addImageInput(std::string name)
 {
     ItemInput *in;
 
@@ -100,10 +100,10 @@ void *AbstractRobotItem::addImageInput(std::string name)
     connect(in, &ItemInput::dataChanged,
             _this.data(), &AbstractRobotItemPrivate::imageInputStateChanged);
 
-    return in;
+    return ImageInput(in);
 }
 
-void *AbstractRobotItem::addImageOutput(std::string name)
+ImageOutput AbstractRobotItem::addImageOutput(std::string name)
 {
     ItemOutput *out;
     ImageWidget *img;
@@ -111,13 +111,13 @@ void *AbstractRobotItem::addImageOutput(std::string name)
     out = this->addOutput(qMetaTypeId<ImageStream*>(), QString::fromStdString(name));
     this->setOutputData(out, new ImageStream(this));
     img = new ImageWidget();
-    _this->out_widgets.insert(out, img);
+    _this->out_widgets.insert(ImageOutput(out), img);
     _this->main_image_layout->addWidget(img);
 
-    return out;
+    return ImageOutput(out);
 }
 
-void AbstractRobotItem::pushImageOut(const PortableImage img, void *output)
+void AbstractRobotItem::pushImageOut(const PortableImage img, ImageOutput output)
 {
     ItemOutput *out;
     ImageStream *stream;
@@ -137,12 +137,12 @@ void AbstractRobotItem::pushImageOut(const PortableImage img, void *output)
         _this->out_widgets.value(output)->setImage(img);
 }
 
-void *AbstractRobotItem::addTrim(std::string name, int min, int max)
+Trim AbstractRobotItem::addTrim(std::string name, int min, int max)
 {
     return this->addTrim(name, min, max, (max - min) + 1);
 }
 
-void *AbstractRobotItem::addTrim(std::string name, double min, double max, int steps)
+Trim AbstractRobotItem::addTrim(std::string name, double min, double max, int steps)
 {
     QSlider *slider = new QSlider();
     QVBoxLayout *layout = new QVBoxLayout();
@@ -166,10 +166,10 @@ void *AbstractRobotItem::addTrim(std::string name, double min, double max, int s
     slider->setObjectName(QString::fromStdString(name));
     _this->sliders.append(slider);
     _this->slider_to_label.insert(slider, label);
-    return slider;
+    return Trim(slider);
 }
 
-double AbstractRobotItem::trimValue(void *trim)
+double AbstractRobotItem::trimValue(Trim trim)
 {
     QSlider *s;
 
@@ -180,7 +180,7 @@ double AbstractRobotItem::trimValue(void *trim)
         return 0.0f;
 }
 
-void AbstractRobotItem::trimChanged(void *, double )
+void AbstractRobotItem::trimChanged(Trim, double )
 {
 }
 
@@ -214,17 +214,17 @@ void AbstractRobotItem::addConfig(std::string name, std::vector<std::string> pos
     _this->config_present = true;
 }
 
-void *AbstractRobotItem::addMessageOutput(std::string name)
+MessageOutput AbstractRobotItem::addMessageOutput(std::string name)
 {
     ItemOutput *out;
 
     out = this->addOutput(qMetaTypeId<MessageStream*>(),  QString::fromStdString(name));
     this->setOutputData(out, new MessageStream(this));
 
-    return out;
+    return MessageOutput(out);
 }
 
-void *AbstractRobotItem::addMessageInput(std::string name)
+MessageInput AbstractRobotItem::addMessageInput(std::string name)
 {
     ItemInput *in;
 
@@ -232,10 +232,10 @@ void *AbstractRobotItem::addMessageInput(std::string name)
     connect(in, &ItemInput::dataChanged,
             _this.data(), &AbstractRobotItemPrivate::messageInputStateChanged);
 
-    return in;
+    return MessageInput(in);
 }
 
-void AbstractRobotItem::outputMessage(void *output, Message message)
+void AbstractRobotItem::outputMessage(MessageOutput output, Message message)
 {
     ItemOutput *out;
     MessageStream *stream;
@@ -251,7 +251,7 @@ void AbstractRobotItem::outputMessage(void *output, Message message)
     emit stream->newMessage(message);
 }
 
-void *AbstractRobotItem::addPointcloudInput(std::string name)
+PointcloudInput AbstractRobotItem::addPointcloudInput(std::string name)
 {
     ItemInput *in;
 
@@ -259,20 +259,20 @@ void *AbstractRobotItem::addPointcloudInput(std::string name)
     connect(in, &ItemInput::dataChanged,
             _this.data(), &AbstractRobotItemPrivate::pointcloudInputStateChanged);
 
-    return in;
+    return PointcloudInput(in);
 }
 
-void *AbstractRobotItem::addPointcloudOutput(std::string name)
+PointcloudOutput AbstractRobotItem::addPointcloudOutput(std::string name)
 {
     ItemOutput *out;
 
     out = this->addOutput(qMetaTypeId<PointStream*>(), QString::fromStdString(name));
     this->setOutputData(out, new PointStream(this));
 
-    return out;
+    return PointcloudOutput(out);
 }
 
-void AbstractRobotItem::pushMessageIn(void *input, const Message msg)
+void AbstractRobotItem::pushMessageIn(MessageInput input, const Message msg)
 {
     this->newMessageReceived(input, msg);
 }

@@ -30,9 +30,9 @@ public slots:
     void pcInputMapper(Pointcloud pointcloud);
 
 signals:
-    void newImage(void *input, PortableImage image);
-    void newMessage(void *input, Message message);
-    void newPointcloud(void *input, Pointcloud pointcloud);
+    void newImage(ImageInput input, PortableImage image);
+    void newMessage(MessageInput input, Message message);
+    void newPointcloud(PointcloudInput input, Pointcloud pointcloud);
 };
 
 #endif // STREAMTOINPUTMAPPER_H

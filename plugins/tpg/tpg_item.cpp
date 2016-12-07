@@ -63,7 +63,7 @@ void TPGItem::thread()
     }
 }
 
-void TPGItem::trimChanged(void *, double value)
+void TPGItem::trimChanged(Trim, double value)
 {
     std::lock_guard<std::mutex> g(this->mutex());
 

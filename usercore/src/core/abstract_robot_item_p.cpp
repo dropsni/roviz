@@ -112,7 +112,7 @@ void AbstractRobotItemPrivate::trimChangedSlot(int value)
     sl->setValue(value);
     _this->settingsScope()->setValue(QString("Sliders/") + sl->name(), value);
 
-    _this->trimChanged(sl, sl->value());
+    _this->trimChanged(Trim(s), sl->value());
 }
 
 void AbstractRobotItemPrivate::collapseBtnClicked()

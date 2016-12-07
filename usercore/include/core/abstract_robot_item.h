@@ -28,6 +28,7 @@
 #include "core/message_stream.h"
 #include "core/point_stream.h"
 #include "core/message_stream.h"
+#include "portable/strong_typedef.h"
 
 class AbstractRobotItemPrivate;
 
@@ -67,24 +68,24 @@ public:
     ///@{
 protected:
     virtual bool running(void) = 0;
-    virtual void *addImageInput(std::string name);
-    virtual void *addImageOutput(std::string name);
-    virtual void pushImageOut(const PortableImage img, void *output);
-    virtual void *addTrim(std::string name, int min, int max);
-    virtual void *addTrim(std::string name, double min, double max, int steps);
-    virtual double trimValue(void *trim);
-    virtual void trimChanged(void *trim, double value);
+    virtual ImageInput addImageInput(std::string name);
+    virtual ImageOutput addImageOutput(std::string name);
+    virtual void pushImageOut(const PortableImage img, ImageOutput output);
+    virtual Trim addTrim(std::string name, int min, int max);
+    virtual Trim addTrim(std::string name, double min, double max, int steps);
+    virtual double trimValue(Trim trim);
+    virtual void trimChanged(Trim trim, double value);
     virtual void addConfig(std::string name, std::string *value, std::function<std::string (std::string)> checker = [](std::string a){return a;});
     virtual void addConfig(std::string name, int *value, std::function<int (int)> checker = [](int a){return a;});
     virtual void addConfig(std::string name, double *value, std::function<double (double)> checker = [](double a){return a;});
     virtual void addConfig(std::string name, bool *value);
     virtual void addConfig(std::string name, std::vector<std::string> possibilities, int *index);
-    virtual void *addMessageOutput(std::string name);
-    virtual void *addMessageInput(std::string name);
-    virtual void outputMessage(void *output, Message message);
-    virtual void *addPointcloudInput(std::string name);
-    virtual void *addPointcloudOutput(std::string name);
-    virtual void pushMessageIn(void *input, const Message msg);
+    virtual MessageOutput addMessageOutput(std::string name);
+    virtual MessageInput addMessageInput(std::string name);
+    virtual void outputMessage(MessageOutput output, Message message);
+    virtual PointcloudInput addPointcloudInput(std::string name);
+    virtual PointcloudOutput addPointcloudOutput(std::string name);
+    virtual void pushMessageIn(MessageInput input, const Message msg);
 
 public slots:
     virtual void start(void);
@@ -94,9 +95,9 @@ public slots:
     virtual void unpause(void) = 0;
 
 protected slots:
-    virtual void pushImageIn(void *input, const PortableImage img) = 0;
-    virtual void pushPointcloudIn(void *input, const Pointcloud pc) = 0;
-    virtual void newMessageReceived(void *input, Message message) = 0;
+    virtual void pushImageIn(ImageInput input, const PortableImage img) = 0;
+    virtual void pushPointcloudIn(PointcloudInput input, const Pointcloud pc) = 0;
+    virtual void newMessageReceived(MessageInput input, Message message) = 0;
     ///@}
 
 protected:

@@ -19,7 +19,7 @@ protected:
     void stopped(void) override;
 
 private:
-    void *output;
+    ImageOutput output;
     int cam_id;
     cv::VideoCapture cap;
     std::vector<std::string> res_list;

@@ -22,8 +22,8 @@ protected:
     void thread(void) override;
 
 private:
-    void *output;
-    void *input;
+    ImageOutput output;
+    ImageInput input;
 
     static PortableImage fromRGB(PortableImage in, int depth);
     static PortableImage fromRGB555(PortableImage in);

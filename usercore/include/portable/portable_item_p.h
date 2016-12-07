@@ -10,9 +10,9 @@ class PortableItemPrivate
 {
 public:
     PortableItem *_this;
-    std::map<void*, InputQueue<PortableImage>* > img_in_queue;
-    std::map<void*, InputQueue<Message>* > msg_in_queue;
-    std::map<void*, InputQueue<Pointcloud>* > pc_in_queue;
+    std::map<ImageInput, InputQueue<PortableImage>* > img_in_queue;
+    std::map<MessageInput, InputQueue<Message>* > msg_in_queue;
+    std::map<PointcloudInput, InputQueue<Pointcloud>* > pc_in_queue;
     std::condition_variable cond;
     std::thread *th;
     std::mutex mtx;

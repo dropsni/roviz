@@ -18,9 +18,9 @@ protected:
     void thread(void) override;
 
 private:
-    void *input;
-    void *output;
-    void *thres, *ratio;
+    ImageInput input;
+    ImageOutput output;
+    Trim thres, ratio;
 };
 
 #endif // CANNY_ITEM_H

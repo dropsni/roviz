@@ -18,9 +18,9 @@ protected:
     void thread(void) override;
 
 private:
-    void *input;
-    void *output;
-    void *depth, *dx, *dy;
+    ImageInput input;
+    ImageOutput output;
+    Trim depth, dx, dy;
 };
 
 #endif // SOBEL_ITEM_H

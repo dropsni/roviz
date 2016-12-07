@@ -14,6 +14,10 @@
 #else
     #include <QtCore/qglobal.h>
     #include <QObject>
+    #include <QSlider>
+    #include "portable/strong_typedef.h"
+    #include "item/item_input.h"
+    #include "item/item_output.h"
     #define PORTABLE_BASE_INCLUDE      "core/abstract_robot_item.h"
     #define PORTABLE_BASE_INCLUDE_P    "core/abstract_robot_item_p.h"
     #define PORTABLE_EXPORT_CLASS      Q_DECL_EXPORT
@@ -21,6 +25,22 @@
     #define PORTABLE_INIT(name)        {this->setImage(QImage(":/logo_"#name".png"));}
     #define QT_PRESENT
     #define OPENCV_PRESENT
+
+    struct ImageInputTag{};
+    struct MessageInputTag{};
+    struct PointcloudInputTag{};
+    struct ImageOutputTag{};
+    struct MessageOutputTag{};
+    struct PointcloudOutputTag{};
+    struct TrimTag{};
+
+    typedef StrongTypedef<ImageInputTag, ItemInput*, nullptr> ImageInput;
+    typedef StrongTypedef<MessageInputTag, ItemInput*, nullptr> MessageInput;
+    typedef StrongTypedef<PointcloudInputTag, ItemInput*, nullptr> PointcloudInput;
+    typedef StrongTypedef<ImageOutputTag, ItemOutput*, nullptr> ImageOutput;
+    typedef StrongTypedef<MessageOutputTag, ItemOutput*, nullptr> MessageOutput;
+    typedef StrongTypedef<PointcloudOutputTag, ItemOutput*, nullptr> PointcloudOutput;
+    typedef StrongTypedef<TrimTag, QSlider*, nullptr> Trim;
 
     class PortableItem;
 
