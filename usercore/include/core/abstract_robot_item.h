@@ -82,10 +82,10 @@ protected:
     virtual void addConfig(std::string name, std::vector<std::string> possibilities, int *index);
     virtual MessageOutput addMessageOutput(std::string name);
     virtual MessageInput addMessageInput(std::string name);
-    virtual void outputMessage(MessageOutput output, Message message);
+    virtual void pushMessageOut(Message message, MessageOutput output);
+    virtual void pushMessageIn(const Message msg, MessageInput input);
     virtual PointcloudInput addPointcloudInput(std::string name);
     virtual PointcloudOutput addPointcloudOutput(std::string name);
-    virtual void pushMessageIn(MessageInput input, const Message msg);
 
 public slots:
     virtual void start(void);
@@ -95,9 +95,9 @@ public slots:
     virtual void unpause(void) = 0;
 
 protected slots:
-    virtual void pushImageIn(ImageInput input, const PortableImage img) = 0;
-    virtual void pushPointcloudIn(PointcloudInput input, const Pointcloud pc) = 0;
-    virtual void newMessageReceived(MessageInput input, Message message) = 0;
+    virtual void pushImageIn(const PortableImage img, ImageInput input) = 0;
+    virtual void pushPointcloudIn(const Pointcloud pc, PointcloudInput input) = 0;
+    virtual void newMessageReceived(Message message, MessageInput input) = 0;
     ///@}
 
 protected:

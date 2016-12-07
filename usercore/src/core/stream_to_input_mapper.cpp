@@ -12,15 +12,15 @@ StreamToInputMapper::~StreamToInputMapper()
 
 void StreamToInputMapper::imgInputMapper(PortableImage image)
 {
-    emit this->newImage(ImageInput(this->input), image);
+    emit this->newImage(image, ImageInput(this->input));
 }
 
 void StreamToInputMapper::msgInputMapper(Message message)
 {
-    emit this->newMessage(MessageInput(this->input), message);
+    emit this->newMessage(message, MessageInput(this->input));
 }
 
 void StreamToInputMapper::pcInputMapper(Pointcloud pointcloud)
 {
-    emit this->newPointcloud(PointcloudInput(this->input), pointcloud);
+    emit this->newPointcloud(pointcloud, PointcloudInput(this->input));
 }

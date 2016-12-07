@@ -235,7 +235,7 @@ MessageInput AbstractRobotItem::addMessageInput(std::string name)
     return MessageInput(in);
 }
 
-void AbstractRobotItem::outputMessage(MessageOutput output, Message message)
+void AbstractRobotItem::pushMessageOut(Message message, MessageOutput output)
 {
     ItemOutput *out;
     MessageStream *stream;
@@ -272,9 +272,9 @@ PointcloudOutput AbstractRobotItem::addPointcloudOutput(std::string name)
     return PointcloudOutput(out);
 }
 
-void AbstractRobotItem::pushMessageIn(MessageInput input, const Message msg)
+void AbstractRobotItem::pushMessageIn(const Message msg, MessageInput input)
 {
-    this->newMessageReceived(input, msg);
+    this->newMessageReceived(msg, input);
 }
 
 void AbstractRobotItem::start()

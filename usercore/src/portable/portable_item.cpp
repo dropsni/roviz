@@ -166,12 +166,12 @@ MessageInput PortableItem::addMessageInput(std::string name)
     return in;
 }
 
-void PortableItem::outputMessage(MessageOutput output, Message message)
+void PortableItem::pushMessageOut(Message message, MessageOutput output)
 {
-    PortableItemBase::outputMessage(output, message);
+    PortableItemBase::pushMessageOut(message, output);
 }
 
-void PortableItem::newMessageReceived(MessageInput, Message)
+void PortableItem::newMessageReceived(Message, MessageInput)
 {
 }
 
@@ -244,7 +244,7 @@ void PortableItem::unpause()
     this->wake();
 }
 
-void PortableItem::pushImageIn(ImageInput input, PortableImage img)
+void PortableItem::pushImageIn(PortableImage img, ImageInput input)
 {
     if(_this->img_in_queue.size() < MAX_QUEUE_SIZE)
     {
@@ -253,17 +253,17 @@ void PortableItem::pushImageIn(ImageInput input, PortableImage img)
     }
 }
 
-void PortableItem::pushMessageIn(MessageInput input, Message msg)
+void PortableItem::pushMessageIn(Message msg, MessageInput input)
 {
     if(_this->msg_in_queue.size() < MAX_QUEUE_SIZE)
     {
         _this->msg_in_queue[input]->push(msg);
         _this->cond.notify_all();
     }
-    PortableItemBase::pushMessageIn(input, msg);
+    PortableItemBase::pushMessageIn(msg, input);
 }
 
-void PortableItem::pushPointcloudIn(PointcloudInput input, Pointcloud pc)
+void PortableItem::pushPointcloudIn(Pointcloud pc, PointcloudInput input)
 {
     if(_this->pc_in_queue.size() < MAX_QUEUE_SIZE)
     {

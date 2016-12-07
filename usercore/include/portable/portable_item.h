@@ -392,14 +392,14 @@ protected:
      *
      * You have to manually set the type of each message by altering the 'type' field.
      */
-    void outputMessage(MessageOutput output, Message message) override;
+    void pushMessageOut(Message message, MessageOutput output) override;
 
     /**
      * @brief Called when a new message arrived at an input
      * @param input The input that received the message
      * @param message The message that was received
      */
-    virtual void newMessageReceived(MessageInput input, Message message) override;
+    virtual void newMessageReceived(Message message, MessageInput input) override;
 
     /**
      * @brief Add a pointcloud output
@@ -532,7 +532,7 @@ private:
      *
      * Called by the base class to add a new image to the queue of an input.
      */
-    void pushImageIn(ImageInput input, PortableImage img) override;
+    void pushImageIn(PortableImage img, ImageInput input) override;
 
     /**
      * @brief Add a message to the input queue
@@ -541,7 +541,7 @@ private:
      *
      * Called by the base class to add a new message to the queue of an input.
      */
-    void pushMessageIn(MessageInput input, Message msg) override;
+    void pushMessageIn(Message msg, MessageInput input) override;
 
     /**
      * @brief Add a pointcloud to the input queue
@@ -550,7 +550,7 @@ private:
      *
      * Called by the base class to add a new pointcloud to the queue of an input.
      */
-    void pushPointcloudIn(PointcloudInput input, Pointcloud pc) override;
+    void pushPointcloudIn(Pointcloud pc, PointcloudInput input) override;
 
     /**
      * @brief Pause execution
