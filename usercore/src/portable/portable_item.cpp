@@ -35,6 +35,26 @@ PortableImage PortableItem::newestImage(ImageInput input)
     return _this->img_in_queue[input]->newest();
 }
 
+Message PortableItem::nextMessage(MessageInput input)
+{
+    return _this->msg_in_queue[input]->next();
+}
+
+Message PortableItem::newestMessage(MessageInput input)
+{
+    return _this->msg_in_queue[input]->newest();
+}
+
+Pointcloud PortableItem::nextPointcloud(PointcloudInput input)
+{
+    return _this->pc_in_queue[input]->next();
+}
+
+Pointcloud PortableItem::newestPointcloud(PointcloudInput input)
+{
+    return _this->pc_in_queue[input]->newest();
+}
+
 bool PortableItem::waitForImage(ImageInput input)
 {
     // Give other threads a chance too

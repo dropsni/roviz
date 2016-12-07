@@ -171,6 +171,50 @@ protected:
     PortableImage newestImage(ImageInput input);
 
     /**
+     * @brief Returns the next message in the input queue
+     * @param input The input handle returned from addMessageInput()
+     * @return The next message in the input queue
+     *
+     * \sa addMessageInput
+     * \sa newestMessage
+     */
+    Message nextMessage(MessageInput input);
+
+    /**
+     * @brief Returns the newest message in the input queue
+     * @param input The input handle returned from addMessageInput()
+     * @return Returns the newest message in the input queue
+     *
+     * All older messages in the input queue are discarded.
+     *
+     * \sa addMessageInput
+     * \sa nextMessage
+     */
+    Message newestMessage(MessageInput input);
+
+    /**
+     * @brief Returns the next pointcloud in the input queue
+     * @param input The input handle returned from addPointcloudInput()
+     * @return The next pointcloud in the input queue
+     *
+     * \sa addPointcloudInput
+     * \sa newestPointcloud
+     */
+    Pointcloud nextPointcloud(PointcloudInput input);
+
+    /**
+     * @brief Returns the newest pointcloud in the input queue
+     * @param input The input handle returned from addPointcloudInput()
+     * @return Returns the newest pointcloud in the input queue
+     *
+     * All older pointclouds in the input queue are discarded.
+     *
+     * \sa addPointcloudInput
+     * \sa nextPointcloud
+     */
+    Pointcloud newestPointcloud(PointcloudInput input);
+
+    /**
      * @brief Wait until an image is available at the input
      * @param input The input handle returned from addImageInput()
      * @return true - New image is available
