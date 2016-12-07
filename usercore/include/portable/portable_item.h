@@ -420,6 +420,15 @@ protected:
     PointcloudInput addPointcloudInput(std::string name) override;
 
     /**
+     * @brief Write a message to the output
+     * @param output The output handle returned from addMessageOutput()
+     * @param message The message to send
+     *
+     * You have to manually set the type of each message by altering the 'type' field.
+     */
+    void pushPointcloudOut(Pointcloud pc, PointcloudOutput output) override;
+
+    /**
      * @brief Add a trim value
      * @param name Name of the value
      * @param min Minimum value

@@ -272,6 +272,22 @@ PointcloudOutput AbstractRobotItem::addPointcloudOutput(std::string name)
     return PointcloudOutput(out);
 }
 
+void AbstractRobotItem::pushPointcloudOut(const Pointcloud pc, PointcloudOutput output)
+{
+    ItemOutput *out;
+    PointStream *stream;
+
+    out = static_cast<ItemOutput*>(output);
+    if(out == nullptr)
+        return;
+
+    stream = qobject_cast<PointStream*>(out->data());
+    if(stream == nullptr)
+        return;
+
+    emit stream->newPoints(pc);
+}
+
 void AbstractRobotItem::pushMessageIn(const Message msg, MessageInput input)
 {
     this->newMessageReceived(msg, input);

@@ -190,6 +190,11 @@ PointcloudInput PortableItem::addPointcloudInput(std::string name)
     return in;
 }
 
+void PortableItem::pushPointcloudOut(Pointcloud pc, PointcloudOutput output)
+{
+    PortableItemBase::pushPointcloudOut(pc, output);
+}
+
 void PortableItem::stopped()
 {
 }

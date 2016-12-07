@@ -86,6 +86,7 @@ protected:
     virtual void pushMessageIn(const Message msg, MessageInput input);
     virtual PointcloudInput addPointcloudInput(std::string name);
     virtual PointcloudOutput addPointcloudOutput(std::string name);
+    virtual void pushPointcloudOut(const Pointcloud pc, PointcloudOutput output);
 
 public slots:
     virtual void start(void);
