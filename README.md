@@ -29,7 +29,7 @@ $ qmake
 $ make
 ```
 
-NOTE: You need to have git and at least Qt 5.7 installed on your system.
+NOTE: You need to have git and at least Qt 5.7 installed on your system and your compiler needs C++11 support.
 
 You can then run the program with (assuming you run it on a linux machine):
 
