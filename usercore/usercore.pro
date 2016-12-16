@@ -21,7 +21,10 @@ SOURCES     +=  \
                 src/core/pointcloud.cpp \
                 src/core/pointcloud_p.cpp \
                 src/core/message.cpp \
-                src/core/message_p.cpp
+                src/core/message_p.cpp \
+                src/portable/point.cpp \
+    include/portable/stream_object.cpp \
+    include/portable/stream_object_base.cpp
 
 HEADERS     +=  \
                 include/usercore.h \
@@ -48,7 +51,10 @@ HEADERS     +=  \
                 include/core/message.h \
                 include/core/message_p.h \
                 include/portable/input_queue.h \
-    include/portable/strong_typedef.h
+                include/portable/strong_typedef.h \
+                include/portable/point.h \
+    include/portable/stream_object.h \
+    include/portable/stream_object_base.h
 
 RESOURCES   +=  resources.qrc
 LIBS        += -lopencv_core
