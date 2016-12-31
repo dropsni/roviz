@@ -2,7 +2,7 @@
 #define FRAMEDELAYER_ITEM_H
 
 #include "portable/portable_item.h"
-#include "portable/portable_image_mutable.h"
+#include "portable/portable_image_m.h"
 #include <queue>
 
 /**

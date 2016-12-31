@@ -2,11 +2,8 @@
 #define STREAMTOINPUTMAPPER_H
 
 #include <QObject>
-#include "item/item_input.h"
-#include "portable/portable_image.h"
 #include "portable/portable_item_global.h"
-#include "core/message.h"
-#include "core/pointcloud.h"
+#include "portable/stream_object.h"
 
 /**
  * @brief Maps the signal that a new message is ready to the right input
@@ -25,14 +22,10 @@ public:
     ~StreamToInputMapper();
 
 public slots:
-    void imgInputMapper(PortableImage image);
-    void msgInputMapper(Message message);
-    void pcInputMapper(Pointcloud pointcloud);
+    void inputMapper(StreamObject obj);
 
 signals:
-    void newImage(PortableImage image, ImageInput input);
-    void newMessage(Message message, MessageInput input);
-    void newPointcloud(Pointcloud pointcloud, PointcloudInput input);
+    void newObject(StreamObject obj, Input input);
 };
 
 #endif // STREAMTOINPUTMAPPER_H

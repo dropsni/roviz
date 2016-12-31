@@ -5,6 +5,7 @@
 #include <mutex>
 #include "portable/portable_item_global.h"
 #include "portable/portable_image.h"
+#include "portable/stream_object.h"
 
 class PortableImage;
 
@@ -15,35 +16,24 @@ class PortableImage;
  *
  * \ingroup robot_framework
  */
-template <class T>
 class PORTABLE_EXPORT_CLASS InputQueue
 {
 public:
     std::mutex mtx;
 
-    InputQueue(){}
+    InputQueue();
 
     /**
      * @brief Push an object into the queue
      * @param obj The object to push in the queue
      */
-    void push(T obj)
-    {
-        std::lock_guard<std::mutex> g(this->mtx);
-        this->objects.push_back(obj);
-    }
+    void push(StreamObject obj);
 
     /**
      * @brief Get the next object in the queue
      * @return The next object in the queue
      */
-    T next(void)
-    {
-        std::lock_guard<std::mutex> g(this->mtx);
-        T obj = this->objects.front();
-        this->objects.pop_front();
-        return obj;
-    }
+    StreamObject next(void);
 
     /**
      * @brief Get the newest object in the queue
@@ -51,26 +41,16 @@ public:
      *
      * Discards all older objects
      */
-    T newest(void)
-    {
-        std::lock_guard<std::mutex> g(this->mtx);
-        T obj = this->objects.back();
-        this->objects.clear();
-        return obj;
-    }
+    StreamObject newest(void);
 
     /**
      * @brief Check whether an object is available
      * @return True if an object is available, false otherwise
      */
-    bool available(void)
-    {
-        std::lock_guard<std::mutex> g(this->mtx);
-        return !this->objects.empty();
-    }
+    bool available(void);
 
 private:
-    std::list<T> objects;
+    std::list<StreamObject> objects;
 };
 
 #endif // IMAGEQUEUE_H

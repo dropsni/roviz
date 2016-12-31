@@ -26,20 +26,12 @@
     #define QT_PRESENT
     #define OPENCV_PRESENT
 
-    struct ImageInputTag{};
-    struct MessageInputTag{};
-    struct PointcloudInputTag{};
-    struct ImageOutputTag{};
-    struct MessageOutputTag{};
-    struct PointcloudOutputTag{};
+    struct InputTag{};
+    struct OutputTag{};
     struct TrimTag{};
 
-    typedef StrongTypedef<ImageInputTag, ItemInput*, nullptr> ImageInput;
-    typedef StrongTypedef<MessageInputTag, ItemInput*, nullptr> MessageInput;
-    typedef StrongTypedef<PointcloudInputTag, ItemInput*, nullptr> PointcloudInput;
-    typedef StrongTypedef<ImageOutputTag, ItemOutput*, nullptr> ImageOutput;
-    typedef StrongTypedef<MessageOutputTag, ItemOutput*, nullptr> MessageOutput;
-    typedef StrongTypedef<PointcloudOutputTag, ItemOutput*, nullptr> PointcloudOutput;
+    typedef StrongTypedef<InputTag, ItemInput*, nullptr> Input;
+    typedef StrongTypedef<OutputTag, ItemOutput*, nullptr> Output;
     typedef StrongTypedef<TrimTag, QSlider*, nullptr> Trim;
 
     class PortableItem;

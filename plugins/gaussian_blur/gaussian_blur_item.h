@@ -2,7 +2,7 @@
 #define GAUSSIANBLUR_ITEM_H
 
 #include "portable/portable_item.h"
-#include "portable/portable_image_mutable.h"
+#include "portable/portable_image_m.h"
 #include "opencv2/core.hpp"
 #include "opencv2/imgproc.hpp"
 

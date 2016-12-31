@@ -4,6 +4,7 @@
 #include <memory>
 #include <initializer_list>
 #include "portable/portable_item_global.h"
+#include "portable/stream_object.h"
 
 #ifdef QT_PRESENT
     #include <QImage>
@@ -14,20 +15,6 @@
 #endif
 
 class PortableImagePrivate;
-struct ImageSrcTreeNode;
-
-/**
- * @brief The ID and source tree of an image
- */
-typedef std::shared_ptr<ImageSrcTreeNode> SourceID;
-
-/**
- * @brief A node of the source-tree
- */
-struct ImageSrcTreeNode
-{
-    std::vector<SourceID> sources;
-};
 
 /**
  * @brief A portable image class with smart memory management
@@ -55,7 +42,7 @@ struct ImageSrcTreeNode
  *
  * \ingroup robot_framework
  */
-class PORTABLE_EXPORT_CLASS PortableImage
+class PORTABLE_EXPORT_CLASS PortableImage : public StreamObject
 {
 public:
 
@@ -73,7 +60,7 @@ public:
         BGR_CV
     };
 
-    PortableImage();
+    PortableImage(std::initializer_list<SourceID> sources = {});
 #ifdef QT_PRESENT
     /**
      * @brief Constructs an image with the given data of a QImage
@@ -97,10 +84,7 @@ public:
     PortableImage(cv::Mat img, std::initializer_list<SourceID> sources = {});
 #endif
 
-    // The std::unique_ptr cannot be automatically copied
-    PortableImage(const PortableImage &other);
-    PortableImage &operator=(const PortableImage &other);
-    virtual ~PortableImage();
+    ~PortableImage();
 
     /**
      * @return The width of the image
@@ -137,11 +121,6 @@ public:
      */
     const unsigned char *data(void) const;
 
-    /**
-     * @return The image ID / source-tree
-     */
-    SourceID id(void) const;
-
 #ifdef QT_PRESENT
     /**
      * @brief Convert the image to a QImage
@@ -170,7 +149,9 @@ public:
 #endif
 
 protected:
-    std::unique_ptr<PortableImagePrivate> _this;
+    PortableImagePrivate *_this;
+
+    PortableImage(bool do_init, std::initializer_list<SourceID> sources);
 };
 
 #endif // PORTABLEIMAGE_H

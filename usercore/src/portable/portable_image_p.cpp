@@ -1,26 +1,11 @@
 
 #include "portable/portable_image_p.h"
 
-PortableImagePrivate::PortableImagePrivate(PortableImage *q)
-{
-    _this = q;
-}
-
-void PortableImagePrivate::init(int w, int h, PortableImage::Format f, std::initializer_list<SourceID> sources)
+void PortableImagePrivate::init(int w, int h, PortableImage::Format f)
 {
     this->w = w;
     this->h = h;
     this->f = f;
-
-    if(sources.size() == 0)
-    {
-        this->id = nullptr;
-    }
-    else
-    {
-        this->id = std::make_shared<ImageSrcTreeNode>();
-        this->id->sources = std::vector<SourceID>(sources);
-    }
 
     switch(f)
     {
@@ -54,9 +39,4 @@ void PortableImagePrivate::init(int w, int h, PortableImage::Format f, std::init
     }
 
     this->len = w * h * this->bytes;
-}
-
-void PortableImagePrivate::deleter(unsigned char *target)
-{
-    operator delete(target);
 }

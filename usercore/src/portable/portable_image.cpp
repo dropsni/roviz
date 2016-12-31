@@ -2,18 +2,31 @@
 #include "portable/portable_image.h"
 #include "portable/portable_image_p.h"
 
-PortableImage::PortableImage()
-    : _this(new PortableImagePrivate(this))
+PortableImage::PortableImage(std::initializer_list<SourceID> sources)
+    : StreamObject(sources),
+      _this(new PortableImagePrivate())
 {
+    _this_base.reset(_this);
+
     _this->is_self_managed = true;
-    _this->init(0, 0, PortableImage::NoFormat, {});
     _this->data_ptr = nullptr;
+
+    _this->init(0, 0, PortableImage::NoFormat);
+}
+
+PortableImage::PortableImage(bool, std::initializer_list<SourceID> sources)
+    : StreamObject(sources),
+      _this(new PortableImagePrivate())
+{
 }
 
 #ifdef QT_PRESENT
 PortableImage::PortableImage(QImage img, std::initializer_list<SourceID> sources)
-    : _this(new PortableImagePrivate(this))
+    : StreamObject(sources),
+      _this(new PortableImagePrivate())
 {
+    _this_base.reset(_this);
+
     enum PortableImage::Format f;
     int cf = -1;
 
@@ -26,20 +39,26 @@ PortableImage::PortableImage(QImage img, std::initializer_list<SourceID> sources
     }
 
     _this->is_self_managed = false;
-    _this->init(img.width(), img.height(), f, sources);
     _this->qt_img = img;
+
     // Now things are getting ugly, but Qt fights hard to force us to make a copy
     _this->data_ptr = const_cast<unsigned char*>(_this->qt_img.constBits());
+
 #ifdef OPENCV_PRESENT
     _this->cv_img = cv::Mat(img.height(), img.width(), cf, _this->data_ptr);
 #endif
+
+    _this->init(img.width(), img.height(), f);
 }
 #endif
 
 #ifdef OPENCV_PRESENT
 PortableImage::PortableImage(cv::Mat img, std::initializer_list<SourceID> sources)
-    : _this(new PortableImagePrivate(this))
+    : StreamObject(sources),
+      _this(new PortableImagePrivate())
 {
+    _this_base.reset(_this);
+
     enum PortableImage::Format f;
     QImage::Format qf = QImage::Format_Invalid;
 
@@ -52,26 +71,16 @@ PortableImage::PortableImage(cv::Mat img, std::initializer_list<SourceID> source
     }
 
     _this->is_self_managed = false;
-    _this->init(img.cols, img.rows, f, sources);
     _this->cv_img = img;
     _this->data_ptr = _this->cv_img.data;
+
 #ifdef QT_PRESENT
     _this->qt_img = QImage(img.data, img.cols, img.rows, qf);
 #endif
+
+    _this->init(img.cols, img.rows, f);
 }
 #endif
-
-PortableImage::PortableImage(const PortableImage &other)
-    : _this(new PortableImagePrivate(this))
-{
-    *_this = *other._this;
-}
-
-PortableImage &PortableImage::operator=(const PortableImage &other)
-{
-    *_this = *other._this;
-    return *this;
-}
 
 PortableImage::~PortableImage()
 {
@@ -110,11 +119,6 @@ int PortableImage::dataLength() const
 const unsigned char *PortableImage::data() const
 {
     return _this->data_ptr;
-}
-
-SourceID PortableImage::id() const
-{
-    return _this->id;
 }
 
 const QImage PortableImage::toQt()

@@ -12,7 +12,7 @@ public:
     QWidget *main_widget;
     QPushButton *collapse_btn;
     QHBoxLayout *main_layout, *main_image_layout, *main_control_layout;
-    QMap<ImageOutput, ImageWidget*> out_widgets;
+    QMap<Output, ImageWidget*> out_widgets;
     QMap<ItemInput*, StreamToInputMapper*> in_mappers;
     QList<QSlider*> sliders;
     QMap<QSlider*, SliderLabel*> slider_to_label;
@@ -25,19 +25,9 @@ public:
 
 public slots:
     /**
-     * @brief The image input was connected or disconnected
+     * @brief The input was connected or disconnected
      */
-    void imageInputStateChanged(void);
-
-    /**
-     * @brief The message input was connected or disconnected
-     */
-    void messageInputStateChanged(void);
-
-    /**
-     * @brief The pointcloud input was connected or disconnected
-     */
-    void pointcloudInputStateChanged(void);
+    void inputStateChanged(void);
 
     /**
      * @brief Wrapper that calls trimChanged()

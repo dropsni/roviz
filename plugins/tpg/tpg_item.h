@@ -8,7 +8,7 @@
 #include <QTimer>
 #include <atomic>
 #include "portable/portable_item.h"
-#include "portable/portable_image_mutable.h"
+#include "portable/portable_image_m.h"
 
 /**
  * @brief Test pattern generator for testing

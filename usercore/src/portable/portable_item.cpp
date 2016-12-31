@@ -2,8 +2,8 @@
 #include "portable/portable_item.h"
 #include "portable/portable_item_p.h"
 
-PortableItem::PortableItem(std::string typeName)
-    : PortableItemBase(typeName),
+PortableItem::PortableItem(std::string type_name)
+    : PortableItemBase(type_name),
       _this(new PortableItemPrivate(this))
 {
     _this->th = nullptr;
@@ -14,87 +14,13 @@ PortableItem::PortableItem(std::string typeName)
 PortableItem::~PortableItem()
 {
     this->stop();
-    for(auto ent : _this->img_in_queue)
+    for(auto &ent : _this->in_queue)
         delete ent.second;
-    _this->img_in_queue.clear();
-    _this->msg_in_queue.clear();
-    _this->pc_in_queue.clear();
+    _this->in_queue.clear();
 }
 
 void PortableItem::starting()
 {
-}
-
-PortableImage PortableItem::nextImage(ImageInput input)
-{
-    return _this->img_in_queue[input]->next();
-}
-
-PortableImage PortableItem::newestImage(ImageInput input)
-{
-    return _this->img_in_queue[input]->newest();
-}
-
-Message PortableItem::nextMessage(MessageInput input)
-{
-    return _this->msg_in_queue[input]->next();
-}
-
-Message PortableItem::newestMessage(MessageInput input)
-{
-    return _this->msg_in_queue[input]->newest();
-}
-
-Pointcloud PortableItem::nextPointcloud(PointcloudInput input)
-{
-    return _this->pc_in_queue[input]->next();
-}
-
-Pointcloud PortableItem::newestPointcloud(PointcloudInput input)
-{
-    return _this->pc_in_queue[input]->newest();
-}
-
-bool PortableItem::waitForImage(ImageInput input)
-{
-    // Give other threads a chance too
-    std::this_thread::yield();
-
-    if(_this->img_in_queue.find(input) == _this->img_in_queue.end())
-        return false;
-
-    std::unique_lock<std::mutex> lock(_this->mtx);
-    _this->cond.wait(lock, [&]{return _this->img_in_queue[input]->available() || _this->is_stopped;});
-
-    return !_this->is_stopped;
-}
-
-bool PortableItem::waitForMessage(MessageInput input)
-{
-    // Give other threads a chance too
-    std::this_thread::yield();
-
-    if(_this->msg_in_queue.find(input) == _this->msg_in_queue.end())
-        return false;
-
-    std::unique_lock<std::mutex> lock(_this->mtx);
-    _this->cond.wait(lock, [&]{return _this->msg_in_queue[input]->available() || _this->is_stopped;});
-
-    return !_this->is_stopped;
-}
-
-bool PortableItem::waitForPointcloud(PointcloudInput input)
-{
-    // Give other threads a chance too
-    std::this_thread::yield();
-
-    if(_this->pc_in_queue.find(input) == _this->pc_in_queue.end())
-        return false;
-
-    std::unique_lock<std::mutex> lock(_this->mtx);
-    _this->cond.wait(lock, [&]{return _this->pc_in_queue[input]->available() || _this->is_stopped;});
-
-    return !_this->is_stopped;
 }
 
 bool PortableItem::wait()
@@ -171,72 +97,36 @@ void PortableItem::addConfig(std::string name, std::vector<std::string> possibil
     PortableItemBase::addConfig(name, possibilities, index);
 }
 
-MessageOutput PortableItem::addMessageOutput(std::string name)
+void PortableItem::pushIn(StreamObject obj, Input in)
 {
-    return PortableItemBase::addMessageOutput(name);
-}
-
-MessageInput PortableItem::addMessageInput(std::string name)
-{
-    MessageInput in;
-
-    in = PortableItemBase::addMessageInput(name);
-    _this->msg_in_queue[in] = new InputQueue<Message>();
-
-    return in;
-}
-
-void PortableItem::pushMessageOut(Message message, MessageOutput output)
-{
-    PortableItemBase::pushMessageOut(message, output);
-}
-
-void PortableItem::newMessageReceived(Message, MessageInput)
-{
-}
-
-PointcloudOutput PortableItem::addPointcloudOutput(std::string name)
-{
-    return PortableItemBase::addPointcloudOutput(name);
-}
-
-PointcloudInput PortableItem::addPointcloudInput(std::string name)
-{
-    PointcloudInput in;
-
-    in = PortableItemBase::addPointcloudInput(name);
-    _this->pc_in_queue[in] = new InputQueue<Pointcloud>();
-
-    return in;
-}
-
-void PortableItem::pushPointcloudOut(Pointcloud pc, PointcloudOutput output)
-{
-    PortableItemBase::pushPointcloudOut(pc, output);
+    if(_this->in_queue.size() < MAX_QUEUE_SIZE)
+    {
+        _this->in_queue[in]->push(obj);
+        _this->cond.notify_all();
+    }
 }
 
 void PortableItem::stopped()
 {
 }
 
-ImageInput PortableItem::addImageInput(std::string name)
+void PortableItem::pushOut(StreamObject obj, Output out)
 {
-    ImageInput in;
-
-    in = PortableItemBase::addImageInput(name);
-    _this->img_in_queue[in] = new InputQueue<PortableImage>();
-
-    return in;
+    PortableItemBase::pushOut(obj, out);
 }
 
-ImageOutput PortableItem::addImageOutput(std::string name)
+bool PortableItem::waitForInput(Input in)
 {
-    return PortableItemBase::addImageOutput(name);
-}
+    // Give other threads a chance too
+    std::this_thread::yield();
 
-void PortableItem::pushImageOut(PortableImage img, ImageOutput output)
-{
-    PortableItemBase::pushImageOut(img, output);
+    if(_this->in_queue.find(in) == _this->in_queue.end())
+        return false;
+
+    std::unique_lock<std::mutex> lock(_this->mtx);
+    _this->cond.wait(lock, [&]{return _this->in_queue[in]->available() || _this->is_stopped;});
+
+    return !_this->is_stopped;
 }
 
 Trim PortableItem::addTrim(std::string name, int min, int max)
@@ -269,34 +159,6 @@ void PortableItem::unpause()
     this->wake();
 }
 
-void PortableItem::pushImageIn(PortableImage img, ImageInput input)
-{
-    if(_this->img_in_queue.size() < MAX_QUEUE_SIZE)
-    {
-        _this->img_in_queue[input]->push(img);
-        _this->cond.notify_all();
-    }
-}
-
-void PortableItem::pushMessageIn(Message msg, MessageInput input)
-{
-    if(_this->msg_in_queue.size() < MAX_QUEUE_SIZE)
-    {
-        _this->msg_in_queue[input]->push(msg);
-        _this->cond.notify_all();
-    }
-    PortableItemBase::pushMessageIn(msg, input);
-}
-
-void PortableItem::pushPointcloudIn(Pointcloud pc, PointcloudInput input)
-{
-    if(_this->pc_in_queue.size() < MAX_QUEUE_SIZE)
-    {
-        _this->pc_in_queue[input]->push(pc);
-        _this->cond.notify_all();
-    }
-}
-
 void PortableItem::start()
 {
     this->starting();
@@ -320,4 +182,33 @@ void PortableItem::stop()
     }
     this->stopped();
     PortableItemBase::stop();
+}
+
+template<class T>
+Input PortableItem::addInput(std::string name)
+{
+    Input in;
+
+    in = this->addInputBase<T>(name);
+    _this->in_queue[in] = new InputQueue();
+
+    return in;
+}
+
+template<class T>
+Output PortableItem::addOutput(std::string name)
+{
+    return this->addOutputBase<T>(name);
+}
+
+template<class T>
+T PortableItem::newest(Input in)
+{
+    return T(_this->in_queue[in]->newest());
+}
+
+template<class T>
+T PortableItem::next(Input in)
+{
+    return T(_this->in_queue[in]->next());
 }

@@ -1,15 +1,37 @@
 #ifndef STREAM_OBJECT_H
 #define STREAM_OBJECT_H
 
-//#include "portable/stream_object_base.h"
+#include <memory>
+#include <vector>
 
-//template<class T>
-class StreamObject //: public StreamObjectBase
+struct SrcTreeNode;
+class StreamObjectPrivate;
+
+/**
+ * @brief The ID and source tree of an image
+ */
+typedef std::shared_ptr<SrcTreeNode> SourceID;
+
+/**
+ * @brief A node of the source-tree
+ */
+struct SrcTreeNode
 {
-public:
-    StreamObject();
+    std::vector<SourceID> sources;
 };
 
+class StreamObject
+{
+public:
+    virtual ~StreamObject();
+    SourceID id(void) const;
+
+protected:
+    StreamObject(std::initializer_list<SourceID> sources);
+
+protected:
+    std::shared_ptr<StreamObjectPrivate> _this_base;
+};
 
 /*
  * Rough idea:

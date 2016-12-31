@@ -5,11 +5,11 @@
 #include <memory>
 #include <initializer_list>
 #include "portable/portable_image.h"
+#include "portable/stream_object_p.h"
 
-class PortableImagePrivate
+class PortableImagePrivate : public StreamObjectPrivate
 {
 public:
-    PortableImage *_this;
 #ifdef QT_PRESENT
     QImage qt_img;
 #endif
@@ -18,14 +18,11 @@ public:
 #endif
     unsigned char *data_ptr;
     bool is_self_managed;
-    std::shared_ptr<unsigned char> mem;
     int w, h, bits, bytes, len;
     enum PortableImage::Format f;
-    SourceID id;
 
-    PortableImagePrivate(PortableImage *q);
-    void init(int w, int h, enum PortableImage::Format f, std::initializer_list<SourceID> sources);
-    static void deleter(unsigned char *target);
+    ~PortableImagePrivate();
+    void init(int w, int h, enum PortableImage::Format f);
 };
 
 #endif // PORTABLEIMAGEPRIVATE_H

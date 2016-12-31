@@ -92,49 +92,51 @@ void AbstractRobotItem::restart()
     this->start();
 }
 
-ImageInput AbstractRobotItem::addImageInput(std::string name)
+template<class T>
+Input AbstractRobotItem::addInputBase(std::string name)
 {
     ItemInput *in;
 
-    in = this->addInput(qMetaTypeId<ImageStream*>(), QString::fromStdString(name));
+    in = this->AbstractItem::addInput(qMetaTypeId<Stream<T>*>(), QString::fromStdString(name));
     connect(in, &ItemInput::dataChanged,
-            _this.data(), &AbstractRobotItemPrivate::imageInputStateChanged);
+            _this.data(), &AbstractRobotItemPrivate::inputStateChanged);
 
-    return ImageInput(in);
+    return Input(in);
 }
 
-ImageOutput AbstractRobotItem::addImageOutput(std::string name)
+template<class T>
+Output AbstractRobotItem::addOutputBase(std::string name)
 {
     ItemOutput *out;
-    ImageWidget *img;
+    Stream<T> *s = new Stream<T>(this);
 
-    out = this->addOutput(qMetaTypeId<ImageStream*>(), QString::fromStdString(name));
-    this->setOutputData(out, new ImageStream(this));
-    img = new ImageWidget();
-    _this->out_widgets.insert(ImageOutput(out), img);
-    _this->main_image_layout->addWidget(img);
+    out = this->AbstractItem::addOutput(qMetaTypeId<Stream<T>*>(), QString::fromStdString(name));
+    this->setOutputData(out, s);
+    _this->out_widgets.insert(Output(out), s->widget());
+    _this->main_image_layout->addWidget(s->widget());
 
-    return ImageOutput(out);
+    return Output(out);
 }
 
-void AbstractRobotItem::pushImageOut(PortableImage img, ImageOutput output)
+void AbstractRobotItem::pushOut(StreamObject obj, Output output)
 {
     ItemOutput *out;
-    ImageStream *stream;
+    StreamBase *stream;
 
     out = static_cast<ItemOutput*>(output);
     if(out == nullptr || out->data() == nullptr)
         return;
 
-    stream = qobject_cast<ImageStream*>(out->data());
+    stream = qobject_cast<StreamBase*>(out->data());
     if(stream == nullptr)
         return;
 
-    emit stream->newImage(img);
+    emit stream->newObject(obj);
 
-    // Prevent overwriting the default image, if the item is not running
+    // Prevent overwriting the default widget if the item is not running
+    // TODO Maybe that check is no longer necessary
     if(this->running())
-        _this->out_widgets.value(output)->setImage(img);
+        _this->out_widgets[output]->update();
 }
 
 Trim AbstractRobotItem::addTrim(std::string name, int min, int max)
@@ -212,85 +214,6 @@ void AbstractRobotItem::addConfig(std::string name, std::vector<std::string> pos
 {
     _this->conf_diag->addItem(name, possibilities, index);
     _this->config_present = true;
-}
-
-MessageOutput AbstractRobotItem::addMessageOutput(std::string name)
-{
-    ItemOutput *out;
-
-    out = this->addOutput(qMetaTypeId<MessageStream*>(),  QString::fromStdString(name));
-    this->setOutputData(out, new MessageStream(this));
-
-    return MessageOutput(out);
-}
-
-MessageInput AbstractRobotItem::addMessageInput(std::string name)
-{
-    ItemInput *in;
-
-    in = this->addInput(qMetaTypeId<MessageStream*>(), QString::fromStdString(name));
-    connect(in, &ItemInput::dataChanged,
-            _this.data(), &AbstractRobotItemPrivate::messageInputStateChanged);
-
-    return MessageInput(in);
-}
-
-void AbstractRobotItem::pushMessageOut(Message message, MessageOutput output)
-{
-    ItemOutput *out;
-    MessageStream *stream;
-
-    out = static_cast<ItemOutput*>(output);
-    if(out == nullptr)
-        return;
-
-    stream = qobject_cast<MessageStream*>(out->data());
-    if(stream == nullptr)
-        return;
-
-    emit stream->newMessage(message);
-}
-
-PointcloudInput AbstractRobotItem::addPointcloudInput(std::string name)
-{
-    ItemInput *in;
-
-    in = this->addInput(qMetaTypeId<PointStream*>(), QString::fromStdString(name));
-    connect(in, &ItemInput::dataChanged,
-            _this.data(), &AbstractRobotItemPrivate::pointcloudInputStateChanged);
-
-    return PointcloudInput(in);
-}
-
-PointcloudOutput AbstractRobotItem::addPointcloudOutput(std::string name)
-{
-    ItemOutput *out;
-
-    out = this->addOutput(qMetaTypeId<PointStream*>(), QString::fromStdString(name));
-    this->setOutputData(out, new PointStream(this));
-
-    return PointcloudOutput(out);
-}
-
-void AbstractRobotItem::pushPointcloudOut(Pointcloud pc, PointcloudOutput output)
-{
-    ItemOutput *out;
-    PointStream *stream;
-
-    out = static_cast<ItemOutput*>(output);
-    if(out == nullptr)
-        return;
-
-    stream = qobject_cast<PointStream*>(out->data());
-    if(stream == nullptr)
-        return;
-
-    emit stream->newPoints(pc);
-}
-
-void AbstractRobotItem::pushMessageIn(Message msg, MessageInput input)
-{
-    this->newMessageReceived(msg, input);
 }
 
 void AbstractRobotItem::start()

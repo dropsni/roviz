@@ -3,12 +3,11 @@
 
 #include <QObject>
 #include <QWidget>
-#include <QLabel>
-#include <QPixmap>
+#include <QOpenGLWidget>
 #include <QImage>
-#include <QResizeEvent>
 #include "core/robot_core.h"
 #include "portable/portable_image.h"
+#include "core/stream.h"
 
 /**
  * @brief A widget to show images
@@ -18,7 +17,7 @@
  *
  * \ingroup robot_framework
  */
-class ROBOTCORE_EXPORT ImageWidget : public QLabel
+class ROBOTCORE_EXPORT ImageWidget : public QOpenGLWidget
 {
 Q_OBJECT
 
@@ -26,28 +25,14 @@ public:
     ImageWidget(QWidget *parent = nullptr);
 
     /**
-     * @brief Set the image that the widget should display
-     * @param img
-     */
-    void setImage(const PortableImage img);
-
-    /**
      * @brief Reset the widget to make it show the default image again
      */
     void reset(void);
 
 protected:
-    void resizeEvent(QResizeEvent *) override;
-
-private:
-    QPixmap original, default_pix;
-    PortableImage image;
-
-private slots:
-    void setPixmapSlot(QImage img);
-
-signals:
-    void setPixmapSignal(QImage img);
+    void initializeGL(void) override;
+    void paintGL(void) override;
+    void resizeGL(int w, int h) override;
 };
 
 #endif // IMAGEWIDGET_H

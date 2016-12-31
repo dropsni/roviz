@@ -3,16 +3,13 @@
 
 #include "portable/portable_item.h"
 #include "portable/input_queue.h"
-#include "core/pointcloud.h"
-#include "core/message.h"
+#include "portable/message.h"
 
 class PortableItemPrivate
 {
 public:
     PortableItem *_this;
-    std::map<ImageInput, InputQueue<PortableImage>* > img_in_queue;
-    std::map<MessageInput, InputQueue<Message>* > msg_in_queue;
-    std::map<PointcloudInput, InputQueue<Pointcloud>* > pc_in_queue;
+    std::map<Input, InputQueue*> in_queue;
     std::condition_variable cond;
     std::thread *th;
     std::mutex mtx;

@@ -6,10 +6,10 @@ AbstractRobotItemPrivate::AbstractRobotItemPrivate(AbstractRobotItem *q)
     this->_this = q;
 }
 
-void AbstractRobotItemPrivate::imageInputStateChanged()
+void AbstractRobotItemPrivate::inputStateChanged()
 {
     ItemInput *in;
-    ImageStream *stream;
+    StreamBase *stream;
     StreamToInputMapper *map;
 
     in = qobject_cast<ItemInput*>(sender());
@@ -25,80 +25,16 @@ void AbstractRobotItemPrivate::imageInputStateChanged()
         delete map;
     }
 
-    stream = qobject_cast<ImageStream*>(in->data());
+    stream = qobject_cast<StreamBase*>(in->data());
     if(stream == nullptr)
         return;
 
     map = new StreamToInputMapper(this);
     map->input = in;
-    map->conn1 = connect(stream, &ImageStream::newImage,
-                         map, &StreamToInputMapper::imgInputMapper);
-    map->conn2 = connect(map, &StreamToInputMapper::newImage,
-                         _this, &AbstractRobotItem::pushImageIn);
-    this->in_mappers.insert(in, map);
-}
-
-void AbstractRobotItemPrivate::messageInputStateChanged()
-{
-    ItemInput *in;
-    MessageStream *stream;
-    StreamToInputMapper *map;
-
-    in = qobject_cast<ItemInput*>(sender());
-    if(in == nullptr)
-        return;
-
-    map = this->in_mappers.value(in, nullptr);
-    if(map != nullptr)
-    {
-        disconnect(map->conn1);
-        disconnect(map->conn2);
-        this->in_mappers.remove(in);
-        delete map;
-    }
-
-    stream = qobject_cast<MessageStream*>(in->data());
-    if(stream == nullptr)
-        return;
-
-    map = new StreamToInputMapper(this);
-    map->input = in;
-    map->conn1 = connect(stream, &MessageStream::newMessage,
-                         map, &StreamToInputMapper::msgInputMapper);
-    map->conn2 = connect(map, &StreamToInputMapper::newMessage,
-                         _this, &AbstractRobotItem::pushMessageIn);
-    this->in_mappers.insert(in, map);
-}
-
-void AbstractRobotItemPrivate::pointcloudInputStateChanged()
-{
-    ItemInput *in;
-    PointStream *stream;
-    StreamToInputMapper *map;
-
-    in = qobject_cast<ItemInput*>(sender());
-    if(in == nullptr)
-        return;
-
-    map = this->in_mappers.value(in, nullptr);
-    if(map != nullptr)
-    {
-        disconnect(map->conn1);
-        disconnect(map->conn2);
-        this->in_mappers.remove(in);
-        delete map;
-    }
-
-    stream = qobject_cast<PointStream*>(in->data());
-    if(stream == nullptr)
-        return;
-
-    map = new StreamToInputMapper(this);
-    map->input = in;
-    map->conn1 = connect(stream, &PointStream::newPoints,
-                         map, &StreamToInputMapper::pcInputMapper);
-    map->conn2 = connect(map, &StreamToInputMapper::newPointcloud,
-                         _this, &AbstractRobotItem::pushPointcloudIn);
+    map->conn1 = connect(stream, &StreamBase::newObject,
+                         map, &StreamToInputMapper::inputMapper);
+    map->conn2 = connect(map, &StreamToInputMapper::newObject,
+                         _this, &AbstractRobotItem::pushIn);
     this->in_mappers.insert(in, map);
 }
 

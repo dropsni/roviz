@@ -66,6 +66,7 @@
 #include "portable_item_global.h"
 #include "portable_image.h"
 #include "portable/input_queue.h"
+#include "portable/stream_object.h"
 
 class PortableItemPrivate;
 
@@ -149,78 +150,69 @@ protected:
     virtual void stopped(void);
 
     /**
-     * @brief Returns the next image in the input queue
-     * @param input The input handle returned from addImageInput()
-     * @return The next image in the input queue
+     * @brief Returns the next object in the input queue
+     * @param input The input handle returned from addInput()
+     * @return The next object in the input queue
      *
-     * \sa addImageInput
-     * \sa newestImage
+     * \sa addInput
+     * \sa newest
      */
-    PortableImage nextImage(ImageInput input);
+    template<class T>
+    T next(Input in);
 
     /**
-     * @brief Returns the newest image in the input queue
-     * @param input The input handle returned from addImageInput()
-     * @return Returns the newest image in the input queue
+     * @brief Returns the newest object in the input queue
+     * @param input The input handle returned from addInput()
+     * @return Returns the newest object in the input queue
      *
-     * All older images in the input queue are discarded.
+     * All older objects in the input queue are discarded.
      *
-     * \sa addImageInput
-     * \sa nextImage
+     * \sa addInput
+     * \sa next
      */
-    PortableImage newestImage(ImageInput input);
+    template<class T>
+    T newest(Input in);
 
     /**
-     * @brief Returns the next message in the input queue
-     * @param input The input handle returned from addMessageInput()
-     * @return The next message in the input queue
+     * @brief Send an object out through an output
+     * @param obj The object
+     * @param out The output handle returned from addOutput()
      *
-     * \sa addMessageInput
-     * \sa newestMessage
+     * This function is completely thread safe, you can call it from
+     * thread() of any other function, like e.g. an event handler.
+     *
+     * \sa addOutput
      */
-    Message nextMessage(MessageInput input);
+    void pushOut(StreamObject obj, Output out);
 
     /**
-     * @brief Returns the newest message in the input queue
-     * @param input The input handle returned from addMessageInput()
-     * @return Returns the newest message in the input queue
+     * @brief Add an input
+     * @param name Name of the input
+     * @return Handle to that input
      *
-     * All older messages in the input queue are discarded.
-     *
-     * \sa addMessageInput
-     * \sa nextMessage
+     * \sa addOutput
      */
-    Message newestMessage(MessageInput input);
+    template<class T>
+    Input addInput(std::string name);
 
     /**
-     * @brief Returns the next pointcloud in the input queue
-     * @param input The input handle returned from addPointcloudInput()
-     * @return The next pointcloud in the input queue
+     * @brief Add an output
+     * @param name Name of the output
+     * @return Handle to that output
      *
-     * \sa addPointcloudInput
-     * \sa newestPointcloud
+     * \sa addInput
+     * \sa pushOut
      */
-    Pointcloud nextPointcloud(PointcloudInput input);
+    template<class T>
+    Output addOutput(std::string name);
 
     /**
-     * @brief Returns the newest pointcloud in the input queue
-     * @param input The input handle returned from addPointcloudInput()
-     * @return Returns the newest pointcloud in the input queue
-     *
-     * All older pointclouds in the input queue are discarded.
-     *
-     * \sa addPointcloudInput
-     * \sa nextPointcloud
-     */
-    Pointcloud newestPointcloud(PointcloudInput input);
-
-    /**
-     * @brief Wait until an image is available at the input
-     * @param input The input handle returned from addImageInput()
-     * @return true - New image is available
+     * @brief Wait until an object is available at the input
+     * @param input The input handle returned from addInput()
+     * @return true - New object is available
      *         false - The item was stopped, the thread _HAS TO_ exit
      *
-     * This function should be used by most image processing items to ensure
+     * This function should be used by most (image processing) items to ensure
      * the start/pause/stop mechanism works.
      *
      * This function implements the pause/stop mechanism. It doesn't return
@@ -231,40 +223,7 @@ protected:
      * \sa wait
      * \sa running
      */
-    bool waitForImage(ImageInput input);
-
-    /**
-     * @brief Wait until a message is available at the input
-     * @param input The input handle returned from addMessageInput()
-     * @return true - New message is available
-     *         false - The item was stopped, the thread _HAS TO_ exit
-     *
-     * This function implements the pause/stop mechanism. It doesn't return
-     * as long as the item is paused and returns false if it is stopped. It
-     * is important that the thread exits when this happens!
-     *
-     * \sa waitFor
-     * \sa wait
-     * \sa running
-     * \sa newMessageReceived
-     */
-    bool waitForMessage(MessageInput input);
-
-    /**
-     * @brief Wait until a pointcloud is available at the input
-     * @param input The input handle returned from addPointcloudInput()
-     * @return true - New pointcloud is available
-     *         false - The item was stopped, the thread _HAS TO_ exit
-     *
-     * This function implements the pause/stop mechanism. It doesn't return
-     * as long as the item is paused and returns false if it is stopped. It
-     * is important that the thread exits when this happens!
-     *
-     * \sa waitFor
-     * \sa wait
-     * \sa running
-     */
-    bool waitForPointcloud(PointcloudInput input);
+    bool waitForInput(Input in);
 
     /**
      * @brief Sleep until a condition comes true
@@ -379,100 +338,6 @@ protected:
     std::mutex &mutex(void);
 
     /**
-     * @brief Add an image input
-     * @param name Name of the input
-     * @return Handle to that input
-     *
-     * \sa addImageOutput
-     */
-    ImageInput addImageInput(std::string name) override;
-
-    /**
-     * @brief Add an image output
-     * @param name Name of the output
-     * @return Handle to that output
-     *
-     * \sa addImageInput
-     * \sa pushImageOut
-     */
-    ImageOutput addImageOutput(std::string name) override;
-
-    /**
-     * @brief Send an image out through an output
-     * @param img The image
-     * @param output The output handle returned from addImageOutput()
-     *
-     * This function is completely thread safe, you can call it from
-     * thread() of any other function, like e.g. an event handler.
-     *
-     * \sa addImageOutput
-     */
-    void pushImageOut(PortableImage img, ImageOutput output) override;
-
-    /**
-     * @brief Add a message output
-     * @param name Name of the output
-     * @return Handle to that output
-     *
-     * \sa outputMessage
-     * \sa addMessageInput
-     */
-    MessageOutput addMessageOutput(std::string name) override;
-
-    /**
-     * @brief Add a message input
-     * @param name Name of the input
-     * @return Handle to that input
-     *
-     * \sa newMessageReceived
-     * \sa addMessageOutput
-     */
-    MessageInput addMessageInput(std::string name) override;
-
-    /**
-     * @brief Write a message to the output
-     * @param output The output handle returned from addMessageOutput()
-     * @param message The message to send
-     *
-     * You have to manually set the type of each message by altering the 'type' field.
-     */
-    void pushMessageOut(Message message, MessageOutput output) override;
-
-    /**
-     * @brief Called when a new message arrived at an input
-     * @param input The input that received the message
-     * @param message The message that was received
-     */
-    virtual void newMessageReceived(Message message, MessageInput input) override;
-
-    /**
-     * @brief Add a pointcloud output
-     * @param name Name of the output
-     * @return Handle to that output
-     *
-     * \sa addPointcloudInput
-     */
-    PointcloudOutput addPointcloudOutput(std::string name) override;
-
-    /**
-     * @brief Add a pointcloud input
-     * @param name Name of the input
-     * @return Handle to that input
-     *
-     * \sa addPointcloudOutput
-     */
-    PointcloudInput addPointcloudInput(std::string name) override;
-
-    /**
-     * @brief Write a message to the output
-     * @param output The output handle returned from addMessageOutput()
-     * @param message The message to send
-     *
-     * You have to manually set the type of each message by altering the 'type' field.
-     */
-    void pushPointcloudOut(Pointcloud pc, PointcloudOutput output) override;
-
-    /**
      * @brief Add a trim value
      * @param name Name of the value
      * @param min Minimum value
@@ -579,31 +444,13 @@ private:
     ///@{
 
     /**
-     * @brief Add an image to the input queue
-     * @param img The image
-     * @param input The input handle returned from addImageInput()
+     * @brief Add an object to the input queue
+     * @param obj The object
+     * @param input The input handle returned from addInput()
      *
-     * Called by the base class to add a new image to the queue of an input.
+     * Called by the base class to add a new object to the queue of an input.
      */
-    void pushImageIn(PortableImage img, ImageInput input) override;
-
-    /**
-     * @brief Add a message to the input queue
-     * @param msg The message
-     * @param input The input handle returned from addMessageInput()
-     *
-     * Called by the base class to add a new message to the queue of an input.
-     */
-    void pushMessageIn(Message msg, MessageInput input) override;
-
-    /**
-     * @brief Add a pointcloud to the input queue
-     * @param pc The pointcloud
-     * @param input The input handle returned from addPointcloudInput()
-     *
-     * Called by the base class to add a new pointcloud to the queue of an input.
-     */
-    void pushPointcloudIn(Pointcloud pc, PointcloudInput input) override;
+    void pushIn(StreamObject obj, Input input) override;
 
     /**
      * @brief Pause execution

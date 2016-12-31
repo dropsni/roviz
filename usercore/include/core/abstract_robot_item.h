@@ -1,4 +1,4 @@
-﻿#ifndef ABSTRACTROBOTITEM_H
+#ifndef ABSTRACTROBOTITEM_H
 #define ABSTRACTROBOTITEM_H
 
 #include <QObject>
@@ -22,13 +22,12 @@
 #include "helper/settings_scope.h"
 #include "item/item_input.h"
 #include "item/item_output.h"
-#include "core/image_stream.h"
 #include "core/stream_to_input_mapper.h"
 #include "gui/config_dialog.h"
-#include "core/message_stream.h"
-#include "core/point_stream.h"
-#include "core/message_stream.h"
+#include "core/stream.h"
+#include "core/stream_base.h"
 #include "portable/strong_typedef.h"
+#include "portable/stream_object.h"
 
 class AbstractRobotItemPrivate;
 
@@ -68,9 +67,14 @@ public:
     ///@{
 protected:
     virtual bool running(void) = 0;
-    virtual ImageInput addImageInput(std::string name);
-    virtual ImageOutput addImageOutput(std::string name);
-    virtual void pushImageOut(PortableImage img, ImageOutput output);
+
+    template<class T>
+    Input addInputBase(std::string name);
+
+    template<class T>
+    Output addOutputBase(std::string name);
+
+    virtual void pushOut(StreamObject obj, Output output);
     virtual Trim addTrim(std::string name, int min, int max);
     virtual Trim addTrim(std::string name, double min, double max, int steps);
     virtual double trimValue(Trim trim);
@@ -80,13 +84,6 @@ protected:
     virtual void addConfig(std::string name, double *value, std::function<double (double)> checker = [](double a){return a;});
     virtual void addConfig(std::string name, bool *value);
     virtual void addConfig(std::string name, std::vector<std::string> possibilities, int *index);
-    virtual MessageOutput addMessageOutput(std::string name);
-    virtual MessageInput addMessageInput(std::string name);
-    virtual void pushMessageOut(Message message, MessageOutput output);
-    virtual void pushMessageIn(Message msg, MessageInput input);
-    virtual PointcloudInput addPointcloudInput(std::string name);
-    virtual PointcloudOutput addPointcloudOutput(std::string name);
-    virtual void pushPointcloudOut(Pointcloud pc, PointcloudOutput output);
 
 public slots:
     virtual void start(void);
@@ -96,9 +93,7 @@ public slots:
     virtual void unpause(void) = 0;
 
 protected slots:
-    virtual void pushImageIn(const PortableImage img, ImageInput input) = 0;
-    virtual void pushPointcloudIn(const Pointcloud pc, PointcloudInput input) = 0;
-    virtual void newMessageReceived(Message message, MessageInput input) = 0;
+    virtual void pushIn(StreamObject obj, Input input) = 0;
     ///@}
 
 protected:

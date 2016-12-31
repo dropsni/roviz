@@ -2,16 +2,13 @@
 #define MESSAGEPRIVATE_H
 
 #include "message.h"
+#include "portable/stream_object_p.h"
 
-class MessagePrivate
+class MessagePrivate : public StreamObjectPrivate
 {
 public:
-    Message *_this;
-    SourceID id;
     std::vector<Message::Entry> entries;
-
-    MessagePrivate(Message *other);
-    ~MessagePrivate();
+    Message::Entry default_entry;
 };
 
 #endif // MESSAGEPRIVATE_H
