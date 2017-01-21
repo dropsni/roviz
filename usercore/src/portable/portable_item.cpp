@@ -4,7 +4,7 @@
 
 PortableItem::PortableItem(std::string type_name)
     : PortableItemBase(type_name),
-      _this(new PortableItemPrivate(this))
+      _this(new PortableItemPrivate())
 {
     _this->th = nullptr;
     _this->is_stopped = true;
@@ -212,3 +212,5 @@ T PortableItem::next(Input in)
 {
     return T(_this->in_queue[in]->next());
 }
+
+INSTANTIATE_PORTABLE_ITEM

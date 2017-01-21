@@ -2,14 +2,15 @@
 #define STREAM_H
 
 #include "core/stream_base.h"
+#include "portable/template_decl.h"
 
+// This class is only needed to get a typeid
 template<class T>
 class Stream : public StreamBase
 {
 public:
-    // Not implemented, has be be implemented for each specialization
-    // Don't forget STARTUP_ADD_COMPONENT
-    static void init(void);
+    Stream() = default;
+    ~Stream() = default;
 };
 
 #endif // STREAM_H

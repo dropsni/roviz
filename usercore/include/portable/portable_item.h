@@ -67,6 +67,7 @@
 #include "portable_image.h"
 #include "portable/input_queue.h"
 #include "portable/stream_object.h"
+#include "portable/template_decl.h"
 
 class PortableItemPrivate;
 

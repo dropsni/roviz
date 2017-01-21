@@ -27,7 +27,7 @@ CvCameraItem::CvCameraItem()
         480
     };
 
-    this->output = this->addImageOutput("Camera Output");
+    this->output = this->addOutput<Image>("Camera Output");
     this->res_index = 0;
     this->cam_id = 0;
     this->addConfig("Resolution", this->res_list, &this->res_index);
@@ -50,7 +50,7 @@ void CvCameraItem::thread()
     while(this->wait())
     {
         this->cap >> frame;
-        emit this->pushImageOut(PortableImage(frame), this->output);
+        emit this->pushOut(Image(frame), this->output);
     }
 }
 

@@ -7,7 +7,7 @@
 #include "portable/portable_image.h"
 #include "portable/stream_object.h"
 
-class PortableImage;
+class Image;
 
 /**
  * @brief A queue to buffer input stream objects

@@ -15,8 +15,8 @@ public:
     std::mutex mtx;
     bool is_paused, is_stopped;
 
-    PortableItemPrivate(PortableItem *q);
-    ~PortableItemPrivate();
+    PortableItemPrivate() = default;
+    ~PortableItemPrivate() = default;
 };
 
 #endif // PORTABLEITEMPRIVATE_H

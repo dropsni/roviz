@@ -82,8 +82,8 @@ void AbstractRobotItem::contextMenuPrepare(QMenu &menu) const
 
 void AbstractRobotItem::stop()
 {
-    for(ImageWidget* iw : _this->out_widgets)
-        iw->reset();
+//    for(ImageWidget* iw : _this->out_widgets)
+//        iw->reset();
 }
 
 void AbstractRobotItem::restart()
@@ -108,7 +108,7 @@ template<class T>
 Output AbstractRobotItem::addOutputBase(std::string name)
 {
     ItemOutput *out;
-    Stream<T> *s = new Stream<T>(this);
+    Stream<T> *s = new Stream<T>();
 
     out = this->AbstractItem::addOutput(qMetaTypeId<Stream<T>*>(), QString::fromStdString(name));
     this->setOutputData(out, s);
@@ -225,3 +225,5 @@ void AbstractRobotItem::start()
         _this->conf_loaded = true;
     }
 }
+
+INSTANTIATE_PORTABLE_BASE

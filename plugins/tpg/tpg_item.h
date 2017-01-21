@@ -29,10 +29,10 @@ private:
     void trimChanged(Trim trim, double value) override;
 
     QImage test_pattern;
-    PortableImageMutable out_img;
+    ImageMutable out_img;
     QTimer timer;
     int timeout;
-    ImageOutput output;
+    Output output;
     Trim trim;
     bool timer_expired;
 

@@ -6,7 +6,7 @@ TVGItem::TVGItem()
 {
     PORTABLE_INIT(TVG);
 
-    this->output = this->addImageOutput("Output");
+    this->output = this->addOutput<Image>("Output");
     this->addConfig("Video file", &this->vid_path, CONFIG_IS_PATH);
 }
 
@@ -33,7 +33,7 @@ void TVGItem::thread()
         if(!cap.read(out))
             cap.set(CV_CAP_PROP_POS_FRAMES, 0);
 
-        this->pushImageOut(PortableImage(out), this->output);
+        this->pushOut(Image(out), this->output);
         del = std::chrono::high_resolution_clock::now() - last;
         last = std::chrono::high_resolution_clock::now();
         if(del < fdel)

@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <vector>
+#include "portable/template_decl.h"
 
 struct SrcTreeNode;
 class StreamObjectPrivate;
@@ -20,39 +21,18 @@ struct SrcTreeNode
     std::vector<SourceID> sources;
 };
 
-class StreamObject
+class PORTABLE_EXPORT_CLASS StreamObject
 {
+    MAKE_ALL_STREAMS_A_FRIEND
+
 public:
-    virtual ~StreamObject();
+    virtual ~StreamObject() = default;
     SourceID id(void) const;
 
 protected:
-    StreamObject(std::initializer_list<SourceID> sources);
-
-protected:
     std::shared_ptr<StreamObjectPrivate> _this_base;
-};
 
-/*
- * Rough idea:
- *
- * Every object that you can output (image, message, shapecollection) has
- * StreamObject as its base class. All functions will then either be
- * templated and use a cast to get the right class from StreamObject, or
- * it only uses StreamObject itself. The needs to be some copy implementation
- * for StreamObject, because just copying it might not copy the derived
- * object correctly if you don't know its type. Pure-virtual clone()
- * method? Called in copy-constructor?
- *
- * ShapeCollection:
- *
- * Collection of Shape objects, implemented similar to StreamObject, base
- * class of shapes (points, circles, ...), access functions of
- * ShapeCollection have to be templated to provide proper access to the
- * right items. A shape probably needs to provide a unique type-id
- * (pure-virtual id()?) that can be checked before a cast. SEE typeinfo
- * KEYWORD!!!
- *
- */
+    StreamObject(std::initializer_list<SourceID> sources = {});
+};
 
 #endif // STREAM_OBJECT_H

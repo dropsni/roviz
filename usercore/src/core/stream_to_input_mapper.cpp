@@ -6,10 +6,6 @@ StreamToInputMapper::StreamToInputMapper(QObject *parent)
 {
 }
 
-StreamToInputMapper::~StreamToInputMapper()
-{
-}
-
 void StreamToInputMapper::inputMapper(StreamObject obj)
 {
     emit this->newObject(obj, Input(this->input));

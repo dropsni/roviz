@@ -11,7 +11,8 @@ Q_OBJECT
 
 public:
     StreamBase();
-    virtual ~StreamBase();
+    virtual ~StreamBase() = default;
+
     virtual QWidget *widget(void);
 
 private:

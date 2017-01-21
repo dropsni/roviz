@@ -6,8 +6,8 @@ FrameDelayerItem::FrameDelayerItem()
 {
     PORTABLE_INIT(FrameDelayer);
 
-    this->input = this->addImageInput("Input");
-    this->output = this->addImageOutput("Output");
+    this->input = this->addInput<Image>("Input");
+    this->output = this->addOutput<Image>("Output");
     this->delay_trim = this->addTrim("Delay (Frames)", 1, 10);
     this->delay = 1;
 }
@@ -26,16 +26,16 @@ void FrameDelayerItem::starting()
 
 void FrameDelayerItem::thread()
 {
-    while(this->waitForImage(this->input))
+    while(this->waitForInput(this->input))
     {
         std::this_thread::yield();
         std::lock_guard<std::mutex> g(this->mtx);
 
-        this->queue.push(this->newestImage(this->input));
+        this->queue.push(this->newest<Image>(this->input));
         if(this->delay >= this->queue.size())
             continue;
 
-        this->pushImageOut(this->queue.front(), this->output);
+        this->pushOut(this->queue.front(), this->output);
         this->queue.pop();
     }
 }
@@ -46,5 +46,5 @@ void FrameDelayerItem::trimChanged(void *, int value)
 
     this->delay = value;
     // Clear queue
-    std::queue<PortableImage>().swap(this->queue);
+    std::queue<Image>().swap(this->queue);
 }

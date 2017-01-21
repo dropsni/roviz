@@ -18,8 +18,8 @@ protected:
     void thread(void) override;
 
 private:
-    ImageOutput output;
-    PortableImage img;
+    Output output;
+    Image img;
     std::string img_path;
     bool is_gray;
 };

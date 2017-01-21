@@ -23,8 +23,8 @@ protected:
     void thread(void) override;
 
 private:
-    ImageInput input;
-    ImageOutput output;
+    Input input;
+    Output output;
     Trim trim;
 };
 

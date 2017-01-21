@@ -12,7 +12,7 @@ TPGItem::TPGItem()
     this->test_pattern.load(":/test_pattern.png");
     this->test_pattern = this->test_pattern.convertToFormat(QImage::Format_RGB888);
 
-    this->output = this->addImageOutput("Test Pattern Output");
+    this->output = this->addOutput<Image>("Test Pattern Output");
     this->trim = this->addTrim("FPS", 1, 120);
 
     connect(&this->timer, &QTimer::timeout,
@@ -43,9 +43,9 @@ void TPGItem::thread()
         this->mutex().unlock();
 
         const unsigned char *src = this->test_pattern.constBits();
-        this->out_img = PortableImageMutable(this->test_pattern.width(),
-                                               this->test_pattern.height(),
-                                               PortableImage::RGB888);
+        this->out_img = ImageMutable(this->test_pattern.width(),
+                                     this->test_pattern.height(),
+                                     Image::RGB888);
         dst = this->out_img.data();
 
         for(qint32 i = 0; i < this->test_pattern.byteCount(); i++)
@@ -59,7 +59,7 @@ void TPGItem::thread()
         if(f > 1.0)
             f = 0.0;
 
-        this->pushImageOut(this->out_img, this->output);
+        this->pushOut(this->out_img, this->output);
     }
 }
 

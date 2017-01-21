@@ -11,10 +11,10 @@
  *
  * \ingroup robot_framework
  */
-class PORTABLE_EXPORT_CLASS PortableImageMutable : public PortableImage
+class PORTABLE_EXPORT_CLASS ImageMutable : public Image
 {
 public:
-    PortableImageMutable();
+    ImageMutable();
 #ifdef QT_PRESENT
     /**
      * @brief Constructs an image with the given data of a QImage
@@ -24,7 +24,7 @@ public:
      * you gave it for initialization. Manipulating the QImage you passed this
      * class afterwards will cause a deep copy!
      */
-    PortableImageMutable(QImage img, std::initializer_list<SourceID> sources = {});
+    ImageMutable(QImage img, std::initializer_list<SourceID> sources = {});
 #endif
 #ifdef OPENCV_PRESENT
     /**
@@ -35,7 +35,7 @@ public:
      * you gave it for initialization. Manipulating the cv::Mat you passed this
      * class afterwards will cause a deep copy!
      */
-    PortableImageMutable(cv::Mat img, std::initializer_list<SourceID> sources = {});
+    ImageMutable(cv::Mat img, std::initializer_list<SourceID> sources = {});
 #endif
     /**
      * @brief Constructs an empty image with the given size
@@ -43,8 +43,8 @@ public:
      * @param h Height of the image
      * @param f Format of the image
      */
-    PortableImageMutable(int w, int h, enum Format f, std::initializer_list<SourceID> sources = {});
-    ~PortableImageMutable();
+    ImageMutable(int w, int h, enum Format f, std::initializer_list<SourceID> sources = {});
+    ~ImageMutable() = default;
 
     /**
      * @return A pointer to the mutable pixel data

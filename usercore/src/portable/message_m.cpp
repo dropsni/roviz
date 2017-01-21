@@ -7,10 +7,6 @@ MessageMutable::MessageMutable(std::initializer_list<SourceID> sources)
 {
 }
 
-MessageMutable::~MessageMutable()
-{
-}
-
 Message::Entry &MessageMutable::entry(unsigned int index)
 {
     if(index > _this->entries.size())

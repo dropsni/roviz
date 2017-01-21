@@ -2,7 +2,12 @@
 #include "portable/portable_image.h"
 #include "portable/portable_image_p.h"
 
-PortableImage::PortableImage(std::initializer_list<SourceID> sources)
+Image::Image(const StreamObject &base)
+{
+    this->_this_base = base._this_base;
+}
+
+Image::Image(std::initializer_list<SourceID> sources)
     : StreamObject(sources),
       _this(new PortableImagePrivate())
 {
@@ -11,31 +16,31 @@ PortableImage::PortableImage(std::initializer_list<SourceID> sources)
     _this->is_self_managed = true;
     _this->data_ptr = nullptr;
 
-    _this->init(0, 0, PortableImage::NoFormat);
+    _this->init(0, 0, Image::NoFormat);
 }
 
-PortableImage::PortableImage(bool, std::initializer_list<SourceID> sources)
+Image::Image(bool, std::initializer_list<SourceID> sources)
     : StreamObject(sources),
       _this(new PortableImagePrivate())
 {
 }
 
 #ifdef QT_PRESENT
-PortableImage::PortableImage(QImage img, std::initializer_list<SourceID> sources)
+Image::Image(QImage img, std::initializer_list<SourceID> sources)
     : StreamObject(sources),
       _this(new PortableImagePrivate())
 {
     _this_base.reset(_this);
 
-    enum PortableImage::Format f;
+    enum Image::Format f;
     int cf = -1;
 
     switch(img.format())
     {
-        case QImage::Format_RGB555: f = PortableImage::RGB555; break;
-        case QImage::Format_RGB888: f = PortableImage::RGB888; break;
-        case QImage::Format_Grayscale8: f = PortableImage::Gray8; cf = CV_8UC1; break;
-        default: f = PortableImage::NoFormat; break;
+        case QImage::Format_RGB555: f = Image::RGB555; break;
+        case QImage::Format_RGB888: f = Image::RGB888; break;
+        case QImage::Format_Grayscale8: f = Image::Gray8; cf = CV_8UC1; break;
+        default: f = Image::NoFormat; break;
     }
 
     _this->is_self_managed = false;
@@ -53,21 +58,21 @@ PortableImage::PortableImage(QImage img, std::initializer_list<SourceID> sources
 #endif
 
 #ifdef OPENCV_PRESENT
-PortableImage::PortableImage(cv::Mat img, std::initializer_list<SourceID> sources)
+Image::Image(cv::Mat img, std::initializer_list<SourceID> sources)
     : StreamObject(sources),
       _this(new PortableImagePrivate())
 {
     _this_base.reset(_this);
 
-    enum PortableImage::Format f;
+    enum Image::Format f;
     QImage::Format qf = QImage::Format_Invalid;
 
     // Be very careful when using OpenCV images in color mode! They use BGR, not RGB!
     switch(img.channels())
     {
-        case 1: f = PortableImage::Gray8; qf = QImage::Format_Grayscale8; break;
-        case 3: f = PortableImage::BGR_CV; break;
-        default: f = PortableImage::NoFormat; break;
+        case 1: f = Image::Gray8; qf = QImage::Format_Grayscale8; break;
+        case 3: f = Image::BGR_CV; break;
+        default: f = Image::NoFormat; break;
     }
 
     _this->is_self_managed = false;
@@ -82,51 +87,47 @@ PortableImage::PortableImage(cv::Mat img, std::initializer_list<SourceID> source
 }
 #endif
 
-PortableImage::~PortableImage()
-{
-}
-
-int PortableImage::width() const
+int Image::width() const
 {
     return _this->w;
 }
 
-int PortableImage::height() const
+int Image::height() const
 {
     return _this->h;
 }
 
-PortableImage::Format PortableImage::format() const
+Image::Format Image::format() const
 {
     return _this->f;
 }
 
-int PortableImage::bitsPerPixel() const
+int Image::bitsPerPixel() const
 {
     return _this->bits;
 }
 
-int PortableImage::bytesPerPixel() const
+int Image::bytesPerPixel() const
 {
     return _this->bytes;
 }
 
-int PortableImage::dataLength() const
+int Image::dataLength() const
 {
     return _this->len;
 }
 
-const unsigned char *PortableImage::data() const
+const unsigned char *Image::data() const
 {
     return _this->data_ptr;
 }
 
-const QImage PortableImage::toQt()
+const QImage Image::toQt()
 {
     return _this->qt_img;
 }
 
-const cv::_InputArray PortableImage::toCv()
+const cv::_InputArray Image::toCv()
 {
     return cv::_InputArray(_this->cv_img);
 }

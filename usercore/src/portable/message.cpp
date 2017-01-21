@@ -2,15 +2,16 @@
 #include "portable/message.h"
 #include "portable/message_p.h"
 
+Message::Message(const StreamObject &base)
+{
+    _this_base = base._this_base;
+}
+
 Message::Message(std::initializer_list<SourceID> sources)
     : StreamObject(sources),
       _this(new MessagePrivate())
 {
     _this_base.reset(_this);
-}
-
-Message::~Message()
-{
 }
 
 const Message::Entry &Message::entry(unsigned int index) const

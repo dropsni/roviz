@@ -6,8 +6,8 @@ GaussianBlurItem::GaussianBlurItem()
 {
     PORTABLE_INIT(GaussianBlur);
 
-    this->input = this->addImageInput("Input");
-    this->output = this->addImageOutput("Output");
+    this->input = this->addInput<Image>("Input");
+    this->output = this->addOutput<Image>("Output");
     this->trim = this->addTrim("Blur Factor", 0.1, 10, 100);
 }
 
@@ -18,14 +18,14 @@ GaussianBlurItem::~GaussianBlurItem()
 
 void GaussianBlurItem::thread()
 {
-    while(this->waitForImage(this->input))
+    while(this->waitForInput(this->input))
     {
         cv::Mat out;
-        PortableImage img = this->nextImage(this->input);
+        Image img = this->next<Image>(this->input);
         cv::GaussianBlur(img.toCv(),
                          out,
                          cv::Size(0, 0),
                          this->trimValue(this->trim));
-        this->pushImageOut(PortableImage(out, {img.id()}), this->output);
+        this->pushOut(Image(out, {img.id()}), this->output);
     }
 }

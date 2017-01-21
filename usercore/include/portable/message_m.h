@@ -7,7 +7,7 @@ class MessageMutable : public Message
 {
 public:
     MessageMutable(std::initializer_list<SourceID> sources = {});
-    ~MessageMutable();
+    ~MessageMutable() = default;
 
     Message::Entry &entry(unsigned int index);
     Message::Entry &at(int index);

@@ -19,10 +19,10 @@ public:
     unsigned char *data_ptr;
     bool is_self_managed;
     int w, h, bits, bytes, len;
-    enum PortableImage::Format f;
+    enum Image::Format f;
 
-    ~PortableImagePrivate();
-    void init(int w, int h, enum PortableImage::Format f);
+    ~PortableImagePrivate() = default;
+    void init(int w, int h, enum Image::Format f);
 };
 
 #endif // PORTABLEIMAGEPRIVATE_H

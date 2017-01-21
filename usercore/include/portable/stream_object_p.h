@@ -8,7 +8,8 @@ class StreamObjectPrivate
 public:
     SourceID id;
 
-    StreamObjectPrivate();
+    StreamObjectPrivate() = default;
+    ~StreamObjectPrivate() = default;
 };
 
 #endif // STREAM_OBJECT_P_H

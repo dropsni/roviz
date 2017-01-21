@@ -22,12 +22,14 @@
 #include "helper/settings_scope.h"
 #include "item/item_input.h"
 #include "item/item_output.h"
+#include "helper/startup_helper.h"
 #include "core/stream_to_input_mapper.h"
 #include "gui/config_dialog.h"
 #include "core/stream.h"
 #include "core/stream_base.h"
 #include "portable/strong_typedef.h"
 #include "portable/stream_object.h"
+#include "portable/template_decl.h"
 
 class AbstractRobotItemPrivate;
 

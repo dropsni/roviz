@@ -28,8 +28,9 @@ public:
         double d;
     };
 
+    Message(const StreamObject &base);
     Message(std::initializer_list<SourceID> sources = {});
-    virtual ~Message();
+    virtual ~Message() = default;
 
     const Entry &entry(unsigned int index) const;
     const Entry &at(int index) const;

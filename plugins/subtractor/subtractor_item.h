@@ -22,8 +22,8 @@ protected:
     void thread(void) override;
 
 private:
-    ImageInput input1, input2;
-    ImageOutput output;
+    Input input1, input2;
+    Output output;
 };
 
 #endif // SUBTRACTOR_ITEM_H

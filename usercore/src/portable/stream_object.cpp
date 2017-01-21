@@ -2,10 +2,6 @@
 #include "portable/stream_object.h"
 #include "portable/stream_object_p.h"
 
-StreamObject::~StreamObject()
-{
-}
-
 SourceID StreamObject::id() const
 {
     return _this_base->id;

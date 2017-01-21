@@ -42,7 +42,7 @@ class PortableImagePrivate;
  *
  * \ingroup robot_framework
  */
-class PORTABLE_EXPORT_CLASS PortableImage : public StreamObject
+class PORTABLE_EXPORT_CLASS Image : public StreamObject
 {
 public:
 
@@ -60,7 +60,8 @@ public:
         BGR_CV
     };
 
-    PortableImage(std::initializer_list<SourceID> sources = {});
+    Image(const StreamObject &base);
+    Image(std::initializer_list<SourceID> sources = {});
 #ifdef QT_PRESENT
     /**
      * @brief Constructs an image with the given data of a QImage
@@ -70,7 +71,7 @@ public:
      * you gave it for initialization. Manipulating the QImage you passed this
      * class afterwards will cause a deep copy!
      */
-    PortableImage(QImage img, std::initializer_list<SourceID> sources = {});
+    Image(QImage img, std::initializer_list<SourceID> sources = {});
 #endif
 #ifdef OPENCV_PRESENT
     /**
@@ -81,10 +82,10 @@ public:
      * you gave it for initialization. Manipulating the cv::Mat you passed this
      * class afterwards will cause a deep copy!
      */
-    PortableImage(cv::Mat img, std::initializer_list<SourceID> sources = {});
+    Image(cv::Mat img, std::initializer_list<SourceID> sources = {});
 #endif
 
-    ~PortableImage();
+    ~Image() = default;
 
     /**
      * @return The width of the image
@@ -151,7 +152,7 @@ public:
 protected:
     PortableImagePrivate *_this;
 
-    PortableImage(bool do_init, std::initializer_list<SourceID> sources);
+    Image(bool do_init, std::initializer_list<SourceID> sources);
 };
 
 #endif // PORTABLEIMAGE_H

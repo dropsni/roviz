@@ -19,7 +19,7 @@ protected:
     void thread(void) override;
 
 private:
-    ImageOutput output;
+    Output output;
     std::string vid_path;
 };
 

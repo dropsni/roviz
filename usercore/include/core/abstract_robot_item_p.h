@@ -12,7 +12,7 @@ public:
     QWidget *main_widget;
     QPushButton *collapse_btn;
     QHBoxLayout *main_layout, *main_image_layout, *main_control_layout;
-    QMap<Output, ImageWidget*> out_widgets;
+    QMap<Output, QWidget*> out_widgets;
     QMap<ItemInput*, StreamToInputMapper*> in_mappers;
     QList<QSlider*> sliders;
     QMap<QSlider*, SliderLabel*> slider_to_label;

@@ -6,10 +6,6 @@ StreamBase::StreamBase()
     this->default_widget = nullptr;
 }
 
-StreamBase::~StreamBase()
-{
-}
-
 QWidget *StreamBase::widget()
 {
     // We only construct it if the base class implementation is really

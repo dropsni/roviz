@@ -1,7 +1,7 @@
 
 #include "portable/portable_image_p.h"
 
-void PortableImagePrivate::init(int w, int h, PortableImage::Format f)
+void PortableImagePrivate::init(int w, int h, Image::Format f)
 {
     this->w = w;
     this->h = h;
@@ -9,26 +9,26 @@ void PortableImagePrivate::init(int w, int h, PortableImage::Format f)
 
     switch(f)
     {
-        case PortableImage::RGB555:
+        case Image::RGB555:
 
             this->bits = 16;
             this->bytes = 2;
             break;
 
-        case PortableImage::RGB888:
+        case Image::RGB888:
 
             this->bits = 24;
             this->bytes = 3;
             break;
 
-        case PortableImage::Gray8:
+        case Image::Gray8:
 
             this->bits = 8;
             this->bytes = 1;
             break;
 
-        case PortableImage::YUV422:
-        case PortableImage::YUV422_Flipped:
+        case Image::YUV422:
+        case Image::YUV422_Flipped:
 
             this->bits = 16;
             this->bytes = 2;

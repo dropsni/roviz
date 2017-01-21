@@ -22,14 +22,14 @@ protected:
     void thread(void) override;
 
 private:
-    ImageOutput output;
-    ImageInput input;
+    Output output;
+    Input input;
 
-    static PortableImage fromRGB(PortableImage in, int depth);
-    static PortableImage fromRGB555(PortableImage in);
-    static PortableImage fromRGB888(PortableImage in);
-    static PortableImage fromYUV422(PortableImage in);
-    static PortableImage fromYUV422_Flipped(PortableImage in);
+    static Image fromRGB(Image in, int depth);
+    static Image fromRGB555(Image in);
+    static Image fromRGB888(Image in);
+    static Image fromYUV422(Image in);
+    static Image fromYUV422_Flipped(Image in);
 };
 
 #endif // GRAYCONV_ITEM_H

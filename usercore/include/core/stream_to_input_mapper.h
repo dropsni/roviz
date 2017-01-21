@@ -19,7 +19,7 @@ public:
     QMetaObject::Connection conn1, conn2;
 
     explicit StreamToInputMapper(QObject *parent = nullptr);
-    ~StreamToInputMapper();
+    ~StreamToInputMapper() = default;
 
 public slots:
     void inputMapper(StreamObject obj);

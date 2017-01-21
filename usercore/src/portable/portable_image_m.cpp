@@ -2,27 +2,27 @@
 #include "portable/portable_image_m.h"
 #include "portable/portable_image_p.h"
 
-PortableImageMutable::PortableImageMutable()
-    : PortableImage()
+ImageMutable::ImageMutable()
+    : Image()
 {
 }
 
 #ifdef QT_PRESENT
-PortableImageMutable::PortableImageMutable(QImage img, std::initializer_list<SourceID> sources)
-    : PortableImage(img, sources)
+ImageMutable::ImageMutable(QImage img, std::initializer_list<SourceID> sources)
+    : Image(img, sources)
 {
 }
 #endif
 
 #ifdef OPENCV_PRESENT
-PortableImageMutable::PortableImageMutable(cv::Mat img, std::initializer_list<SourceID> sources)
-    : PortableImage(img, sources)
+ImageMutable::ImageMutable(cv::Mat img, std::initializer_list<SourceID> sources)
+    : Image(img, sources)
 {
 }
 #endif
 
-PortableImageMutable::PortableImageMutable(int w, int h, PortableImage::Format f, std::initializer_list<SourceID> sources)
-    : PortableImage(false, sources)
+ImageMutable::ImageMutable(int w, int h, Image::Format f, std::initializer_list<SourceID> sources)
+    : Image(false, sources)
 {
     _this->is_self_managed = true;
     _this->data_ptr = new unsigned char[this->dataLength()];
@@ -40,11 +40,7 @@ PortableImageMutable::PortableImageMutable(int w, int h, PortableImage::Format f
     _this->init(w, h, f);
 }
 
-PortableImageMutable::~PortableImageMutable()
-{
-}
-
-unsigned char *PortableImageMutable::data()
+unsigned char *ImageMutable::data()
 {
     return _this->data_ptr;
 }
