@@ -19,3 +19,9 @@ StreamObject::StreamObject(std::initializer_list<SourceID> sources)
         _this_base->id->sources = std::vector<SourceID>(sources);
     }
 }
+
+StreamWidgetBase *StreamObject::constructWidget()
+{
+    // Should be reparented/deleted by SharedWindow
+    return new StreamWidgetBase();
+}

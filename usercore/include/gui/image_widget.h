@@ -8,6 +8,7 @@
 #include "core/robot_core.h"
 #include "portable/portable_image.h"
 #include "core/stream.h"
+#include "gui/stream_widget_base.h"
 
 /**
  * @brief A widget to show images
@@ -17,7 +18,7 @@
  *
  * \ingroup robot_framework
  */
-class ROBOTCORE_EXPORT ImageWidget : public QOpenGLWidget
+class ROBOTCORE_EXPORT ImageWidget : public QOpenGLWidget, public StreamWidgetBase
 {
 Q_OBJECT
 
@@ -33,6 +34,9 @@ protected:
     void initializeGL(void) override;
     void paintGL(void) override;
     void resizeGL(int w, int h) override;
+
+public slots:
+    void newObject(StreamObject obj) override;
 };
 
 #endif // IMAGEWIDGET_H

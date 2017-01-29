@@ -25,6 +25,14 @@ Image::Image(bool, std::initializer_list<SourceID> sources)
 {
 }
 
+#ifndef PORTABLE_EXPORT
+#include "gui/image_widget.h"
+QWidget *Image::constructWidget()
+{
+    return new ImageWidget();
+}
+#endif
+
 #ifdef QT_PRESENT
 Image::Image(QImage img, std::initializer_list<SourceID> sources)
     : StreamObject(sources),

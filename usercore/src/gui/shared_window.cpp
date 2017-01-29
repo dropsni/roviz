@@ -272,15 +272,24 @@ SharedWindow::~SharedWindow()
 
 void SharedWindow::addItem(AbstractRobotItem* item)
 {
+    StreamBase *s;
     if(!this->parents.contains(item))
     {
         DockWidgetSignaling *dock = new DockWidgetSignaling(item->name(), this->main_window);
-        dock->setWidget(item->widget());
+
+        // TODO
+        // IMPORTANT!!! CHANGE THIS!!!
+        // Right now, we only look at the first output!
+        s = qobject_cast<StreamBase*>(item->outputs().first()->data());
+        if(s == nullptr) // Not all items have outputs
+            continue;
+        dock->setWidget(s->widget());
+
         dock->setObjectName(item->name());
         this->main_window->addDockWidget(Qt::TopDockWidgetArea, dock);
         this->dock_items.append(dock);
         this->parents.append(item);
-        item->widget()->hide();
+        s->widget()->hide();
         dock->hide();
         connect(dock, &DockWidgetSignaling::closed,
                 this, &SharedWindow::itemClosed);
@@ -292,10 +301,14 @@ void SharedWindow::addItem(AbstractRobotItem* item)
 void SharedWindow::removeItem(AbstractRobotItem *item)
 {
     this->parents.removeOne(item);
-    QDockWidget *d = qobject_cast<QDockWidget*>(item->widget()->parentWidget());
+    // TODO CHANGE HERE TOO!!!
+    StreamBase *s = qobject_cast<StreamBase*>(item->outputs().first()->data());
+    if(s == nullptr) // Not all items have outputs
+        return;
+    QDockWidget *d = qobject_cast<QDockWidget*>(s->widget()->parentWidget());
     this->dock_items.removeOne(d);
     d->deleteLater();
-    item->widget()->deleteLater();
+    s->widget()->deleteLater();
 }
 
 SharedWindow *SharedWindow::instance(SettingsScope *proj)

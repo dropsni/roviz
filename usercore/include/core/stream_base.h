@@ -4,19 +4,19 @@
 #include <QObject>
 #include <QWidget>
 #include "portable/stream_object.h"
+#include "gui/stream_widget_base.h"
 
 class StreamBase : public QObject
 {
 Q_OBJECT
 
 public:
-    StreamBase();
+    StreamBase() = default;
     virtual ~StreamBase() = default;
+    QWidget *widget(void);
 
-    virtual QWidget *widget(void);
-
-private:
-    QWidget *default_widget;
+protected:
+    StreamWidgetBase *widget_ptr;
 
 signals:
     void newObject(StreamObject obj);

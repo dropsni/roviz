@@ -153,6 +153,11 @@ protected:
     PortableImagePrivate *_this;
 
     Image(bool do_init, std::initializer_list<SourceID> sources);
+
+// Handle the displaying of the image
+#ifndef PORTABLE_EXPORT
+    static QWidget *constructWidget(void) override;
+#endif
 };
 
 #endif // PORTABLEIMAGE_H

@@ -28,3 +28,8 @@ void ImageWidget::resizeGL(int w, int h)
 {
 
 }
+
+void ImageWidget::newObject(StreamObject obj)
+{
+    Image img(obj);
+}

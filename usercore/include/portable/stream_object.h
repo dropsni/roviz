@@ -4,6 +4,7 @@
 #include <memory>
 #include <vector>
 #include "portable/template_decl.h"
+#include "gui/stream_widget_base.h"
 
 struct SrcTreeNode;
 class StreamObjectPrivate;
@@ -26,6 +27,7 @@ class PORTABLE_EXPORT_CLASS StreamObject
     MAKE_ALL_STREAMS_A_FRIEND
 
 public:
+    StreamObject() = default;
     virtual ~StreamObject() = default;
     SourceID id(void) const;
 
@@ -33,6 +35,7 @@ protected:
     std::shared_ptr<StreamObjectPrivate> _this_base;
 
     StreamObject(std::initializer_list<SourceID> sources = {});
+    virtual static StreamWidgetBase *constructWidget(void);
 };
 
 #endif // STREAM_OBJECT_H

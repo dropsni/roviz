@@ -3,13 +3,13 @@
 
 #include "core/stream_base.h"
 #include "portable/template_decl.h"
+#include "gui/stream_widget_base.h"
 
-// This class is only needed to get a typeid
 template<class T>
 class Stream : public StreamBase
 {
 public:
-    Stream() = default;
+    Stream();
     ~Stream() = default;
 };
 
