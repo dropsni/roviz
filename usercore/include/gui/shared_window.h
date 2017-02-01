@@ -15,12 +15,12 @@
 #include <QVariant>
 #include <QLineEdit>
 #include "core/robot_core.h"
-#include "core/abstract_robot_item.h"
+#include "core/roviz_item_dev_base.h"
 #include "helper/settings_scope.h"
 #include "gui/gui_manager.h"
 #include "gui/dock_widget_signaling.h"
 
-class AbstractRobotItem;
+class RovizItemDevBase;
 
 /**
  * @brief Provides a shared window that displays data from all items
@@ -49,13 +49,13 @@ public:
      * because the shared window also has to handle the start/pause/stop events
      * of the items that are not visible.
      */
-    void addItem(AbstractRobotItem *item);
+    void addItem(RovizItemDevBase *item);
 
     /**
      * @brief Remove an item from the shared window
      * @param item The item to remove
      */
-    void removeItem(AbstractRobotItem *item);
+    void removeItem(RovizItemDevBase *item);
 
     /**
      * @brief Loads the config (if not already done) and shows the window
@@ -80,7 +80,7 @@ private:
 
     QObject *destructor;
     QList<QDockWidget*> dock_items;
-    QList<AbstractRobotItem*> parents;
+    QList<RovizItemDevBase*> parents;
     bool running, paused, initialized;
     SettingsScope *project_settings;
     QToolButton *btn_start, *btn_pause, *btn_stop, *btn_new_tab;

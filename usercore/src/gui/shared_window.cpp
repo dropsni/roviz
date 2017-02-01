@@ -109,10 +109,10 @@ void SharedWindow::start()
 {
     if(this->running)
     {
-        for(AbstractRobotItem *item : this->parents)
+        for(RovizItemDevBase *item : this->parents)
             item->stop();
 
-        for(AbstractRobotItem *item : this->parents)
+        for(RovizItemDevBase *item : this->parents)
             item->start();
 
         this->btn_pause->setIcon(this->ico_pause);
@@ -120,7 +120,7 @@ void SharedWindow::start()
     }
     else
     {
-        for(AbstractRobotItem *item : this->parents)
+        for(RovizItemDevBase *item : this->parents)
             item->start();
 
         this->btn_start->setIcon(this->ico_restart);
@@ -133,7 +133,7 @@ void SharedWindow::pause()
 {
     if(this->paused)
     {
-        for(AbstractRobotItem *item : this->parents)
+        for(RovizItemDevBase *item : this->parents)
             item->unpause();
 
         this->btn_pause->setIcon(this->ico_pause);
@@ -141,7 +141,7 @@ void SharedWindow::pause()
     }
     else
     {
-        for(AbstractRobotItem *item : this->parents)
+        for(RovizItemDevBase *item : this->parents)
             item->pause();
 
         this->btn_pause->setIcon(this->ico_unpause);
@@ -151,7 +151,7 @@ void SharedWindow::pause()
 
 void SharedWindow::stop()
 {
-    for(AbstractRobotItem *item : this->parents)
+    for(RovizItemDevBase *item : this->parents)
         item->stop();
 
     this->running = false;
@@ -274,7 +274,7 @@ SharedWindow::~SharedWindow()
 {
 }
 
-void SharedWindow::addItem(AbstractRobotItem* item)
+void SharedWindow::addItem(RovizItemDevBase* item)
 {
     if(!this->parents.contains(item))
     {
@@ -293,7 +293,7 @@ void SharedWindow::addItem(AbstractRobotItem* item)
     }
 }
 
-void SharedWindow::removeItem(AbstractRobotItem *item)
+void SharedWindow::removeItem(RovizItemDevBase *item)
 {
     this->parents.removeOne(item);
     QDockWidget *d = qobject_cast<QDockWidget*>(item->widget()->parentWidget());

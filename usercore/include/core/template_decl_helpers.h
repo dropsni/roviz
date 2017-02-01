@@ -1,35 +1,16 @@
-#ifndef TEMPLATEDECL_H
-#define TEMPLATEDECL_H
+#ifndef TEMPLATE_DECL_HELPERS_H
+#define TEMPLATE_DECL_HELPERS_H
 
-#include "portable/portable_item_global.h"
+#define STREAM_COLOR_GREEN  Qt::green
+#define STREAM_COLOR_RED    Qt::red
+#define STREAM_COLOR_YELLOW Qt::yellow
 
-// Including the header here leads to a circular inclusion
-class Image;
-class Message;
-
-#ifndef PORTABLE_EXPORT
-// The MOC is not smart enough to handle it if its encapsulated
-// within the macro. If you want to add a stream, copy one of the
-// classes below and name it StreamInit*YOUR_TYPE*. The class is only
-// used for type-matching and coloring.
-
-// PortableImage stream
-class Q_DECL_EXPORT StreamInitImage : public QObject \
-{ Q_OBJECT public: static void init(void); };
-
-// Message stream
-class Q_DECL_EXPORT StreamInitMessage : public QObject \
-{ Q_OBJECT public: static void init(void); };
-
-#endif
-
-// Make sure all templates for the streams get instantiated
-#define DO_FOR_ALL_STREAMS(EXPR) \
-    EXPR(Image) \
-    EXPR(Message)
-
-// If you just want to add a new stream, the things below don't matter
-// for you.
+#define INIT_STREAM_CPP(T, color) \
+    STARTUP_ADD_COMPONENT(StreamInit##T) \
+    void StreamInit##T::init() \
+    { \
+        AbstractItem::registerConnectorStyle(color, qMetaTypeId<Stream<T>*>()); \
+    }
 
 #define INSTANTIATE_PORTABLE_ITEM_P(T) \
     template Input PortableItem::addInput<T>(std::string name); \
@@ -60,4 +41,4 @@ class Q_DECL_EXPORT StreamInitMessage : public QObject \
 #define MAKE_ALL_STREAMS_A_FRIEND \
     DO_FOR_ALL_STREAMS(MAKE_ALL_STREAMS_A_FRIEND##_P)
 
-#endif // TEMPLATEDECL_H
+#endif // TEMPLATE_DECL_HELPERS_H

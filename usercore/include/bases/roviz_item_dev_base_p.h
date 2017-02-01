@@ -1,14 +1,14 @@
-#ifndef ABSTRACTROBOTITEMPRIVATE_H
-#define ABSTRACTROBOTITEMPRIVATE_H
+#ifndef ROVIZITEMDEVBASEPRIVATE_H
+#define ROVIZITEMDEVBASEPRIVATE_H
 
-#include "core/abstract_robot_item.h"
+#include "bases/roviz_item_dev_base.h"
 
-class AbstractRobotItemPrivate : public QObject
+class RovizItemDevBasePrivate : public QObject
 {
     Q_OBJECT
 
 public:
-    AbstractRobotItem *_this;
+    RovizItemDevBase *_this;
     QWidget *main_widget;
     QPushButton *collapse_btn;
     QHBoxLayout *main_layout, *main_image_layout, *main_control_layout;
@@ -21,7 +21,7 @@ public:
     ConfigDialog *conf_diag;
     bool config_present, conf_loaded;
 
-    AbstractRobotItemPrivate(AbstractRobotItem *q);
+    RovizItemDevBasePrivate(RovizItemDevBase *q);
 
 public slots:
     /**
@@ -58,4 +58,4 @@ public slots:
     void parentScopeChanged(SettingsScope *old);
 };
 
-#endif // ABSTRACTROBOTITEMPRIVATE_H
+#endif // ROVIZITEMDEVBASEPRIVATE_H

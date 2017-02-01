@@ -2,7 +2,7 @@
 #define FACTORY_TVG_H
 
 #include "plugin/interface_factory.h"
-#include "core/abstract_robot_item.h"
+#include "core/roviz_item_dev_base.h"
 
 class FactoryTVG : public InterfaceFactory
 {

@@ -1,7 +1,7 @@
 #ifndef PORTABLEITEMPRIVATE_H
 #define PORTABLEITEMPRIVATE_H
 
-#include "portable/portable_item.h"
+#include "portable/roviz_item.h"
 #include "portable/input_queue.h"
 #include "portable/message.h"
 

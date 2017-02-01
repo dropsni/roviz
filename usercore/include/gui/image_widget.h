@@ -7,7 +7,7 @@
 #include <QImage>
 #include <QPainter>
 #include "core/robot_core.h"
-#include "portable/portable_image.h"
+#include "portable/image.h"
 #include "core/stream.h"
 
 #include <QLabel>

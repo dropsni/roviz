@@ -1,8 +1,8 @@
 #ifndef SUBTRACTOR_ITEM_H
 #define SUBTRACTOR_ITEM_H
 
-#include "portable/portable_item.h"
-#include "portable/portable_image_m.h"
+#include "portable/roviz_item.h"
+#include "portable/image_m.h"
 
 /**
  * @brief Subtracts two images

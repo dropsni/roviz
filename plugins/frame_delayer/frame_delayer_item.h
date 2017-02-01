@@ -1,8 +1,8 @@
 #ifndef FRAMEDELAYER_ITEM_H
 #define FRAMEDELAYER_ITEM_H
 
-#include "portable/portable_item.h"
-#include "portable/portable_image_m.h"
+#include "portable/roviz_item.h"
+#include "portable/image_m.h"
 #include <queue>
 
 /**

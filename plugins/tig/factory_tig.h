@@ -2,7 +2,7 @@
 #define FACTORY_TIG_H
 
 #include "plugin/interface_factory.h"
-#include "core/abstract_robot_item.h"
+#include "core/roviz_item_dev_base.h"
 
 class FactoryTIG : public InterfaceFactory
 {

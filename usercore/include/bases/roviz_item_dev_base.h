@@ -1,54 +1,27 @@
-#ifndef ABSTRACTROBOTITEM_H
-#define ABSTRACTROBOTITEM_H
+#ifndef ROVIZITEMDEVBASE_H
+#define ROVIZITEMDEVBASE_H
 
-#include <QObject>
-#include <QLabel>
-#include <QSlider>
-#include <QImage>
-#include <QLayout>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
-#include <QSignalMapper>
-#include <QMap>
-#include <QPropertyAnimation>
-#include <QPushButton>
-#include <QScopedPointer>
-#include <QMenu>
-#include "gui/gui_manager.h"
+#include <string>
+#include <functional>
+#include <QWidget>
 #include "item/abstract_item.h"
-#include "gui/shared_window.h"
-#include "gui/slider_label.h"
-#include "gui/image_widget.h"
-#include "helper/settings_scope.h"
-#include "item/item_input.h"
-#include "item/item_output.h"
-#include "helper/startup_helper.h"
-#include "core/stream_to_input_mapper.h"
-#include "gui/config_dialog.h"
-#include "core/stream.h"
-#include "core/stream_base.h"
-#include "portable/strong_typedef.h"
-#include "portable/stream_object.h"
-#include "portable/template_decl.h"
+#include "core/typedecl.h"
+#include "bases/export_handling.h"
 
-class AbstractRobotItemPrivate;
-
-// To be able to be the base class of PortableItem
-class AbstractRobotItem;
-typedef AbstractRobotItem PortableItemBase;
+class RovizItemDevBasePrivate;
 
 /**
  * @brief Base class that binds PortableItem to traviz/Qt
  * \ingroup robot_framework
  */
-class ROBOTCORE_EXPORT AbstractRobotItem : public AbstractItem
+class ROVIZ_EXPORT_CLASS RovizItemDevBase : public AbstractItem
 {
     Q_OBJECT
-    friend class AbstractRobotItemPrivate;
+    friend class RovizItemDevBasePrivate;
 
 public:
-    explicit AbstractRobotItem(std::string typeName);
-    virtual ~AbstractRobotItem();
+    explicit RovizItemDevBase(std::string typeName);
+    virtual ~RovizItemDevBase();
 
     /**
      * @return The main widget of the item
@@ -63,7 +36,7 @@ public:
      * @name Interface implementation
      *
      * Implementation of the interface that PortableItem demands.
-     * See the documentation of PortableItem to see what these functions
+     * See the documentation of RovizItem to see what these functions
      * do.
      */
     ///@{
@@ -103,7 +76,7 @@ protected:
     void contextMenuPrepare(QMenu &menu) const override;
 
 private:
-    QScopedPointer<AbstractRobotItemPrivate> _this;
+    QScopedPointer<RovizItemDevBasePrivate> _this;
 };
 
-#endif // ABSTRACTROBOTITEM_H
+#endif // ROVIZITEMDEVBASE_H

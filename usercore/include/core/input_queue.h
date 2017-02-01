@@ -3,8 +3,8 @@
 
 #include <list>
 #include <mutex>
-#include "portable/portable_item_global.h"
-#include "portable/portable_image.h"
+#include "portable/export_handling.h"
+#include "portable/image.h"
 #include "portable/stream_object.h"
 
 class Image;
@@ -16,7 +16,7 @@ class Image;
  *
  * \ingroup robot_framework
  */
-class PORTABLE_EXPORT_CLASS InputQueue
+class ROVIZ_EXPORT_CLASS InputQueue
 {
 public:
     std::mutex mtx;

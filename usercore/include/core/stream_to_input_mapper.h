@@ -2,7 +2,7 @@
 #define STREAMTOINPUTMAPPER_H
 
 #include <QObject>
-#include "portable/portable_item_global.h"
+#include "portable/export_handling.h"
 #include "portable/stream_object.h"
 
 /**
