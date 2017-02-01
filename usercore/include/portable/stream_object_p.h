@@ -9,7 +9,7 @@ public:
     SourceID id;
 
     StreamObjectPrivate() = default;
-    ~StreamObjectPrivate() = default;
+    virtual ~StreamObjectPrivate() = default;
 };
 
 #endif // STREAM_OBJECT_P_H

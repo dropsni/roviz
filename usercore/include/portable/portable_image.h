@@ -5,6 +5,7 @@
 #include <initializer_list>
 #include "portable/portable_item_global.h"
 #include "portable/stream_object.h"
+#include "core/stream_base.h"
 
 #ifdef QT_PRESENT
     #include <QImage>
@@ -156,7 +157,8 @@ protected:
 
 // Handle the displaying of the image
 #ifndef PORTABLE_EXPORT
-    static QWidget *constructWidget(void) override;
+public:
+    static QWidget *initWidget(StreamBase *stream);
 #endif
 };
 

@@ -5,6 +5,7 @@
 #include <initializer_list>
 #include <memory>
 #include "portable/stream_object.h"
+#include "core/stream_base.h"
 
 class MessagePrivate;
 
@@ -38,6 +39,12 @@ public:
 
 protected:
     MessagePrivate *_this;
+
+// Handle the displaying of the message
+#ifndef PORTABLE_EXPORT
+public:
+    static QWidget *initWidget(StreamBase *stream);
+#endif
 };
 
 #endif // MESSAGE_H

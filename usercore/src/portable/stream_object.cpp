@@ -7,7 +7,7 @@ SourceID StreamObject::id() const
     return _this_base->id;
 }
 
-StreamObject::StreamObject(std::initializer_list<SourceID> sources)
+void StreamObject::initSources(std::initializer_list<SourceID> sources)
 {
     if(sources.size() == 0)
     {
@@ -18,10 +18,4 @@ StreamObject::StreamObject(std::initializer_list<SourceID> sources)
         _this_base->id = std::make_shared<SrcTreeNode>();
         _this_base->id->sources = std::vector<SourceID>(sources);
     }
-}
-
-StreamWidgetBase *StreamObject::constructWidget()
-{
-    // Should be reparented/deleted by SharedWindow
-    return new StreamWidgetBase();
 }

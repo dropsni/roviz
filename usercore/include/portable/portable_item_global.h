@@ -54,8 +54,8 @@
         STARTUP_ADD_COMPONENT(StreamInit##T) \
         void StreamInit##T::init() \
         { \
-            AbstractItem::registerConnectorStyle(color, qMetaTypeId<StreamInit##T*>()); \
-        } \
+            AbstractItem::registerConnectorStyle(color, qMetaTypeId<Stream<T>*>()); \
+        }
 
 #endif
 

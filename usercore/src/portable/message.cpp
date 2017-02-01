@@ -8,10 +8,10 @@ Message::Message(const StreamObject &base)
 }
 
 Message::Message(std::initializer_list<SourceID> sources)
-    : StreamObject(sources),
-      _this(new MessagePrivate())
+    : _this(new MessagePrivate())
 {
     _this_base.reset(_this);
+    this->initSources(sources);
 }
 
 const Message::Entry &Message::entry(unsigned int index) const
@@ -30,4 +30,10 @@ const Message::Entry &Message::at(int index) const
 const Message::Entry &Message::operator[](int index) const
 {
     return _this->entries[index];
+}
+
+QWidget *Message::initWidget(StreamBase *)
+{
+    // TODO Implement
+    return new QWidget();
 }

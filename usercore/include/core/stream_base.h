@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QWidget>
 #include "portable/stream_object.h"
-#include "gui/stream_widget_base.h"
 
 class StreamBase : public QObject
 {
@@ -16,7 +15,7 @@ public:
     QWidget *widget(void);
 
 protected:
-    StreamWidgetBase *widget_ptr;
+    QWidget *widget_ptr;
 
 signals:
     void newObject(StreamObject obj);

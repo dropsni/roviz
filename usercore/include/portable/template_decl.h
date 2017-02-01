@@ -3,7 +3,7 @@
 
 #include "portable/portable_item_global.h"
 
-// Including the header here might lead to a circular inclusion
+// Including the header here leads to a circular inclusion
 class Image;
 class Message;
 

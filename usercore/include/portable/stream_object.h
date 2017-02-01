@@ -4,7 +4,6 @@
 #include <memory>
 #include <vector>
 #include "portable/template_decl.h"
-#include "gui/stream_widget_base.h"
 
 struct SrcTreeNode;
 class StreamObjectPrivate;
@@ -34,8 +33,13 @@ public:
 protected:
     std::shared_ptr<StreamObjectPrivate> _this_base;
 
-    StreamObject(std::initializer_list<SourceID> sources = {});
-    virtual static StreamWidgetBase *constructWidget(void);
+    // Cannot be done in the constructer, because the derived class has to
+    // initialize the private data first.
+    void initSources(std::initializer_list<SourceID> sources = {});
+
+    // C++ doesn't allow this, just make sure the object implements such a function.
+    // virtual static StreamWidgetBase *constructWidget(void);
 };
+Q_DECLARE_METATYPE(StreamObject)
 
 #endif // STREAM_OBJECT_H

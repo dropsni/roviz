@@ -23,8 +23,7 @@ SOURCES     +=  \
                 src/portable/portable_item_p.cpp \
                 src/portable/stream_object.cpp \
                 src/portable/stream_object_p.cpp \
-                src/portable/template_decl.cpp \
-    include/gui/stream_widget_base.cpp
+                src/portable/template_decl.cpp
 
 HEADERS     +=  \
                 include/usercore.h \
@@ -53,7 +52,7 @@ HEADERS     +=  \
                 include/portable/stream_object_p.h \
                 include/portable/strong_typedef.h \
                 include/portable/template_decl.h \
-    include/gui/stream_widget_base.h
+    include/portable/all_streams.h
 
 RESOURCES   +=  resources.qrc
 LIBS        += -lopencv_core

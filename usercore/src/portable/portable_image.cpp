@@ -5,13 +5,14 @@
 Image::Image(const StreamObject &base)
 {
     this->_this_base = base._this_base;
+    _this = dynamic_cast<PortableImagePrivate*>(this->_this_base.get());
 }
 
 Image::Image(std::initializer_list<SourceID> sources)
-    : StreamObject(sources),
-      _this(new PortableImagePrivate())
+    : _this(new PortableImagePrivate())
 {
     _this_base.reset(_this);
+    this->initSources(sources);
 
     _this->is_self_managed = true;
     _this->data_ptr = nullptr;
@@ -20,25 +21,31 @@ Image::Image(std::initializer_list<SourceID> sources)
 }
 
 Image::Image(bool, std::initializer_list<SourceID> sources)
-    : StreamObject(sources),
-      _this(new PortableImagePrivate())
+    : _this(new PortableImagePrivate())
 {
+    _this_base.reset(_this);
+    this->initSources(sources);
 }
 
 #ifndef PORTABLE_EXPORT
 #include "gui/image_widget.h"
-QWidget *Image::constructWidget()
+QWidget *Image::initWidget(StreamBase *stream)
 {
-    return new ImageWidget();
+    ImageWidget *w = new ImageWidget();
+
+    QObject::connect(stream, &StreamBase::newObject,
+                     w, &ImageWidget::newObject);
+
+    return w;
 }
 #endif
 
 #ifdef QT_PRESENT
 Image::Image(QImage img, std::initializer_list<SourceID> sources)
-    : StreamObject(sources),
-      _this(new PortableImagePrivate())
+    : _this(new PortableImagePrivate())
 {
     _this_base.reset(_this);
+    this->initSources(sources);
 
     enum Image::Format f;
     int cf = -1;
@@ -67,10 +74,10 @@ Image::Image(QImage img, std::initializer_list<SourceID> sources)
 
 #ifdef OPENCV_PRESENT
 Image::Image(cv::Mat img, std::initializer_list<SourceID> sources)
-    : StreamObject(sources),
-      _this(new PortableImagePrivate())
+    : _this(new PortableImagePrivate())
 {
     _this_base.reset(_this);
+    this->initSources(sources);
 
     enum Image::Format f;
     QImage::Format qf = QImage::Format_Invalid;
