@@ -1,6 +1,7 @@
 
-#include "portable/template_decl.h"
-#include PORTABLE_BASE_INCLUDE
+#include "core/template_decl.h"
+#include ROVIZ_BASE_INCLUDE
+#include "streams/all_streams.h"
 
 // Initialize streams
 INIT_STREAM_CPP(Image, STREAM_COLOR_GREEN)

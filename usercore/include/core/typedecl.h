@@ -15,16 +15,18 @@ typedef StrongTypedef<InputTag, ItemInput*, nullptr> Input;
 typedef StrongTypedef<OutputTag, ItemOutput*, nullptr> Output;
 typedef StrongTypedef<TrimTag, QSlider*, nullptr> Trim;
 
-class PortableItem;
+#ifndef ROVIZ_EXPORT
+class RovizItem;
 
 /**
- * @brief Use NonPortableItem for simulation-only items
+ * @brief Use RovizItemNoExport for simulation-only items
  *
  * This type will be undefined when exporting, making it easier to detect
  * the error when trying to export a simulation-only item.
  *
- * \ingroup robot_framework
+ * \ingroup roviz_framework
  */
-typedef PortableItem NonPortableItem;
+typedef RovizItem RovizItemNoExport;
+#endif
 
 #endif // TYPEDECL_H

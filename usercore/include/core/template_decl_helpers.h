@@ -13,18 +13,18 @@
     }
 
 #define INSTANTIATE_PORTABLE_ITEM_P(T) \
-    template Input PortableItem::addInput<T>(std::string name); \
-    template Output PortableItem::addOutput<T>(std::string name); \
-    template T PortableItem::next<T>(Input in); \
-    template T PortableItem::newest<T>(Input in);
+    template Input RovizItem::addInput<T>(std::string name); \
+    template Output RovizItem::addOutput<T>(std::string name); \
+    template T RovizItem::next<T>(Input in); \
+    template T RovizItem::newest<T>(Input in);
 
 // The '##' is needed to prevent expansion
 #define INSTANTIATE_PORTABLE_ITEM \
     DO_FOR_ALL_STREAMS(INSTANTIATE_PORTABLE_ITEM##_P)
 
 #define INSTANTIATE_PORTABLE_BASE_P(T) \
-    template Input PortableItemBase::addInputBase<T>(std::string name); \
-    template Output PortableItemBase::addOutputBase<T>(std::string name);
+    template Input RovizItemBase::addInputBase<T>(std::string name); \
+    template Output RovizItemBase::addOutputBase<T>(std::string name);
 
 #define INSTANTIATE_PORTABLE_BASE \
     DO_FOR_ALL_STREAMS(INSTANTIATE_PORTABLE_BASE##_P)

@@ -1,17 +1,21 @@
 
-#include "portable/portable_item.h"
-#include "portable/portable_item_p.h"
+#include "core/roviz_item.h"
+#include "core/roviz_item_p.h"
 
-PortableItem::PortableItem(std::string type_name)
-    : PortableItemBase(type_name),
-      _this(new PortableItemPrivate())
+#include <thread>
+#include <chrono>
+#include "streams/all_streams.h"
+
+RovizItem::RovizItem(std::string type_name)
+    : RovizItemBase(type_name),
+      _this(new RovizItemPrivate())
 {
     _this->th = nullptr;
     _this->is_stopped = true;
     _this->is_paused = false;
 }
 
-PortableItem::~PortableItem()
+RovizItem::~RovizItem()
 {
     this->stop();
     for(auto &ent : _this->in_queue)
@@ -19,11 +23,11 @@ PortableItem::~PortableItem()
     _this->in_queue.clear();
 }
 
-void PortableItem::starting()
+void RovizItem::starting()
 {
 }
 
-bool PortableItem::wait()
+bool RovizItem::wait()
 {
     // Give other threads a chance too
     std::this_thread::yield();
@@ -34,12 +38,12 @@ bool PortableItem::wait()
     return !_this->is_stopped;
 }
 
-bool PortableItem::running()
+bool RovizItem::running() const
 {
     return !_this->is_stopped && !_this->is_paused;
 }
 
-bool PortableItem::waitForCond(std::function<bool ()> cond)
+bool RovizItem::waitForCond(std::function<bool ()> cond)
 {
     // Give other threads a chance too
     std::this_thread::yield();
@@ -50,7 +54,7 @@ bool PortableItem::waitForCond(std::function<bool ()> cond)
     return !_this->is_stopped;
 }
 
-bool PortableItem::waitFor(std::function<bool ()> cond)
+bool RovizItem::waitFor(std::function<bool ()> cond)
 {
     while((_this->is_paused || !cond()) && !_this->is_stopped)
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
@@ -58,46 +62,46 @@ bool PortableItem::waitFor(std::function<bool ()> cond)
     return !_this->is_stopped;
 }
 
-void PortableItem::wake()
+void RovizItem::wake() const
 {
     _this->cond.notify_all();
 }
 
-std::mutex &PortableItem::mutex()
+std::mutex &RovizItem::mutex() const
 {
     return _this->mtx;
 }
 
-void PortableItem::trimChanged(Trim, double )
+void RovizItem::trimChanged(Trim, double)
 {
 }
 
-void PortableItem::addConfig(std::string name, std::string *value, std::function<std::string (std::string)> checker)
+void RovizItem::addConfig(std::string name, std::string *value, std::function<std::string (std::string)> checker)
 {
-    PortableItemBase::addConfig(name, value, checker);
+    RovizItemBase::addConfig(name, value, checker);
 }
 
-void PortableItem::addConfig(std::string name, int *value, std::function<int (int)> checker)
+void RovizItem::addConfig(std::string name, int *value, std::function<int (int)> checker)
 {
-    PortableItemBase::addConfig(name, value, checker);
+    RovizItemBase::addConfig(name, value, checker);
 }
 
-void PortableItem::addConfig(std::string name, double *value, std::function<double (double)> checker)
+void RovizItem::addConfig(std::string name, double *value, std::function<double (double)> checker)
 {
-    PortableItemBase::addConfig(name, value, checker);
+    RovizItemBase::addConfig(name, value, checker);
 }
 
-void PortableItem::addConfig(std::string name, bool *value)
+void RovizItem::addConfig(std::string name, bool *value)
 {
-    PortableItemBase::addConfig(name, value);
+    RovizItemBase::addConfig(name, value);
 }
 
-void PortableItem::addConfig(std::string name, std::vector<std::string> possibilities, int *index)
+void RovizItem::addConfig(std::string name, std::vector<std::string> possibilities, int *index)
 {
-    PortableItemBase::addConfig(name, possibilities, index);
+    RovizItemBase::addConfig(name, possibilities, index);
 }
 
-void PortableItem::pushIn(StreamObject obj, Input in)
+void RovizItem::pushIn(StreamObject obj, Input in)
 {
     if(_this->in_queue.size() < MAX_QUEUE_SIZE)
     {
@@ -106,16 +110,16 @@ void PortableItem::pushIn(StreamObject obj, Input in)
     }
 }
 
-void PortableItem::stopped()
+void RovizItem::stopped()
 {
 }
 
-void PortableItem::pushOut(StreamObject obj, Output out)
+void RovizItem::pushOut(StreamObject obj, Output out)
 {
-    PortableItemBase::pushOut(obj, out);
+    RovizItemBase::pushOut(obj, out);
 }
 
-bool PortableItem::waitForInput(Input in)
+bool RovizItem::waitForInput(Input in)
 {
     // Give other threads a chance too
     std::this_thread::yield();
@@ -129,29 +133,29 @@ bool PortableItem::waitForInput(Input in)
     return !_this->is_stopped;
 }
 
-Trim PortableItem::addTrim(std::string name, int min, int max)
+Trim RovizItem::addTrim(std::string name, int min, int max)
 {
-    return PortableItemBase::addTrim(name, min, max);
+    return RovizItemBase::addTrim(name, min, max);
 }
 
-Trim PortableItem::addTrim(std::string name, double min, double max, int steps)
+Trim RovizItem::addTrim(std::string name, double min, double max, int steps)
 {
-    return PortableItemBase::addTrim(name, min, max, steps);
+    return RovizItemBase::addTrim(name, min, max, steps);
 }
 
-double PortableItem::trimValue(Trim trim)
+double RovizItem::trimValue(Trim trim) const
 {
-    return PortableItemBase::trimValue(trim);
+    return RovizItemBase::trimValue(trim);
 }
 
-void PortableItem::pause()
+void RovizItem::pause()
 {
     std::lock_guard<std::mutex> g(_this->mtx);
 
     _this->is_paused = true;
 }
 
-void PortableItem::unpause()
+void RovizItem::unpause()
 {
     std::lock_guard<std::mutex> g(_this->mtx);
 
@@ -159,15 +163,15 @@ void PortableItem::unpause()
     this->wake();
 }
 
-void PortableItem::start()
+void RovizItem::start()
 {
     this->starting();
-    AbstractRobotItem::start();
+    RovizItemBase::start();
     _this->is_stopped = false;
-    _this->th = new std::thread(&PortableItem::thread, this);
+    _this->th = new std::thread(&RovizItem::thread, this);
 }
 
-void PortableItem::stop()
+void RovizItem::stop()
 {
     if(_this->th != nullptr)
     {
@@ -181,11 +185,11 @@ void PortableItem::stop()
         _this->th = nullptr;
     }
     this->stopped();
-    PortableItemBase::stop();
+    RovizItemBase::stop();
 }
 
 template<class T>
-Input PortableItem::addInput(std::string name)
+Input RovizItem::addInput(std::string name)
 {
     Input in;
 
@@ -196,19 +200,19 @@ Input PortableItem::addInput(std::string name)
 }
 
 template<class T>
-Output PortableItem::addOutput(std::string name)
+Output RovizItem::addOutput(std::string name)
 {
     return this->addOutputBase<T>(name);
 }
 
 template<class T>
-T PortableItem::newest(Input in)
+T RovizItem::newest(Input in)
 {
     return T(_this->in_queue[in]->newest());
 }
 
 template<class T>
-T PortableItem::next(Input in)
+T RovizItem::next(Input in)
 {
     return T(_this->in_queue[in]->next());
 }

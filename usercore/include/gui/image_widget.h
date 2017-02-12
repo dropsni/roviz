@@ -1,16 +1,16 @@
 #ifndef IMAGEWIDGET_H
 #define IMAGEWIDGET_H
 
-#include <QObject>
-#include <QWidget>
-#include <QOpenGLWidget>
+#include <QRectF>
 #include <QImage>
-#include <QPainter>
-#include "core/robot_core.h"
-#include "portable/image.h"
-#include "core/stream.h"
-
 #include <QLabel>
+#include "bases/export_handling.h"
+#include "streams/image.h"
+#include "streams/stream_object.h"
+
+class QWidget;
+class QPaintEvent;
+class QResizeEvent;
 
 // TODO Use native OpenGL, implement BGR display for OpenCV, just switching to
 // QOpenGLWidget doesn't seem to work, don't know why.
@@ -20,9 +20,9 @@
  * This widget automatically scales the image it is supposed to display to the
  * correct size.
  *
- * \ingroup robot_framework
+ * \ingroup roviz_framework
  */
-class ROBOTCORE_EXPORT ImageWidget : public QLabel
+class ROVIZ_EXPORT_CLASS ImageWidget : public QLabel
 {
 Q_OBJECT
 

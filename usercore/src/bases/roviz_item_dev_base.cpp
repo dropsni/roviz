@@ -1,11 +1,30 @@
 
-#include "core/abstract_robot_item.h"
-#include "core/abstract_robot_item_p.h"
+#include "bases/roviz_item_dev_base.h"
+#include "bases/roviz_item_dev_base_p.h"
 
-AbstractRobotItem::AbstractRobotItem(std::string typeName)
-    : AbstractItem(QString::fromStdString(typeName)),
-      _this(new AbstractRobotItemPrivate(this))
+#include <QWidget>
+#include <QLabel>
+#include <QSlider>
+#include <QPushButton>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include "helper/settings_scope.h"
+#include "gui/gui_manager.h"
+#include "item/item_input.h"
+#include "item/item_output.h"
+#include "core/template_decl.h"
+#include "gui/shared_window.h"
+#include "gui/config_dialog.h"
+#include "gui/slider_label.h"
+#include "streams/stream_base.h"
+#include "streams/stream.h"
+
+RovizItemDevBase::RovizItemDevBase(std::string type_name)
+    : AbstractItem(QString::fromStdString(type_name)),
+      _this(new RovizItemDevBasePrivate(this))
 {
+    // Each item can display a widget in the shared window.
+    // That's prepared here.
     _this->main_widget = new QWidget();
     _this->main_layout = new QHBoxLayout();
     _this->main_control_layout = new QHBoxLayout();
@@ -23,7 +42,7 @@ AbstractRobotItem::AbstractRobotItem(std::string typeName)
     hlayout->addWidget(_this->control_base);
     _this->main_layout->addLayout(hlayout);
     connect(_this->collapse_btn, &QPushButton::clicked,
-            _this.data(), &AbstractRobotItemPrivate::collapseBtnClicked);
+            _this.data(), &RovizItemDevBasePrivate::collapseBtnClicked);
 
     _this->main_layout->addLayout(_this->main_image_layout);
     _this->main_widget->setLayout(_this->main_layout);
@@ -34,41 +53,45 @@ AbstractRobotItem::AbstractRobotItem(std::string typeName)
     _this->main_image_layout->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     hlayout->setAlignment(_this->collapse_btn, Qt::AlignTop | Qt::AlignLeft);
 
+    // We need a parent for the config dialog that get destructed when the
+    // application closes.
     _this->conf_diag = new ConfigDialog(GuiManager::instance()->widgetReference());
     _this->config_present = false;
     _this->conf_loaded = false;
     connect(_this->conf_diag, &ConfigDialog::itemsChanged,
-            _this.data(), &AbstractRobotItemPrivate::restartIfRunning);
+            _this.data(), &RovizItemDevBasePrivate::restartIfRunning);
     connect(_this->conf_diag, &ConfigDialog::itemsChanged,
-            _this.data(), &AbstractRobotItemPrivate::saveConfigs);
+            _this.data(), &RovizItemDevBasePrivate::saveConfigs);
 
     // Hide the collapse button as long as there is nothing to collapse
     _this->collapse_btn->hide();
     connect(this->settingsScope(), &SettingsScope::parentScopeChanged,
-            _this.data(), &AbstractRobotItemPrivate::parentScopeChanged);
+            _this.data(), &RovizItemDevBasePrivate::parentScopeChanged);
     _this->main_widget->hide();
 }
 
-AbstractRobotItem::~AbstractRobotItem()
+RovizItemDevBase::~RovizItemDevBase()
 {
     if(this->settingsScope()->parentScope() != nullptr)
         SharedWindow::instance(this->settingsScope()->parentScope())->removeItem(this);
 }
 
-QWidget *AbstractRobotItem::widget()
+QWidget *RovizItemDevBase::widget()
 {
+    // The main widget contains the trims as well as all output stream widgets
     return _this->main_widget;
 }
 
-void AbstractRobotItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
+void RovizItemDevBase::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
+    // Opens the shared window on a double click
     AbstractItem::mouseDoubleClickEvent(event);
     SharedWindow::instance(this->settingsScope()->parentScope())->load();
     _this->main_widget->parentWidget()->show();
     _this->main_widget->show();
 }
 
-void AbstractRobotItem::contextMenuPrepare(QMenu &menu) const
+void RovizItemDevBase::contextMenuPrepare(QMenu &menu) const
 {
     if(!_this->conf_loaded)
     {
@@ -80,45 +103,49 @@ void AbstractRobotItem::contextMenuPrepare(QMenu &menu) const
         menu.addAction("Configure", [this]{_this->conf_diag->show();});
 }
 
-void AbstractRobotItem::stop()
+// TODO Re-enable3
+void RovizItemDevBase::stop()
 {
 //    for(ImageWidget* iw : _this->out_widgets)
 //        iw->reset();
 }
 
-void AbstractRobotItem::restart()
+void RovizItemDevBase::restart()
 {
     this->stop();
     this->start();
 }
 
+// The following two functions can't have the same name as in RovizItem because
+// they are templated and also because functions with the same name already
+// exist in AbstractItem (from the itemframework).
 template<class T>
-Input AbstractRobotItem::addInputBase(std::string name)
+Input RovizItemDevBase::addInputBase(std::string name)
 {
     ItemInput *in;
 
     in = this->AbstractItem::addInput(qMetaTypeId<Stream<T>*>(), QString::fromStdString(name));
     connect(in, &ItemInput::dataChanged,
-            _this.data(), &AbstractRobotItemPrivate::inputStateChanged);
+            _this.data(), &RovizItemDevBasePrivate::inputStateChanged);
 
     return Input(in);
 }
 
 template<class T>
-Output AbstractRobotItem::addOutputBase(std::string name)
+Output RovizItemDevBase::addOutputBase(std::string name)
 {
     ItemOutput *out;
-    Stream<T> *s = new Stream<T>();
+    Stream<T> *stream = new Stream<T>();
 
     out = this->AbstractItem::addOutput(qMetaTypeId<Stream<T>*>(), QString::fromStdString(name));
-    this->setOutputData(out, s);
-    _this->out_widgets.insert(Output(out), s->widget());
-    _this->main_image_layout->addWidget(s->widget());
+    this->setOutputData(out, stream);
+    _this->out_widgets.insert(Output(out), stream->widget());
+    _this->main_image_layout->addWidget(stream->widget());
 
     return Output(out);
 }
 
-void AbstractRobotItem::pushOut(StreamObject obj, Output output)
+void RovizItemDevBase::pushOut(StreamObject obj, Output output)
 {
     ItemOutput *out;
     StreamBase *stream;
@@ -139,12 +166,12 @@ void AbstractRobotItem::pushOut(StreamObject obj, Output output)
         _this->out_widgets[output]->update();
 }
 
-Trim AbstractRobotItem::addTrim(std::string name, int min, int max)
+Trim RovizItemDevBase::addTrim(std::string name, int min, int max)
 {
     return this->addTrim(name, min, max, (max - min) + 1);
 }
 
-Trim AbstractRobotItem::addTrim(std::string name, double min, double max, int steps)
+Trim RovizItemDevBase::addTrim(std::string name, double min, double max, int steps)
 {
     QSlider *slider = new QSlider();
     QVBoxLayout *layout = new QVBoxLayout();
@@ -161,17 +188,18 @@ Trim AbstractRobotItem::addTrim(std::string name, double min, double max, int st
     _this->main_control_layout->addLayout(layout);
 
     connect(slider, &QSlider::valueChanged,
-            _this.data(), &AbstractRobotItemPrivate::trimChangedSlot);
+            _this.data(), &RovizItemDevBasePrivate::trimChangedSlot);
 
     _this->collapse_btn->show();
 
-    slider->setObjectName(QString::fromStdString(name));
+    // TODO Why?
+//    slider->setObjectName(QString::fromStdString(name));
     _this->sliders.append(slider);
     _this->slider_to_label.insert(slider, label);
     return Trim(slider);
 }
 
-double AbstractRobotItem::trimValue(Trim trim)
+double RovizItemDevBase::trimValue(Trim trim) const
 {
     QSlider *s;
 
@@ -182,41 +210,41 @@ double AbstractRobotItem::trimValue(Trim trim)
         return 0.0f;
 }
 
-void AbstractRobotItem::trimChanged(Trim, double )
+void RovizItemDevBase::trimChanged(Trim, double)
 {
 }
 
-void AbstractRobotItem::addConfig(std::string name, std::string *value, std::function<std::string (std::string)> checker)
-{
-    _this->conf_diag->addItem(name, value, checker);
-    _this->config_present = true;
-}
-
-void AbstractRobotItem::addConfig(std::string name, int *value, std::function<int (int)> checker)
+void RovizItemDevBase::addConfig(std::string name, std::string *value, std::function<std::string (std::string)> checker)
 {
     _this->conf_diag->addItem(name, value, checker);
     _this->config_present = true;
 }
 
-void AbstractRobotItem::addConfig(std::string name, double *value, std::function<double (double)> checker)
+void RovizItemDevBase::addConfig(std::string name, int *value, std::function<int (int)> checker)
 {
     _this->conf_diag->addItem(name, value, checker);
     _this->config_present = true;
 }
 
-void AbstractRobotItem::addConfig(std::string name, bool *value)
+void RovizItemDevBase::addConfig(std::string name, double *value, std::function<double (double)> checker)
+{
+    _this->conf_diag->addItem(name, value, checker);
+    _this->config_present = true;
+}
+
+void RovizItemDevBase::addConfig(std::string name, bool *value)
 {
     _this->conf_diag->addItem(name, value);
     _this->config_present = true;
 }
 
-void AbstractRobotItem::addConfig(std::string name, std::vector<std::string> possibilities, int *index)
+void RovizItemDevBase::addConfig(std::string name, std::vector<std::string> possibilities, int *index)
 {
     _this->conf_diag->addItem(name, possibilities, index);
     _this->config_present = true;
 }
 
-void AbstractRobotItem::start()
+void RovizItemDevBase::start()
 {
     // TODO The itemframework should have an 'initialization complete' signal
     if(!_this->conf_loaded)

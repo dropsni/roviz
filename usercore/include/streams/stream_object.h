@@ -3,7 +3,8 @@
 
 #include <memory>
 #include <vector>
-#include "portable/template_decl.h"
+#include "core/template_decl.h"
+#include "bases/export_handling.h"
 
 struct SrcTreeNode;
 class StreamObjectPrivate;
@@ -21,7 +22,7 @@ struct SrcTreeNode
     std::vector<SourceID> sources;
 };
 
-class PORTABLE_EXPORT_CLASS StreamObject
+class ROVIZ_EXPORT_CLASS StreamObject
 {
     MAKE_ALL_STREAMS_A_FRIEND
 

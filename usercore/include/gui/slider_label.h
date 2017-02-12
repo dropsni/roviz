@@ -7,7 +7,7 @@
 /**
  * @brief A QLabel that can be directly connected to a QSlider
  *
- * \ingroup robot_framework
+ * \ingroup roviz_framework
  */
 class SliderLabel : public QLabel
 {

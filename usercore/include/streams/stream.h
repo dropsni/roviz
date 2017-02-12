@@ -1,8 +1,7 @@
 #ifndef STREAM_H
 #define STREAM_H
 
-#include "core/stream_base.h"
-#include "portable/template_decl.h"
+#include "streams/stream_base.h"
 
 template<class T>
 class Stream : public StreamBase

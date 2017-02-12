@@ -1,7 +1,20 @@
 #ifndef ROVIZITEMDEVBASEPRIVATE_H
 #define ROVIZITEMDEVBASEPRIVATE_H
 
-#include "bases/roviz_item_dev_base.h"
+#include <QMap>
+#include <QList>
+#include <QImage>
+#include "core/typedecl.h"
+
+class QWidget;
+class QPushButton;
+class QSlider;
+class QHBoxLayout;
+class SettingsScope;
+class SliderLabel;
+class ConfigDialog;
+class StreamToInputMapper;
+class RovizItemDevBase;
 
 class RovizItemDevBasePrivate : public QObject
 {

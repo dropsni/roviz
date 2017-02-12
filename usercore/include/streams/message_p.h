@@ -2,7 +2,7 @@
 #define MESSAGEPRIVATE_H
 
 #include "message.h"
-#include "portable/stream_object_p.h"
+#include "streams/stream_object_p.h"
 
 class MessagePrivate : public StreamObjectPrivate
 {

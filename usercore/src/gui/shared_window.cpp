@@ -1,6 +1,22 @@
 
 #include "gui/shared_window.h"
 
+#include <QObject>
+#include <QWidget>
+#include <QString>
+#include <QStringList>
+#include <QSize>
+#include <QRect>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QDockWidget>
+#include <QLineEdit>
+#include <QTabBar>
+#include <QToolButton>
+#include <QCloseEvent>
+#include "helper/settings_scope.h"
+#include "bases/roviz_item_dev_base.h"
+
 QMap<SettingsScope*, SharedWindow*> SharedWindow::inst;
 
 SharedWindow::SharedWindow(QWidget *parent)
@@ -86,8 +102,8 @@ SharedWindow::SharedWindow(QWidget *parent)
     connect(this->tab, &QTabBar::tabBarDoubleClicked,
             this, &SharedWindow::tabStartRename);
 
-    // That's probably the only place that gets called only once in the beginning
-    // without adding a new class/function.
+    // That's probably the only place that gets called only once in the
+    // beginning  without adding a new class/function.
     qRegisterMetaType<StreamObject>();
 }
 
@@ -280,7 +296,8 @@ void SharedWindow::addItem(RovizItemDevBase* item)
     {
         DockWidgetSignaling *dock = new DockWidgetSignaling(item->name(), this->main_window);
         dock->setWidget(item->widget());
-        dock->setObjectName(item->name());
+        // TODO Why?
+        // dock->setObjectName(item->name());
         this->main_window->addDockWidget(Qt::TopDockWidgetArea, dock);
         this->dock_items.append(dock);
         this->parents.append(item);

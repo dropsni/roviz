@@ -3,11 +3,11 @@
 
 #include <string>
 #include <initializer_list>
-#include <memory>
-#include "portable/stream_object.h"
-#include "core/stream_base.h"
+#include "streams/stream_object.h"
 
+class QWidget;
 class MessagePrivate;
+class StreamBase;
 
 class Message : public StreamObject
 {

@@ -1,5 +1,7 @@
 
-#include "core/stream_to_input_mapper.h"
+#include "bases/stream_to_input_mapper.h"
+
+#include "item/item_input.h"
 
 StreamToInputMapper::StreamToInputMapper(QObject *parent)
     : QObject(parent)

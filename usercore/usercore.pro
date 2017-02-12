@@ -1,11 +1,11 @@
 include(usercore.pri)
 
-SOURCES +=  src/bases/roviz_item_dev_base.cpp \
+SOURCES +=  src/usercore.cpp \
+            src/bases/roviz_item_dev_base.cpp \
             src/bases/roviz_item_dev_base_p.cpp \
+            src/bases/stream_to_input_mapper.cpp \
             src/core/input_queue.cpp \
             src/core/roviz_item.cpp \
-            src/core/roviz_item_p.cpp \
-            src/core/stream_to_input_mapper.cpp \
             src/core/template_decl.cpp \
             src/gui/config_dialog.cpp \
             src/gui/dock_widget_signaling.cpp \
@@ -17,19 +17,18 @@ SOURCES +=  src/bases/roviz_item_dev_base.cpp \
             src/streams/image_p.cpp \
             src/streams/message.cpp \
             src/streams/message_m.cpp \
-            src/streams/message_p.cpp \
             src/streams/stream_base.cpp \
             src/streams/stream.cpp \
-            src/streams/stream_object.cpp \
-            src/streams/stream_object_p.cpp
+            src/streams/stream_object.cpp
 
-HEADERS +=  include/bases/export_handling.h \
+HEADERS +=  include/usercore.h \
+            include/bases/export_handling.h \
             include/bases/roviz_item_dev_base.h \
             include/bases/roviz_item_dev_base_p.h \
+            include/bases/stream_to_input_mapper.h \
             include/core/input_queue.h \
             include/core/roviz_item.h \
             include/core/roviz_item_p.h \
-            include/core/stream_to_input_mapper.h \
             include/core/strong_typedef.h \
             include/core/template_decl.h \
             include/core/template_decl_helpers.h \

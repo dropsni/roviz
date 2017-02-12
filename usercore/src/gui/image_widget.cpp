@@ -1,6 +1,11 @@
 
 #include "gui/image_widget.h"
 
+#include <QWidget>
+#include <QPaintEvent>
+#include <QResizeEvent>
+#include <QPainter>
+
 ImageWidget::ImageWidget(QWidget *parent)
     : QLabel(parent)
 {
@@ -34,7 +39,7 @@ void ImageWidget::newObject(StreamObject obj)
     Image img = this->image;
     this->image = Image(obj);
 
-    // We have to resize, when the aspect ratio changes
+    // We have to resize, when the size changes
     if(this->image.format() != Image::NoFormat &&
        (img.format() != Image::NoFormat ||
         this->image.width() != img.width() ||

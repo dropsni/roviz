@@ -1,6 +1,9 @@
 
-#include "portable/message.h"
-#include "portable/message_p.h"
+#include "streams/message.h"
+#include "streams/message_p.h"
+
+#include <QWidget>
+#include <streams/stream_base.h>
 
 Message::Message(const StreamObject &base)
 {

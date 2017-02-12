@@ -1,15 +1,18 @@
 
-#include "portable/portable_image.h"
-#include "portable/portable_image_p.h"
+#include "streams/image.h"
+#include "streams/image_p.h"
+
+#include <memory>
+#include "streams/stream_base.h"
 
 Image::Image(const StreamObject &base)
 {
     this->_this_base = base._this_base;
-    _this = dynamic_cast<PortableImagePrivate*>(this->_this_base.get());
+    _this = dynamic_cast<ImagePrivate*>(this->_this_base.get());
 }
 
 Image::Image(std::initializer_list<SourceID> sources)
-    : _this(new PortableImagePrivate())
+    : _this(new ImagePrivate())
 {
     _this_base.reset(_this);
     this->initSources(sources);
@@ -21,7 +24,7 @@ Image::Image(std::initializer_list<SourceID> sources)
 }
 
 Image::Image(bool, std::initializer_list<SourceID> sources)
-    : _this(new PortableImagePrivate())
+    : _this(new ImagePrivate())
 {
     _this_base.reset(_this);
     this->initSources(sources);
@@ -42,7 +45,7 @@ QWidget *Image::initWidget(StreamBase *stream)
 
 #ifdef QT_PRESENT
 Image::Image(QImage img, std::initializer_list<SourceID> sources)
-    : _this(new PortableImagePrivate())
+    : _this(new ImagePrivate())
 {
     _this_base.reset(_this);
     this->initSources(sources);
@@ -74,7 +77,7 @@ Image::Image(QImage img, std::initializer_list<SourceID> sources)
 
 #ifdef OPENCV_PRESENT
 Image::Image(cv::Mat img, std::initializer_list<SourceID> sources)
-    : _this(new PortableImagePrivate())
+    : _this(new ImagePrivate())
 {
     _this_base.reset(_this);
     this->initSources(sources);

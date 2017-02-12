@@ -1,6 +1,7 @@
 
-#include "core/stream.h"
-#include "portable/all_streams.h"
+#include "core/template_decl.h"
+#include "streams/stream.h"
+#include "streams/all_streams.h"
 
 INSTANTIATE_STREAM
 

@@ -1,6 +1,5 @@
 
-#include "portable/input_queue.h"
-
+#include "core/input_queue.h"
 
 InputQueue::InputQueue()
 {

@@ -1,7 +1,7 @@
 #ifndef MESSAGE_M_H
 #define MESSAGE_M_H
 
-#include "portable/message.h"
+#include "streams/message.h"
 
 class MessageMutable : public Message
 {

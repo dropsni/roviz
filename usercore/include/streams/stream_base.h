@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QWidget>
-#include "portable/stream_object.h"
+#include "streams/stream_object.h"
 
 class StreamBase : public QObject
 {

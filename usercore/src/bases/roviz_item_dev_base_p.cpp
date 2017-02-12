@@ -1,12 +1,27 @@
 
-#include "core/abstract_robot_item_p.h"
+#include "bases/roviz_item_dev_base.h"
+#include "bases/roviz_item_dev_base_p.h"
 
-AbstractRobotItemPrivate::AbstractRobotItemPrivate(AbstractRobotItem *q)
+#include <QString>
+#include <QWidget>
+#include <QSlider>
+#include <QPushButton>
+#include <QHBoxLayout>
+#include <QPropertyAnimation>
+#include "item/item_input.h"
+#include "helper/settings_scope.h"
+#include "bases/stream_to_input_mapper.h"
+#include "gui/shared_window.h"
+#include "gui/slider_label.h"
+#include "gui/config_dialog.h"
+#include "streams/stream_base.h"
+
+RovizItemDevBasePrivate::RovizItemDevBasePrivate(RovizItemDevBase *q)
 {
     this->_this = q;
 }
 
-void AbstractRobotItemPrivate::inputStateChanged()
+void RovizItemDevBasePrivate::inputStateChanged()
 {
     ItemInput *in;
     StreamBase *stream;
@@ -34,11 +49,11 @@ void AbstractRobotItemPrivate::inputStateChanged()
     map->conn1 = connect(stream, &StreamBase::newObject,
                          map, &StreamToInputMapper::inputMapper);
     map->conn2 = connect(map, &StreamToInputMapper::newObject,
-                         _this, &AbstractRobotItem::pushIn);
+                         _this, &RovizItemDevBase::pushIn);
     this->in_mappers.insert(in, map);
 }
 
-void AbstractRobotItemPrivate::trimChangedSlot(int value)
+void RovizItemDevBasePrivate::trimChangedSlot(int value)
 {
     QSlider *s;
     SliderLabel *sl;
@@ -51,7 +66,7 @@ void AbstractRobotItemPrivate::trimChangedSlot(int value)
     _this->trimChanged(Trim(s), sl->value());
 }
 
-void AbstractRobotItemPrivate::collapseBtnClicked()
+void RovizItemDevBasePrivate::collapseBtnClicked()
 {
     QPropertyAnimation *an = new QPropertyAnimation(this->control_base, "maximumWidth");
     an->setDuration(500);
@@ -76,18 +91,18 @@ void AbstractRobotItemPrivate::collapseBtnClicked()
     an->start();
 }
 
-void AbstractRobotItemPrivate::saveConfigs()
+void RovizItemDevBasePrivate::saveConfigs()
 {
     this->conf_diag->save(_this->settingsScope());
 }
 
-void AbstractRobotItemPrivate::restartIfRunning()
+void RovizItemDevBasePrivate::restartIfRunning()
 {
     if(_this->running())
         _this->restart();
 }
 
-void AbstractRobotItemPrivate::parentScopeChanged(SettingsScope *old)
+void RovizItemDevBasePrivate::parentScopeChanged(SettingsScope *old)
 {
     QString trim_name;
 

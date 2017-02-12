@@ -1,6 +1,6 @@
 
-#include "portable/portable_image_m.h"
-#include "portable/portable_image_p.h"
+#include "streams/image_m.h"
+#include "streams/image_p.h"
 
 ImageMutable::ImageMutable()
     : Image()

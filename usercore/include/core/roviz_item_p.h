@@ -1,22 +1,25 @@
 #ifndef PORTABLEITEMPRIVATE_H
 #define PORTABLEITEMPRIVATE_H
 
-#include "portable/roviz_item.h"
-#include "portable/input_queue.h"
-#include "portable/message.h"
+#include <map>
+#include <mutex>
+#include <condition_variable>
+#include <thread>
+#include "core/typedecl.h"
+#include "core/input_queue.h"
 
-class PortableItemPrivate
+class RovizItemPrivate
 {
 public:
-    PortableItem *_this;
+    RovizItem *_this;
     std::map<Input, InputQueue*> in_queue;
     std::condition_variable cond;
     std::thread *th;
     std::mutex mtx;
     bool is_paused, is_stopped;
 
-    PortableItemPrivate() = default;
-    ~PortableItemPrivate() = default;
+    RovizItemPrivate() = default;
+    ~RovizItemPrivate() = default;
 };
 
 #endif // PORTABLEITEMPRIVATE_H

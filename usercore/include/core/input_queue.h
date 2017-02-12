@@ -3,18 +3,15 @@
 
 #include <list>
 #include <mutex>
-#include "portable/export_handling.h"
-#include "portable/image.h"
-#include "portable/stream_object.h"
-
-class Image;
+#include "bases/export_handling.h"
+#include "streams/stream_object.h"
 
 /**
  * @brief A queue to buffer input stream objects
  *
  * Used to queue streams that arrive at item inputs.
  *
- * \ingroup robot_framework
+ * \ingroup roviz_framework
  */
 class ROVIZ_EXPORT_CLASS InputQueue
 {

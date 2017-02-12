@@ -1,7 +1,7 @@
 
-#include "portable/portable_image_p.h"
+#include "streams/image_p.h"
 
-void PortableImagePrivate::init(int w, int h, Image::Format f)
+void ImagePrivate::init(int w, int h, Image::Format f)
 {
     this->w = w;
     this->h = h;

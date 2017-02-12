@@ -1,6 +1,6 @@
 
-#include "portable/message_m.h"
-#include "portable/message_p.h"
+#include "streams/message_m.h"
+#include "streams/message_p.h"
 
 MessageMutable::MessageMutable(std::initializer_list<SourceID> sources)
     : Message(sources)

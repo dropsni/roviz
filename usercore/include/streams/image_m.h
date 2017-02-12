@@ -1,7 +1,7 @@
 #ifndef PORTABLEIMAGEMUTABLE_H
 #define PORTABLEIMAGEMUTABLE_H
 
-#include "portable/portable_image.h"
+#include "streams/image.h"
 
 /**
  * @brief The mutable version PortableImage
@@ -11,7 +11,7 @@
  *
  * \ingroup robot_framework
  */
-class PORTABLE_EXPORT_CLASS ImageMutable : public Image
+class ROVIZ_EXPORT_CLASS ImageMutable : public Image
 {
 public:
     ImageMutable();

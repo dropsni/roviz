@@ -2,25 +2,22 @@
 #define PORTABLEITEM_H
 
 /**
- * \defgroup robot_framework Robot Framework
+ * \defgroup roviz_framework Roviz Framework
  *
- * The robot framework is optimized to easily manipulate image/video streams
- * within traviz. It is completely decoupled from Qt and items that are
- * carefully written can therefore directly run on hardware. To achieve
- * this portability, the base class of all items, PortableItem,
- * is written portably in pure C++. Depending on how the user compiles the
- * program, PortableItem gets a different base class. To use it
- * in traviz, it has AbstractRobotItem as the base class.
- * AbstractRobotItem binds the interface to traviz, handles the
- * connections traviz makes, visualizes the data and acts as a bridge
- * between Qt and standard C++. In the future, there will also be other base
- * classes available for PortableItem, for example one that
- * connects the items via ROS to make them available on embedded platforms.
- * Items that are meant to be exportable, should therefore be written in
- * pure C++. Items that are for simulation purposes only can be flagged as
- * non-exportable by inheriting from NonPortableItem.
- * NonPortableItem provides the same interface as
- * PortableItem.
+ * The roviz framework is optimized to easily manipulate image/video streams
+ * within the itemframework. It is completely decoupled from Qt and items that
+ * are carefully written can therefore directly run on e.g. embedded hardware.
+ * To achieve this portability, the base class of all items, RovizItem, is
+ * written portably in pure C++. Depending on how the user compiles the program,
+ * RovizItem gets a different base class. To use it with the itemframework, it
+ * has RovizItemDevBase as the base class. This is the base class intended for
+ * development. A more stripped down framework that would run in some kind of
+ * production environment might be called RovizItemProdBase, but this class
+ * heavily depends on the use case, which is why it doesn't exist yes. Items
+ * that are for simulation/development purposes only, like test image generators
+ * and the like, can be flagged as non-exportable by inheriting from
+ * RovizItemNoExport, which provides the same interface, but won't be available
+ * in production.
  *
  * Items also have a start/pause/stop mechanism that is triggered externally.
  * When an item is started, it gets its own thread where it can process all
@@ -30,65 +27,71 @@
  *
  * There are trim values and configs to customize the item. Trim values are
  * nummeric values that can be adjusted at runtime. Adjusting them can for
- * example happen with a slider on a GUI. Configs on the other hand are not
- * meant to change often. Everytime a config changes, the item is
- * automatically restarted. The advantage of them, is that there are more
- * data types available for configs. They can be used for static values,
- * like frame sizes, that you most likely only have to set once and can
+ * example happen with a slider on a GUI (which RovizItemDevBase provides).
+ * Configs on the other hand are not meant to change often. Everytime a config
+ * changes, the item is automatically restarted. The advantage of them, is that
+ * there are more data types available for configs. They can be used for static
+ * values, like frame sizes, that you most likely only have to set once and can
  * forget about afterwards.
  *
  * The robot framework also provides message streams for control data. Once
  * the desired information is extracted from images, these messages could
- * be used to control parts of the robot. They could also be a second
- * source of sensor information that isn't as ressource intensive as images.
+ * be used to control other applications. They could also be a second
+ * source of information that isn't as ressource intensive as images.
  *
- * If you want to write an item using the robot framework, have a look at
- * PortableItem to get started.
+ * If you want to write an item using the roviz framework, have a look at
+ * RovizItem to get started.
  */
 
 /**
- * \defgroup robot_plugins Robot Plugins
+ * \defgroup roviz_plugins Robot Plugins
  *
- * Plugins for the robot framework.
+ * Plugins for the roviz framework.
  *
- * \ingroup robot_framework
+ * \ingroup roviz_framework
  */
 
 // TODO If one thread alone can't handle all data, spawn more threads
 // to already start processing the next images as soon as they arrive.
 
-#include <list>
-#include <map>
-#include <thread>
-#include <condition_variable>
+#include <string>
+#include <vector>
+#include <memory>
 #include <functional>
-#include <chrono>
-#include "portable_item_global.h"
-#include "portable_image.h"
-#include "portable/input_queue.h"
-#include "portable/stream_object.h"
-#include "portable/template_decl.h"
-
-class PortableItemPrivate;
+#include <mutex>
+#include "bases/export_handling.h"
+#include "core/template_decl.h"
+#include "core/typedecl.h"
+#include "streams/stream_object.h"
 
 // Include the appropriate base class
-#include PORTABLE_BASE_INCLUDE
+#include ROVIZ_BASE_INCLUDE
 
+class RovizItemPrivate;
+
+// Maximal number of frames that an input queue can hold.
+// Depending on the application, this might have to be adjusted.
 #define MAX_QUEUE_SIZE 32
 
 /**
- * @brief Base class for all items that use the robot framework.
+ * @brief Base class for all items that use the roviz framework.
  *
- * All items using the robot framework have to inherit from this class. They
+ * All items using the roviz framework have to inherit from this class. They
  * have to at least implement thread(). This function will run in a seperate
  * thread and can process the image data.
  *
- * \sa AbstractRobotItem
- * \sa NonPortableItem
- * \sa PortableItemBase
- * \ingroup robot_framework
+ * The templated functions need to know on what kind of stream they operate.
+ * Examples might be Image or Message. You can also implement your own
+ * stream-type. Look at Stream<T> for more information. Trying to call e.g.
+ * next() with the wrong stream type for the given input will result in
+ * undefined behavior!
+ *
+ * \sa RovizItemBase
+ * \sa RovizItemDevBase
+ * \sa RovizItemNoExport
+ * \ingroup roviz_framework
  */
-class PORTABLE_EXPORT_CLASS PortableItem : public PortableItemBase
+class ROVIZ_EXPORT_CLASS RovizItem : public RovizItemBase
 {
     // The moc won't allow a portable name
     Q_OBJECT
@@ -97,9 +100,8 @@ public:
     /**
      * @param typeName The name of the item
      */
-    explicit PortableItem(std::string typeName);
-
-    virtual ~PortableItem();
+    explicit RovizItem(std::string type_name);
+    virtual ~RovizItem();
 
 protected:
     /**
@@ -131,9 +133,9 @@ protected:
     /**
      * @brief Stop thread operation
      *
-     * __Important:__ You have to call this function in the destructor, otherwise
-     * the thread might still run after destruction of the members, even if it
-     * is called in the base class destructor.
+     * __Important:__ You have to call this function in the destructor,
+     * otherwise the thread might still run after destruction of the members,
+     * even if it is called in the base class destructor.
      *
      * \sa stopped
      * \sa starting
@@ -179,8 +181,8 @@ protected:
      * @param obj The object
      * @param out The output handle returned from addOutput()
      *
-     * This function is completely thread safe, you can call it from
-     * thread() of any other function, like e.g. an event handler.
+     * This function is completely thread safe, you can call it from thread()
+     * or any other function, like e.g. an event handler.
      *
      * \sa addOutput
      */
@@ -282,11 +284,11 @@ protected:
 
     /**
      * @brief Wait if the item is paused
-     * @return true - No need to wait
+     * @return true - No need to wait any further
      *         false - The item was stopped, the thread _HAS TO_ exit
      *
      * This function could be used for image sources that don't need a
-     * condidion to be matched to generate an image.
+     * condidion to be true to generate an image.
      *
      * This function implements the pause/stop mechanism. It doesn't return
      * as long as the item is paused and returns false if it is stopped. It
@@ -314,7 +316,7 @@ protected:
      * \sa waitFor
      * \sa wait
      */
-    bool running(void) override;
+    bool running(void) const;
 
     /**
      * @brief Wake the possibly waiting thread
@@ -325,7 +327,7 @@ protected:
      *
      * \sa waitFor
      */
-    void wake(void);
+    void wake(void) const;
 
     /**
      * @brief Mutex that waitFor() locks to check the condidion
@@ -335,8 +337,9 @@ protected:
      * mutex!
      *
      * \sa waitFor
+     * \sa waitForCond
      */
-    std::mutex &mutex(void);
+    std::mutex &mutex(void) const;
 
     /**
      * @brief Add a trim value
@@ -371,7 +374,7 @@ protected:
      * @param trim Handle to the trim value returned from addTrim()
      * @return The value the trim value currently has
      */
-    double trimValue(Trim trim) override;
+    double trimValue(Trim trim) const override;
 
     /**
      * @brief Called, when the trim value changed
@@ -431,7 +434,7 @@ protected:
     void addConfig(std::string name, std::vector<std::string> possibilities, int *index) override;
 
 private:
-    std::unique_ptr<PortableItemPrivate> _this;
+    std::unique_ptr<RovizItemPrivate> _this;
 
     /**
      * @name Internal interface functions
@@ -451,25 +454,7 @@ private:
      *
      * Called by the base class to add a new object to the queue of an input.
      */
-    void pushIn(StreamObject obj, Input input) override;
-
-    /**
-     * @brief Pause execution
-     *
-     * Pauses the operation of the item, but does not reset it.
-     *
-     * \sa unpause
-     */
-    void pause(void) override;
-
-    /**
-     * @brief Resume execution
-     *
-     * Resumes execution after a call to pause()
-     *
-     * \sa pause
-     */
-    void unpause(void) override;
+    void pushIn(StreamObject obj, Input input);
 
     /**
      * @brief Start execution
@@ -480,6 +465,24 @@ private:
      * \sa pause
      */
     void start(void) override;
+
+    /**
+     * @brief Pause execution
+     *
+     * Pauses the operation of the item, but does not reset it.
+     *
+     * \sa unpause
+     */
+    void pause(void);
+
+    /**
+     * @brief Resume execution
+     *
+     * Resumes execution after a call to pause()
+     *
+     * \sa pause
+     */
+    void unpause(void);
     ///@}
 };
 

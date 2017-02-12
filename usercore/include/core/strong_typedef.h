@@ -1,7 +1,11 @@
 #ifndef STRONG_TYPEDEF_H
 #define STRONG_TYPEDEF_H
 
-// http://www.ilikebigbits.com/blog/2014/5/6/type-safe-identifiers-in-c
+/**
+ * @brief A strong typedef that doesn't allow much casting around
+ *
+ * From http://www.ilikebigbits.com/blog/2014/5/6/type-safe-identifiers-in-c
+ */
 template<class Tag, class impl, impl default_value>
 class StrongTypedef
 {

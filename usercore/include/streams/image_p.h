@@ -1,13 +1,11 @@
 #ifndef PORTABLEIMAGEPRIVATE_H
 #define PORTABLEIMAGEPRIVATE_H
 
-#include <vector>
-#include <memory>
-#include <initializer_list>
-#include "portable/portable_image.h"
-#include "portable/stream_object_p.h"
+#include <QImage>
+#include "streams/image.h"
+#include "streams/stream_object_p.h"
 
-class PortableImagePrivate : public StreamObjectPrivate
+class ImagePrivate : public StreamObjectPrivate
 {
 public:
 #ifdef QT_PRESENT
@@ -21,7 +19,7 @@ public:
     int w, h, bits, bytes, len;
     enum Image::Format f;
 
-    ~PortableImagePrivate() = default;
+    ~ImagePrivate() = default;
     void init(int w, int h, enum Image::Format f);
 };
 

@@ -1,26 +1,23 @@
 ﻿#ifndef SHARED_WINDOW_H
 #define SHARED_WINDOW_H
 
-#include <QObject>
-#include <QMdiArea>
-#include <QMdiSubWindow>
 #include <QMainWindow>
 #include <QList>
-#include <QMap>
-#include <QDockWidget>
-#include <QToolButton>
-#include <QTabBar>
-#include <QStringList>
 #include <QVector>
-#include <QVariant>
-#include <QLineEdit>
-#include "core/robot_core.h"
-#include "core/roviz_item_dev_base.h"
-#include "helper/settings_scope.h"
-#include "gui/gui_manager.h"
-#include "gui/dock_widget_signaling.h"
+#include <QMap>
+#include <QByteArray>
+#include <QIcon>
+#include "bases/export_handling.h"
 
 class RovizItemDevBase;
+class QCloseEvent;
+class SettingsScope;
+class QObject;
+class QDockWidget;
+class QToolButton;
+class QTabBar;
+class QLineEdit;
+class QWidget;
 
 /**
  * @brief Provides a shared window that displays data from all items
@@ -29,9 +26,9 @@ class RovizItemDevBase;
  * items on the scene in one aggregated window. It also handles the
  * start/pause/stop mechanism.
  *
- * \ingroup robot_framework
+ * \ingroup roviz_framework
  */
-class ROBOTCORE_EXPORT SharedWindow : public QMainWindow
+class ROVIZ_EXPORT_CLASS SharedWindow : public QMainWindow
 {
 Q_OBJECT
 

@@ -2,13 +2,16 @@
 #define STREAMTOINPUTMAPPER_H
 
 #include <QObject>
-#include "portable/export_handling.h"
-#include "portable/stream_object.h"
+#include "bases/export_handling.h"
+#include "core/typedecl.h"
+#include "streams/stream_object.h"
+
+class ItemInput;
 
 /**
  * @brief Maps the signal that a new message is ready to the right input
  *
- * \ingroup robot_framework
+ * \ingroup roviz_framework
  */
 class StreamToInputMapper : public QObject
 {
