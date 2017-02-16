@@ -1,17 +1,18 @@
 #ifndef TIG_ITEM_H
 #define TIG_ITEM_H
 
-#include "portable/roviz_item.h"
-#include "portable/image_m.h"
+#include "core/roviz_item.h"
+#include "streams//image_m.h"
 #include "opencv2/opencv.hpp"
 #include "opencv2/imgproc.hpp"
+#include <thread>
 
-class TIGItem : public PortableItem
+class TIGItem : public RovizItem
 {
     Q_OBJECT
 
 public:
-    PORTABLE_INVOKABLE TIGItem();
+    ROVIZ_INVOKABLE TIGItem();
     ~TIGItem();
 
 protected:

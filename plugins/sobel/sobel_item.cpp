@@ -2,9 +2,9 @@
 #include "sobel_item.h"
 
 SobelItem::SobelItem()
-    : PortableItem("Sobel")
+    : RovizItem("Sobel")
 {
-    PORTABLE_INIT(Sobel);
+    ROVIZ_INIT_ITEM(Sobel);
 
     this->input = this->addInput<Image>("Input");
     this->output = this->addOutput<Image>("Output");

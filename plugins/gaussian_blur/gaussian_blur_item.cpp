@@ -2,9 +2,9 @@
 #include "gaussian_blur_item.h"
 
 GaussianBlurItem::GaussianBlurItem()
-    : PortableItem("GaussianBlur")
+    : RovizItem("GaussianBlur")
 {
-    PORTABLE_INIT(GaussianBlur);
+    ROVIZ_INIT_ITEM(GaussianBlur);
 
     this->input = this->addInput<Image>("Input");
     this->output = this->addOutput<Image>("Output");

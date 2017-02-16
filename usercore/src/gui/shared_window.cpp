@@ -11,11 +11,13 @@
 #include <QVBoxLayout>
 #include <QDockWidget>
 #include <QLineEdit>
+#include <QPushButton>
 #include <QTabBar>
 #include <QToolButton>
 #include <QCloseEvent>
 #include "helper/settings_scope.h"
 #include "bases/roviz_item_dev_base.h"
+#include "gui/dock_widget_signaling.h"
 
 QMap<SettingsScope*, SharedWindow*> SharedWindow::inst;
 

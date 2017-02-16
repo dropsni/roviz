@@ -1,21 +1,22 @@
 #ifndef FRAMEDELAYER_ITEM_H
 #define FRAMEDELAYER_ITEM_H
 
-#include "portable/roviz_item.h"
-#include "portable/image_m.h"
+#include "core/roviz_item.h"
+#include "streams/image_m.h"
 #include <queue>
+#include <thread>
 
 /**
  * @brief Delays incoming frames for some time before outputting them again
  *
  * \ingroup robot_plugins
  */
-class FrameDelayerItem : public PortableItem
+class FrameDelayerItem : public RovizItem
 {
     Q_OBJECT
 
 public:
-    PORTABLE_INVOKABLE FrameDelayerItem();
+    ROVIZ_INVOKABLE FrameDelayerItem();
     ~FrameDelayerItem();
 
 protected:

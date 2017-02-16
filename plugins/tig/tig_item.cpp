@@ -2,9 +2,9 @@
 #include "tig_item.h"
 
 TIGItem::TIGItem()
-    : PortableItem("Test Image Generator")
+    : RovizItem("Test Image Generator")
 {
-    PORTABLE_INIT(TIG);
+    ROVIZ_INIT_ITEM(TIG);
 
     this->is_gray = false;
 

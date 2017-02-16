@@ -1,6 +1,6 @@
 
-#include "portable/stream_object.h"
-#include "portable/stream_object_p.h"
+#include "streams/stream_object.h"
+#include "streams/stream_object_p.h"
 
 SourceID StreamObject::id() const
 {

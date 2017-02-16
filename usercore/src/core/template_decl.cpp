@@ -1,6 +1,7 @@
 
 #include "core/template_decl.h"
 #include ROVIZ_BASE_INCLUDE
+#include "streams/stream.h"
 #include "streams/all_streams.h"
 
 // Initialize streams

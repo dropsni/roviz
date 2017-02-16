@@ -7,20 +7,20 @@
 #include <QImage>
 #include <QTimer>
 #include <atomic>
-#include "portable/roviz_item.h"
-#include "portable/image_m.h"
+#include "core/roviz_item.h"
+#include "streams/image_m.h"
 
 /**
  * @brief Test pattern generator for testing
  *
  * \ingroup robot_plugins
  */
-class TPGItem : public PortableItem
+class TPGItem : public RovizItem
 {
     Q_OBJECT
 
 public:
-    PORTABLE_INVOKABLE TPGItem();
+    ROVIZ_INVOKABLE TPGItem();
     ~TPGItem();
 
 private:

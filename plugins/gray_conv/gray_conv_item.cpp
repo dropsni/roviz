@@ -2,9 +2,9 @@
 #include "gray_conv_item.h"
 
 GrayConvItem::GrayConvItem()
-    : PortableItem("GrayConv")
+    : RovizItem("GrayConv")
 {
-    PORTABLE_INIT(GrayConv);
+    ROVIZ_INIT_ITEM(GrayConv);
 
     this->input = this->addInput<Image>("RGB Input");
     this->output = this->addOutput<Image>("Grayscale Output");

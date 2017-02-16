@@ -2,9 +2,9 @@
 #include "frame_delayer_item.h"
 
 FrameDelayerItem::FrameDelayerItem()
-    : PortableItem("FrameDelayer")
+    : RovizItem("FrameDelayer")
 {
-    PORTABLE_INIT(FrameDelayer);
+    ROVIZ_INIT_ITEM(FrameDelayer);
 
     this->input = this->addInput<Image>("Input");
     this->output = this->addOutput<Image>("Output");

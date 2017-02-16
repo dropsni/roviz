@@ -2,9 +2,9 @@
 #include "tvg_item.h"
 
 TVGItem::TVGItem()
-    : PortableItem("Test Video Generator")
+    : RovizItem("Test Video Generator")
 {
-    PORTABLE_INIT(TVG);
+    ROVIZ_INIT_ITEM(TVG);
 
     this->output = this->addOutput<Image>("Output");
     this->addConfig("Video file", &this->vid_path, CONFIG_IS_PATH);

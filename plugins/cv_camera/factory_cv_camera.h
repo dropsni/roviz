@@ -2,7 +2,6 @@
 #define FACTORY_CVCAMERA_H
 
 #include "plugin/interface_factory.h"
-#include "core/roviz_item_dev_base.h"
 
 class FactoryCvCamera : public InterfaceFactory
 {

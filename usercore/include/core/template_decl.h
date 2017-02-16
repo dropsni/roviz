@@ -51,6 +51,7 @@ class Message;
 
 #ifndef PORTABLE_EXPORT
 #include <QObject>
+
 // The MOC is not smart enough to handle it if its encapsulated
 // within the macro. If you want to add a stream, copy one of the
 // classes below and name it StreamInit*YOUR_TYPE*.

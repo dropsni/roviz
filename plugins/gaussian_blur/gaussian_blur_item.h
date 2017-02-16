@@ -1,8 +1,8 @@
 #ifndef GAUSSIANBLUR_ITEM_H
 #define GAUSSIANBLUR_ITEM_H
 
-#include "portable/roviz_item.h"
-#include "portable/image_m.h"
+#include "core/roviz_item.h"
+#include "streams/image_m.h"
 #include "opencv2/core.hpp"
 #include "opencv2/imgproc.hpp"
 
@@ -11,12 +11,12 @@
  *
  * \ingroup robot_plugins
  */
-class GaussianBlurItem : public PortableItem
+class GaussianBlurItem : public RovizItem
 {
     Q_OBJECT
 
 public:
-    PORTABLE_INVOKABLE GaussianBlurItem();
+    ROVIZ_INVOKABLE GaussianBlurItem();
     ~GaussianBlurItem();
 
 protected:

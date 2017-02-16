@@ -2,9 +2,9 @@
 #include "cv_camera_item.h"
 
 CvCameraItem::CvCameraItem()
-    : PortableItem("CvCamera")
+    : RovizItem("CvCamera")
 {
-    PORTABLE_INIT(CvCamera);
+    ROVIZ_INIT_ITEM(CvCamera);
 
     this->res_list =
     {

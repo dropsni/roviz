@@ -5,9 +5,9 @@
 #include "tpg_item.h"
 
 TPGItem::TPGItem()
-    : NonPortableItem("Test Pattern Generator")
+    : RovizItemNoExport("Test Pattern Generator")
 {
-    PORTABLE_INIT(TPG);
+    ROVIZ_INIT_ITEM(TPG);
 
     this->test_pattern.load(":/test_pattern.png");
     this->test_pattern = this->test_pattern.convertToFormat(QImage::Format_RGB888);

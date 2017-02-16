@@ -1,17 +1,17 @@
 #ifndef CVCAMERA_ITEM_H
 #define CVCAMERA_ITEM_H
 
-#include "portable/roviz_item.h"
-#include "portable/image_m.h"
+#include "core/roviz_item.h"
+#include "streams/image_m.h"
 #include <opencv2/opencv.hpp>
 #include <opencv2/videoio.hpp>
 
-class CvCameraItem : public PortableItem
+class CvCameraItem : public RovizItem
 {
     Q_OBJECT
 
 public:
-    PORTABLE_INVOKABLE CvCameraItem();
+    ROVIZ_INVOKABLE CvCameraItem();
     ~CvCameraItem();
 
 protected:

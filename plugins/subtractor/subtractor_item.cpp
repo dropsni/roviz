@@ -2,9 +2,9 @@
 #include "subtractor_item.h"
 
 SubtractorItem::SubtractorItem()
-    : PortableItem("Subtractor")
+    : RovizItem("Subtractor")
 {
-    PORTABLE_INIT(Subtractor);
+    ROVIZ_INIT_ITEM(Subtractor);
 
     this->input1 = this->addInput<Image>("Input 1");
     this->input2 = this->addInput<Image>("Input 2");

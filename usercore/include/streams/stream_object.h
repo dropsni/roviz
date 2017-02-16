@@ -39,8 +39,13 @@ protected:
     void initSources(std::initializer_list<SourceID> sources = {});
 
     // C++ doesn't allow this, just make sure the object implements such a function.
-    // virtual static StreamWidgetBase *constructWidget(void);
+//  virtual static StreamWidgetBase *constructWidget(void);
 };
+
+// This is the only place within the portable code that we need that. I'm not
+// going to make a portable macro just for that.
+#ifndef ROVIZ_EXPORT
 Q_DECLARE_METATYPE(StreamObject)
+#endif
 
 #endif // STREAM_OBJECT_H

@@ -71,6 +71,7 @@ class RovizItemPrivate;
 
 // Maximal number of frames that an input queue can hold.
 // Depending on the application, this might have to be adjusted.
+// TODO This should be easier to configure
 #define MAX_QUEUE_SIZE 32
 
 /**
@@ -316,7 +317,7 @@ protected:
      * \sa waitFor
      * \sa wait
      */
-    bool running(void) const;
+    bool running(void) const override;
 
     /**
      * @brief Wake the possibly waiting thread
@@ -454,7 +455,7 @@ private:
      *
      * Called by the base class to add a new object to the queue of an input.
      */
-    void pushIn(StreamObject obj, Input input);
+    void pushIn(StreamObject obj, Input input) override;
 
     /**
      * @brief Start execution
@@ -473,7 +474,7 @@ private:
      *
      * \sa unpause
      */
-    void pause(void);
+    void pause(void) override;
 
     /**
      * @brief Resume execution
@@ -482,7 +483,7 @@ private:
      *
      * \sa pause
      */
-    void unpause(void);
+    void unpause(void) override;
     ///@}
 };
 

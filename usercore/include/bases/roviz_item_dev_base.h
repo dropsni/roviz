@@ -10,6 +10,13 @@
 #include "core/typedecl.h"
 #include "streams/stream_object.h"
 
+// Needed by template_decl.cpp
+// We include that here, because it is a non-portable dependency
+#include "helper/startup_helper.h"
+
+// Temporary workaround to make CONFIG_IS_PATH available
+#include "gui/config_dialog.h"
+
 class QWidget;
 class QGraphicsSceneMouseEvent;
 class RovizItemDevBasePrivate;
@@ -46,6 +53,10 @@ public:
      * do.
      */
     ///@{
+    virtual void pause(void) = 0;
+    virtual void unpause(void) = 0;
+    virtual bool running(void) const = 0;
+
 protected:
     template<class T>
     Input addInputBase(std::string name);
@@ -63,9 +74,6 @@ protected:
     virtual void addConfig(std::string name, double *value, std::function<double (double)> checker = [](double a){return a;});
     virtual void addConfig(std::string name, bool *value);
     virtual void addConfig(std::string name, std::vector<std::string> possibilities, int *index);
-    virtual void pause(void) = 0;
-    virtual void unpause(void) = 0;
-    virtual bool running(void) = 0;
 
 public slots:
     virtual void start(void);

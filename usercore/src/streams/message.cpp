@@ -35,8 +35,10 @@ const Message::Entry &Message::operator[](int index) const
     return _this->entries[index];
 }
 
+#ifndef ROVIZ_EXPORT
 QWidget *Message::initWidget(StreamBase *)
 {
     // TODO Implement
     return new QWidget();
 }
+#endif

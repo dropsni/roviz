@@ -2,9 +2,9 @@
 #include "canny_item.h"
 
 CannyItem::CannyItem()
-    : PortableItem("Canny")
+    : RovizItem("Canny")
 {
-    PORTABLE_INIT(Canny);
+    ROVIZ_INIT_ITEM(Canny);
 
     this->input = this->addInput<Image>("Input");
     this->output = this->addOutput<Image>("Output");

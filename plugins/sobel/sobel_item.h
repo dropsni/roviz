@@ -1,17 +1,17 @@
 #ifndef SOBEL_ITEM_H
 #define SOBEL_ITEM_H
 
-#include "portable/roviz_item.h"
-#include "portable/image_m.h"
+#include "core/roviz_item.h"
+#include "streams/image_m.h"
 #include "opencv2/opencv.hpp"
 #include "opencv2/imgproc.hpp"
 
-class SobelItem : public PortableItem
+class SobelItem : public RovizItem
 {
     Q_OBJECT
 
 public:
-    PORTABLE_INVOKABLE SobelItem();
+    ROVIZ_INVOKABLE SobelItem();
     ~SobelItem();
 
 protected:

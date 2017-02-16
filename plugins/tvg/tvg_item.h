@@ -1,18 +1,19 @@
 #ifndef TVG_ITEM_H
 #define TVG_ITEM_H
 
-#include "portable/roviz_item.h"
-#include "portable/image_m.h"
+#include "core/roviz_item.h"
+#include "streams/image_m.h"
 #include "opencv2/opencv.hpp"
 #include "opencv2/videoio.hpp"
 #include <ctime>
+#include <thread>
 
-class TVGItem : public PortableItem
+class TVGItem : public RovizItem
 {
     Q_OBJECT
 
 public:
-    PORTABLE_INVOKABLE TVGItem();
+    ROVIZ_INVOKABLE TVGItem();
     ~TVGItem();
 
 protected:

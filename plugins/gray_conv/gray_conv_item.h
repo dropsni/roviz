@@ -1,20 +1,20 @@
 #ifndef GRAYCONV_ITEM_H
 #define GRAYCONV_ITEM_H
 
-#include "portable/roviz_item.h"
-#include "portable/image_m.h"
+#include "core/roviz_item.h"
+#include "streams/image_m.h"
 
 /**
  * @brief Converts an RGB image to grayscale
  *
  * \ingroup robot_plugins
  */
-class GrayConvItem : public PortableItem
+class GrayConvItem : public RovizItem
 {
     Q_OBJECT
 
 public:
-    PORTABLE_INVOKABLE GrayConvItem();
+    ROVIZ_INVOKABLE GrayConvItem();
     ~GrayConvItem();
 
 protected:
