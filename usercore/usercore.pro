@@ -19,7 +19,15 @@ SOURCES +=  src/usercore.cpp \
             src/streams/message.cpp \
             src/streams/message_m.cpp \
             src/streams/stream.cpp \
-            src/streams/stream_object.cpp
+            src/streams/stream_object.cpp \
+    include/config/cfg_double.cpp \
+    src/config/config.cpp \
+    include/config/cfg_int.cpp \
+    include/config/cfg_string.cpp \
+    include/config/cfg_bool.cpp \
+    include/config/cfg_list.cpp \
+    include/config/cfg_file_path.cpp \
+    include/config/cfg_url.cpp
 
 HEADERS +=  include/usercore.h \
             include/bases/export_handling.h \
@@ -27,6 +35,7 @@ HEADERS +=  include/usercore.h \
             include/bases/roviz_item_dev_base_p.h \
             include/bases/stream_base.h \
             include/bases/stream_to_input_mapper.h \
+            include/config/config.h \
             include/core/input_queue.h \
             include/core/roviz_item.h \
             include/core/roviz_item_p.h \
@@ -48,7 +57,14 @@ HEADERS +=  include/usercore.h \
             include/streams/message_p.h \
             include/streams/stream.h \
             include/streams/stream_object.h \
-            include/streams/stream_object_p.h
+            include/streams/stream_object_p.h \
+    include/config/cfg_double.h \
+    include/config/cfg_int.h \
+    include/config/cfg_string.h \
+    include/config/cfg_bool.h \
+    include/config/cfg_list.h \
+    include/config/cfg_file_path.h \
+    include/config/cfg_url.h
 
 RESOURCES   +=  resources.qrc
 LIBS        += -lopencv_core

@@ -26,7 +26,6 @@
  * @brief Shows a dialog window to adjust configs
  *
  * See RovizItem to learn more about configs.
- * Note: This might API change in the future, it's far from perfect.
  */
 // NOTE I know all of this is rather ugly, but I couldn't think of a more
 //      elegant way. Feel free to change it if you find one.
