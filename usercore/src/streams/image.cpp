@@ -3,7 +3,7 @@
 #include "streams/image_p.h"
 
 #include <memory>
-#include "streams/stream_base.h"
+#include "bases/stream_base.h"
 
 Image::Image(const StreamObject &base)
 {

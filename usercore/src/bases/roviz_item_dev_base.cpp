@@ -16,7 +16,7 @@
 #include "gui/shared_window.h"
 #include "gui/config_dialog.h"
 #include "gui/slider_label.h"
-#include "streams/stream_base.h"
+#include "bases/stream_base.h"
 #include "streams/stream.h"
 
 RovizItemDevBase::RovizItemDevBase(std::string type_name)

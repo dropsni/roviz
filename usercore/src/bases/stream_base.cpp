@@ -1,5 +1,5 @@
 
-#include "streams/stream_base.h"
+#include "bases/stream_base.h"
 
 QWidget *StreamBase::widget()
 {
