@@ -266,6 +266,7 @@ void SharedWindow::load()
     {
         for(SharedWindow *s : SharedWindow::inst)
         {
+            // TODO Fix this...
             QStringList var_list = s->project_settings->value("Robot/SharedWindow/States").toStringList();
             for(QString var : var_list)
                 s->states.append(QByteArray::fromBase64(var.toLatin1()));
@@ -362,9 +363,10 @@ void SharedWindow::closeEvent(QCloseEvent *event)
     for(QByteArray a : this->states)
         var_list.append(a.toBase64());
 
-    this->project_settings->setValue("Robot/SharedWindow/Tabs", names);
-    this->project_settings->setValue("Robot/SharedWindow/ActiveTab", this->active_tab);
-    this->project_settings->setValue("Robot/SharedWindow/States", var_list);
+    // TODO fix this...
+    //this->project_settings->setValue("Robot/SharedWindow/Tabs", names);
+    //this->project_settings->setValue("Robot/SharedWindow/ActiveTab", this->active_tab);
+    //this->project_settings->setValue("Robot/SharedWindow/States", var_list);
 
     for(QWidget *w : this->dock_items)
             w->hide();

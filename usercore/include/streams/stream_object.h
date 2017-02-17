@@ -45,7 +45,7 @@ protected:
 // This is the only place within the portable code that we need that. I'm not
 // going to make a portable macro just for that.
 #ifndef ROVIZ_EXPORT
-Q_DECLARE_METATYPE(StreamObject)
+    Q_DECLARE_METATYPE(StreamObject)
 #endif
 
 #endif // STREAM_OBJECT_H
