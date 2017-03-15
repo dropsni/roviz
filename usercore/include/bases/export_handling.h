@@ -24,17 +24,25 @@
     #define ROVIZ_INIT_ITEM(name)
     #define OPENCV_PRESENT
 #else
-    #define ROVIZ_BASE_INCLUDE     "bases/roviz_item_dev_base.h"
-    #define ROVIZ_BASE_INCLUDE_P   "bases/roviz_item_dev_base_p.h"
-    #define ROVIZ_EXPORT_CLASS     Q_DECL_EXPORT
-    #define ROVIZ_INVOKABLE        Q_INVOKABLE
-    #define ROVIZ_INIT_ITEM(name)  {this->setImage(QImage(":/logo_"#name".png"));}
+    #define ROVIZ_BASE_INCLUDE        "bases/roviz_item_dev_base.h"
+    #define ROVIZ_BASE_INCLUDE_P      "bases/roviz_item_dev_base_p.h"
+    #define ROVIZ_CONFIG_IMPL_INCLUDE "config/config_impl_dev.h"
+    #define ROVIZ_EXPORT_CLASS        Q_DECL_EXPORT
+    #define ROVIZ_INVOKABLE           Q_INVOKABLE
+    #define ROVIZ_INIT_ITEM(name)     {this->setImage(QImage(":/logo_"#name".png"));}
     #define QT_PRESENT
     #define OPENCV_PRESENT
 
     // Select the appropriate base class for the items here
     class RovizItemDevBase;
     typedef RovizItemDevBase RovizItemBase;
+
+    // Select the appropriate implementation of the configs
+    template<typename T>
+    class ConfigImplDev<T>;
+
+    template<typename T>
+    using ConfigImpl = ConfigImplDev<T>;
 #endif
 
 #endif // EXPORT_HANDLING_H

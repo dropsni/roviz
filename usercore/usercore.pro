@@ -19,7 +19,10 @@ SOURCES +=  src/usercore.cpp \
             src/streams/message.cpp \
             src/streams/message_m.cpp \
             src/streams/stream.cpp \
-            src/streams/stream_object.cpp
+            src/streams/stream_object.cpp \
+    include/config/config.cpp \
+    include/config/config_impl_dev.cpp \
+    include/config/config_p.cpp
 
 HEADERS +=  include/usercore.h \
             include/bases/export_handling.h \
@@ -48,7 +51,10 @@ HEADERS +=  include/usercore.h \
             include/streams/message_p.h \
             include/streams/stream.h \
             include/streams/stream_object.h \
-            include/streams/stream_object_p.h
+            include/streams/stream_object_p.h \
+    include/config/config.h \
+    include/config/config_impl_dev.h \
+    include/config/config_p.h
 
 RESOURCES   +=  resources.qrc
 LIBS        += -lopencv_core

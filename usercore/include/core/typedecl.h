@@ -1,6 +1,7 @@
 #ifndef TYPEDECL_H
 #define TYPEDECL_H
 
+#include <string>
 #include "core/strong_typedef.h"
 
 class ItemInput;
@@ -10,14 +11,18 @@ class QSlider;
 struct InputTag{};
 struct OutputTag{};
 struct TrimTag{};
+struct FilePathTag{};
 
+typedef StrongTypedef<FilePathTag, std::string, nullptr> FilePath;
+
+#ifdef ROVIZ_EXPORT
+// Insert the typdefs for the exported case here
+#else
 typedef StrongTypedef<InputTag, ItemInput*, nullptr> Input;
 typedef StrongTypedef<OutputTag, ItemOutput*, nullptr> Output;
 typedef StrongTypedef<TrimTag, QSlider*, nullptr> Trim;
 
-#ifndef ROVIZ_EXPORT
 class RovizItem;
-
 /**
  * @brief Use RovizItemNoExport for simulation-only items
  *
