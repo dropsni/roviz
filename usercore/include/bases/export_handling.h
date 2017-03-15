@@ -38,11 +38,8 @@
     typedef RovizItemDevBase RovizItemBase;
 
     // Select the appropriate implementation of the configs
-    template<typename T>
-    class ConfigImplDev<T>;
-
-    template<typename T>
-    using ConfigImpl = ConfigImplDev<T>;
+    class ConfigImplDevBase;
+    typedef ConfigImplDevBase ConfigImplBase;
 #endif
 
 #endif // EXPORT_HANDLING_H

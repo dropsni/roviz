@@ -20,9 +20,9 @@ public:
     RovizItem *parent;
     std::string name;
     ConfigImpl<T> impl;
-    ConfigStorageType<T>::type val, tmp_val;
+    ConfigStorageType<T>::type val;
     std::mutex mtx;
-    bool has_changed, has_tmp_changed, restart_after_change;
+    bool changed, restart_after_change;
 };
 
 #endif // CONFIG_P_H

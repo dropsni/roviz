@@ -1,28 +1,40 @@
 
 #include "config.h"
 
-template<typename T>
-Config::Config(RovizItem *parent, std::string name, ConfigStorageType::type default_value, bool restart_when_changed)
+template<>
+Config<int>::Config(RovizItem *parent, const std::string &name, const ConfigStorageType::type &default_value, int min, int max, bool restart_when_changed)
     : ConfigImpl<T>(_this)
 {
-    bool success;
+    this->init(parent, name, default_value, restart_when_changed);
+    _this->impl.init(min, max);
+}
 
-    _this->parent = parent;
-    _this->name = name;
-    _this->val_tmp = _this->val = _this->impl.load(name, &success);
+template<>
+Config<double>::Config(RovizItem *parent, const std::string &name, const ConfigStorageType::type &default_value, double min, double max, bool restart_when_changed)
+    : ConfigImpl<T>(_this)
+{
+    this->init(parent, name, default_value, restart_when_changed);
+    _this->impl.init(min, max);
+}
 
-    if(!success)
-        _this->val_tmp = _this->val = default_value;
+template<>
+Config<std::string>::Config(RovizItem *parent, const std::string &name, const ConfigStorageType::type &default_value, std::function<std::string (std::string)> checker, bool restart_when_changed)
+    : ConfigImpl<T>(_this)
+{
+    this->init(parent, name, default_value, restart_when_changed);
+    _this->impl.init(checker);
+}
 
-    _this->has_changed = _this->has_tmp_changed = false;
-    _this->restart_after_change = restart_when_changed;
-
-    // We can't init it in the constructor because we need to init this class first
-    _this->impl.init();
+template<>
+Config<std::list<std::string> >::Config(RovizItem *parent, const std::string &name, const ConfigStorageType::type &default_index, const std::list<std::string> &possibilities, bool restart_when_changed)
+    : ConfigImpl<T>(_this)
+{
+    this->init(parent, name, default_index, restart_when_changed);
+    _this->impl.init(possibilities);
 }
 
 template<typename T>
-ConfigStorageType::type Config::value()
+ConfigStorageType<T>::type Config::value()
 {
     std::lock_guard<std::mutex> lock;
 
@@ -34,5 +46,22 @@ bool Config::changed()
 {
     std::lock_guard<std::mutex> lock;
 
-    return _this->has_changed;
+    return _this->changed;
+}
+
+template<typename T>
+ConfigImplBase *Config::getImplBase() const
+{
+    return &_this->impl;
+}
+
+template<typename T>
+void Config::init(RovizItem *parent, const std::string &name, const ConfigStorageType::type &default_value, bool restart_when_changed)
+{
+    _this->parent = parent;
+    _this->name = name;
+    _this->val_tmp = _this->val = _this->impl.load(default_value);
+
+    _this->changed = false;
+    _this->restart_after_change = restart_when_changed;
 }
