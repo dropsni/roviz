@@ -7,13 +7,16 @@
 #include <QSlider>
 #include <QPushButton>
 #include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <QPropertyAnimation>
+#include <QDialog>
 #include "item/item_input.h"
 #include "helper/settings_scope.h"
+#include "gui/gui_manager.h"
 #include "bases/stream_to_input_mapper.h"
+#include "config/config_impl_dev_base.h"
 #include "gui/shared_window.h"
 #include "gui/slider_label.h"
-#include "gui/config_dialog.h"
 #include "bases/stream_base.h"
 
 RovizItemDevBasePrivate::RovizItemDevBasePrivate(RovizItemDevBase *q)
@@ -132,4 +135,29 @@ void RovizItemDevBasePrivate::parentScopeChanged(SettingsScope *old)
 
         SharedWindow::instance(_this->settingsScope()->parentScope())->addItem(_this);
     }
+}
+
+void RovizItemDevBasePrivate::showConfigWindow()
+{
+    // Gets redone everytime the config window is shown to allow inserting/modifying configs on-the-fly
+    QDialog *dialog = new QDialog(GuiManager::instance()->widgetReference());
+//    QVBoxLayout *main_layout = new QVBoxLayout();
+    QVBoxLayout *conf_layout = new QVBoxLayout();
+//    QHBoxLayout *button_layout = new QHBoxLayout();
+//    QPushButton *btn_ok = new QPushButton("Ok");
+//    QPushButton *btn_cancel = new QPushButton("Cancel");
+
+    for(auto &conf : this->configs)
+        conf_layout->addWidget(conf->widget());
+
+//    button_layout->addWidget(btn_ok);
+//    button_layout->addWidget(btn_cancel);
+//    main_layout->addLayout(conf_layout);
+//    main_layout->addLayout(button_layout);
+//    dialog->setLayout(main_layout);
+    dialog->setLayout(conf_layout);
+
+    if(dialog->exec() == QDialog::Accepted)
+        for(auto &conf : this->configs)
+            conf->changed();
 }

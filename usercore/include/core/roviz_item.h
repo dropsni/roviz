@@ -60,6 +60,7 @@
 #include <functional>
 #include <mutex>
 #include "bases/export_handling.h"
+#include "config/config_base.h"
 #include "core/template_decl.h"
 #include "core/typedecl.h"
 #include "streams/stream_object.h"
@@ -387,52 +388,7 @@ protected:
      */
     virtual void trimChanged(Trim trim, double value) override;
 
-    /**
-     * @brief Add a string config
-     * @param name Name of the config
-     * @param value Pointer to the value that will be updated with the new config
-     * @param checker Function that checks, whether the input is valid or not
-     */
-    void addConfig(std::string name, std::string *value, std::function<std::string (std::string)> checker = [](std::string a){return a;}) override;
-
-    /**
-     * @brief Add an int config
-     * @param name Name of the config
-     * @param value Pointer to the value that will be updated with the new config
-     * @param checker Function that checks, whether the input is valid or not
-     *
-     * __Important:__ The data _value_ points to is only valid during the started() method!
-     */
-    void addConfig(std::string name, int *value, std::function<int (int)> checker = [](int a){return a;}) override;
-
-    /**
-     * @brief Add a double config
-     * @param name Name of the config
-     * @param value Pointer to the value that will be updated with the new config
-     * @param checker Function that checks, whether the input is valid or not
-     *
-     * __Important:__ The data _value_ points to is only valid during the started() method!
-     */
-    void addConfig(std::string name, double *value, std::function<double (double)> checker = [](double a){return a;}) override;
-
-    /**
-     * @brief Add a bool config
-     * @param name Name of the config
-     * @param value Pointer to the value that will be updated with the new config
-     *
-     * __Important:__ The data _value_ points to is only valid during the started() method!
-     */
-    void addConfig(std::string name, bool *value) override;
-
-    /**
-     * @brief Add a config with a defined list of choices
-     * @param name Name of the config
-     * @param possibilities List of all possible values
-     * @param index Pointer to the index variable that will we updated with the currently active list entry index
-     *
-     * __Important:__ The data _index_ points to is only valid during the started() method!
-     */
-    void addConfig(std::string name, std::vector<std::string> possibilities, int *index) override;
+    void addConfig(const ConfigBase &config) override;
 
 private:
     std::unique_ptr<RovizItemPrivate> _this;

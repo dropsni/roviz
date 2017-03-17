@@ -53,16 +53,6 @@ RovizItemDevBase::RovizItemDevBase(std::string type_name)
     _this->main_image_layout->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     hlayout->setAlignment(_this->collapse_btn, Qt::AlignTop | Qt::AlignLeft);
 
-    // We need a parent for the config dialog that get destructed when the
-    // application closes.
-    _this->conf_diag = new ConfigDialog(GuiManager::instance()->widgetReference());
-    _this->config_present = false;
-    _this->conf_loaded = false;
-    connect(_this->conf_diag, &ConfigDialog::itemsChanged,
-            _this.data(), &RovizItemDevBasePrivate::restartIfRunning);
-    connect(_this->conf_diag, &ConfigDialog::itemsChanged,
-            _this.data(), &RovizItemDevBasePrivate::saveConfigs);
-
     // Hide the collapse button as long as there is nothing to collapse
     _this->collapse_btn->hide();
     connect(this->settingsScope(), &SettingsScope::parentScopeChanged,
@@ -93,17 +83,11 @@ void RovizItemDevBase::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 
 void RovizItemDevBase::contextMenuPrepare(QMenu &menu) const
 {
-    if(!_this->conf_loaded)
-    {
-        _this->conf_diag->load(this->settingsScope());
-        _this->conf_loaded = true;
-    }
-
     if(_this->config_present)
-        menu.addAction("Configure", [this]{_this->conf_diag->show();});
+        menu.addAction("Configure", [this]{_this->showConfigWindow();});
 }
 
-// TODO Re-enable3
+// TODO Re-enable
 void RovizItemDevBase::stop()
 {
 //    for(ImageWidget* iw : _this->out_widgets)
@@ -214,33 +198,9 @@ void RovizItemDevBase::trimChanged(Trim, double)
 {
 }
 
-void RovizItemDevBase::addConfig(std::string name, std::string *value, std::function<std::string (std::string)> checker)
+void RovizItemDevBase::addConfig(const ConfigBase &config)
 {
-    _this->conf_diag->addItem(name, value, checker);
-    _this->config_present = true;
-}
-
-void RovizItemDevBase::addConfig(std::string name, int *value, std::function<int (int)> checker)
-{
-    _this->conf_diag->addItem(name, value, checker);
-    _this->config_present = true;
-}
-
-void RovizItemDevBase::addConfig(std::string name, double *value, std::function<double (double)> checker)
-{
-    _this->conf_diag->addItem(name, value, checker);
-    _this->config_present = true;
-}
-
-void RovizItemDevBase::addConfig(std::string name, bool *value)
-{
-    _this->conf_diag->addItem(name, value);
-    _this->config_present = true;
-}
-
-void RovizItemDevBase::addConfig(std::string name, std::vector<std::string> possibilities, int *index)
-{
-    _this->conf_diag->addItem(name, possibilities, index);
+    _this->configs.append(config.getImplBase());
     _this->config_present = true;
 }
 

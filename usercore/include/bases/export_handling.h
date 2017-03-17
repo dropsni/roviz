@@ -40,6 +40,13 @@
     // Select the appropriate implementation of the configs
     class ConfigImplDevBase;
     typedef ConfigImplDevBase ConfigImplBase;
+
+    template<typename T>
+    class ConfigImplDev<T>;
+
+    template<typename T>
+    using ConfigImpl = ConfigImplDev<T>;
+
 #endif
 
 #endif // EXPORT_HANDLING_H

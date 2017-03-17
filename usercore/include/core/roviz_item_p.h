@@ -7,6 +7,7 @@
 #include <thread>
 #include "core/typedecl.h"
 #include "core/input_queue.h"
+#include "config/config_base.h"
 
 class RovizItemPrivate
 {

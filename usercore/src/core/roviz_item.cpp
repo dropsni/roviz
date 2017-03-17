@@ -76,29 +76,9 @@ void RovizItem::trimChanged(Trim, double)
 {
 }
 
-void RovizItem::addConfig(std::string name, std::string *value, std::function<std::string (std::string)> checker)
+void RovizItem::addConfig(const ConfigBase &config)
 {
-    RovizItemBase::addConfig(name, value, checker);
-}
-
-void RovizItem::addConfig(std::string name, int *value, std::function<int (int)> checker)
-{
-    RovizItemBase::addConfig(name, value, checker);
-}
-
-void RovizItem::addConfig(std::string name, double *value, std::function<double (double)> checker)
-{
-    RovizItemBase::addConfig(name, value, checker);
-}
-
-void RovizItem::addConfig(std::string name, bool *value)
-{
-    RovizItemBase::addConfig(name, value);
-}
-
-void RovizItem::addConfig(std::string name, std::vector<std::string> possibilities, int *index)
-{
-    RovizItemBase::addConfig(name, possibilities, index);
+    RovizItemBase::addConfig(config);
 }
 
 void RovizItem::pushIn(StreamObject obj, Input in)

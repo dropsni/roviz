@@ -142,10 +142,17 @@ void ConfigImplDev::changed()
 {
     std::lock_guard<std::mutex> lock(_this->mtx);
 
+    // Only proceed if this item really changed
+    if(!this->tmp_changed)
+        return;
+
     _this->changed = true;
     this->tmp_changed = false;
 
     _this->val = this->tmp_val;
+
+    if(_this->restart_after_change)
+        _this->parent->restart();
 }
 
 template<typename T>

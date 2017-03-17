@@ -8,6 +8,7 @@
 #include "item/abstract_item.h"
 #include "bases/export_handling.h"
 #include "core/typedecl.h"
+#include "config/config_base.h"
 #include "streams/stream_object.h"
 
 // Needed by template_decl.cpp
@@ -69,11 +70,7 @@ protected:
     virtual Trim addTrim(std::string name, double min, double max, int steps);
     virtual double trimValue(Trim trim) const;
     virtual void trimChanged(Trim trim, double value);
-    virtual void addConfig(std::string name, std::string *value, std::function<std::string (std::string)> checker = [](std::string a){return a;});
-    virtual void addConfig(std::string name, int *value, std::function<int (int)> checker = [](int a){return a;});
-    virtual void addConfig(std::string name, double *value, std::function<double (double)> checker = [](double a){return a;});
-    virtual void addConfig(std::string name, bool *value);
-    virtual void addConfig(std::string name, std::vector<std::string> possibilities, int *index);
+    virtual void addConfig(const ConfigBase &config);
 
 public slots:
     virtual void start(void);

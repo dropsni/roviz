@@ -12,9 +12,9 @@ class QSlider;
 class QHBoxLayout;
 class SettingsScope;
 class SliderLabel;
-class ConfigDialog;
 class StreamToInputMapper;
 class RovizItemDevBase;
+class ConfigImplDevBase;
 
 class RovizItemDevBasePrivate : public QObject
 {
@@ -29,9 +29,9 @@ public:
     QMap<ItemInput*, StreamToInputMapper*> in_mappers;
     QList<QSlider*> sliders;
     QMap<QSlider*, SliderLabel*> slider_to_label;
+    QList<ConfigImplDevBase*> configs;
     QWidget *control_base;
     QImage default_image;
-    ConfigDialog *conf_diag;
     bool config_present, conf_loaded;
 
     RovizItemDevBasePrivate(RovizItemDevBase *q);
@@ -69,6 +69,8 @@ public slots:
      * @param Old SettingsScope
      */
     void parentScopeChanged(SettingsScope *old);
+
+    void showConfigWindow(void);
 };
 
 #endif // ROVIZITEMDEVBASEPRIVATE_H

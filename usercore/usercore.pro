@@ -8,7 +8,6 @@ SOURCES +=  src/usercore.cpp \
             src/core/input_queue.cpp \
             src/core/roviz_item.cpp \
             src/core/template_decl.cpp \
-            src/gui/config_dialog.cpp \
             src/gui/dock_widget_signaling.cpp \
             src/gui/image_widget.cpp \
             src/gui/shared_window.cpp \
@@ -39,7 +38,6 @@ HEADERS +=  include/usercore.h \
             include/core/template_decl.h \
             include/core/template_decl_helpers.h \
             include/core/typedecl.h \
-            include/gui/config_dialog.h \
             include/gui/dock_widget_signaling.h \
             include/gui/image_widget.h \
             include/gui/shared_window.h \
