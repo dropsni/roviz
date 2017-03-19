@@ -41,11 +41,14 @@
     class ConfigImplDevBase;
     typedef ConfigImplDevBase ConfigImplBase;
 
-    template<typename T>
-    class ConfigImplDev<T>;
+    // Even though we use a #define below, this is still needed. Somehow.
+    template<typename>
+    class ConfigImplDev;
 
-    template<typename T>
-    using ConfigImpl = ConfigImplDev<T>;
+    // C++ won't allow us to use a typedef or using here because that would
+    // impose restrictions, like not being allowed to instantiate the template
+    // using the alias. So we have to do it the ugly way.
+    #define ConfigImpl ConfigImplDev
 
 #endif
 

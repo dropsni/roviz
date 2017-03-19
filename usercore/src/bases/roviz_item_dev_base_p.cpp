@@ -94,11 +94,6 @@ void RovizItemDevBasePrivate::collapseBtnClicked()
     an->start();
 }
 
-void RovizItemDevBasePrivate::saveConfigs()
-{
-    this->conf_diag->save(_this->settingsScope());
-}
-
 void RovizItemDevBasePrivate::restartIfRunning()
 {
     if(_this->running())
@@ -147,7 +142,7 @@ void RovizItemDevBasePrivate::showConfigWindow()
 //    QPushButton *btn_ok = new QPushButton("Ok");
 //    QPushButton *btn_cancel = new QPushButton("Cancel");
 
-    for(auto &conf : this->configs)
+    for(auto &conf : this->config_impls)
         conf_layout->addWidget(conf->widget());
 
 //    button_layout->addWidget(btn_ok);
@@ -158,6 +153,6 @@ void RovizItemDevBasePrivate::showConfigWindow()
     dialog->setLayout(conf_layout);
 
     if(dialog->exec() == QDialog::Accepted)
-        for(auto &conf : this->configs)
+        for(auto &conf : this->config_impls)
             conf->changed();
 }

@@ -15,9 +15,6 @@
 // We include that here, because it is a non-portable dependency
 #include "helper/startup_helper.h"
 
-// Temporary workaround to make CONFIG_IS_PATH available
-#include "gui/config_dialog.h"
-
 class QWidget;
 class QGraphicsSceneMouseEvent;
 class RovizItemDevBasePrivate;

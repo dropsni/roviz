@@ -1,7 +1,7 @@
 #ifndef CONFIG_BASE_H
 #define CONFIG_BASE_H
 
-class ConfigImplBase;
+#include "bases/export_handling.h"
 
 class ConfigBase
 {

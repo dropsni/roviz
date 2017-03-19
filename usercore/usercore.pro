@@ -56,7 +56,8 @@ HEADERS +=  include/usercore.h \
     include/config/config_impl_dev.h \
     include/config/config_p.h \
     include/config/config_base.h \
-    include/config/config_impl_dev_base.h
+    include/config/config_impl_dev_base.h \
+    include/config/config_storage_type.h
 
 RESOURCES   +=  resources.qrc
 LIBS        += -lopencv_core

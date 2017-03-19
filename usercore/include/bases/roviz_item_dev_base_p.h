@@ -29,7 +29,7 @@ public:
     QMap<ItemInput*, StreamToInputMapper*> in_mappers;
     QList<QSlider*> sliders;
     QMap<QSlider*, SliderLabel*> slider_to_label;
-    QList<ConfigImplDevBase*> configs;
+    QList<ConfigImplDevBase*> config_impls;
     QWidget *control_base;
     QImage default_image;
     bool config_present, conf_loaded;
@@ -52,11 +52,6 @@ public slots:
      * @brief (Un)collapses all trim sliders
      */
     void collapseBtnClicked(void);
-
-    /**
-     * @brief Saves all configs of the item
-     */
-    void saveConfigs(void);
 
     /**
      * @brief Restarts the item operation if the item is running

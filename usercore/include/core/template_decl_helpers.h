@@ -33,6 +33,31 @@
 #define INSTANTIATE_PORTABLE_BASE \
     DO_FOR_ALL_STREAMS(INSTANTIATE_PORTABLE_BASE##_P)
 
+#define DO_FOR_ALL_CONFIG_TYPES(EXPR) \
+    EXPR(int) \
+    EXPR(double) \
+    EXPR(std::string) \
+    EXPR(std::list<std::string>)
+
+#define INSTANTIATE_CONFIG_P(T) \
+    template class Config<T>;
+
+// I know, that's a stupid name...
+#define INSTANTIATE_CONFIG_PRIVATE_P(T) \
+    template class ConfigPrivate<T>;
+
+#define INSTANTIATE_CONFIG_IMPL_P(T) \
+    template class ConfigImpl<T>;
+
+#define INSTANTIATE_CONFIG \
+    DO_FOR_ALL_CONFIG_TYPES(INSTANTIATE_CONFIG##_P)
+
+#define INSTANTIATE_CONFIG_PRIVATE \
+    DO_FOR_ALL_CONFIG_TYPES(INSTANTIATE_CONFIG_PRIVATE##_P)
+
+#define INSTANTIATE_CONFIG_IMPL \
+    DO_FOR_ALL_CONFIG_TYPES(INSTANTIATE_CONFIG_IMPL##_P)
+
 #define INSTANTIATE_STREAM_P(T) \
     template class Stream<T>;
 

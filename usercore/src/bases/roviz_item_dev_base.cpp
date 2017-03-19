@@ -14,7 +14,6 @@
 #include "item/item_output.h"
 #include "core/template_decl.h"
 #include "gui/shared_window.h"
-#include "gui/config_dialog.h"
 #include "gui/slider_label.h"
 #include "bases/stream_base.h"
 #include "streams/stream.h"
@@ -200,18 +199,12 @@ void RovizItemDevBase::trimChanged(Trim, double)
 
 void RovizItemDevBase::addConfig(const ConfigBase &config)
 {
-    _this->configs.append(config.getImplBase());
+    _this->config_impls.append(config.getImplBase());
     _this->config_present = true;
 }
 
 void RovizItemDevBase::start()
 {
-    // TODO The itemframework should have an 'initialization complete' signal
-    if(!_this->conf_loaded)
-    {
-        _this->conf_diag->load(this->settingsScope());
-        _this->conf_loaded = true;
-    }
 }
 
 INSTANTIATE_PORTABLE_BASE

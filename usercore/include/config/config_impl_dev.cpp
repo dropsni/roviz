@@ -2,6 +2,7 @@
 #include "config/config_impl_dev.h"
 
 #include <mutex>
+#include <QtGlobal>
 #include <QWidget>
 #include <QHBoxLayout>
 #include <QLabel>
@@ -10,21 +11,25 @@
 #include <QDoubleValidator>
 #include <QComboBox>
 #include <QVariant>
+#include "helper/settings_scope.h"
+#include "config/config_p.h"
+#include "core/template_decl.h"
 #include "core/roviz_item.h"
 
-ConfigImplDev::ConfigImplDev(ConfigPrivate<T> *config)
+template<typename T>
+ConfigImplDev<T>::ConfigImplDev(ConfigPrivate<T> *config)
 {
-    this->cfg = config;
+    _this = config;
 }
 
 template<typename T>
-QWidget *ConfigImplDev::widget() const
+QWidget *ConfigImplDev<T>::widget() const
 {
     return this->main_widget;
 }
 
 template<>
-ConfigStorageType<int>::type ConfigImplDev::load(const ConfigStorageType::type &default_value)
+ConfigStorageType<int>::type ConfigImplDev<int>::load(const ConfigStorageType<int>::type &default_value)
 {
     QVariant var = _this->parent->settingsScope()->value("Config/int/" + QString::fromStdString(_this->name));
     if(!var.isValid())
@@ -34,7 +39,7 @@ ConfigStorageType<int>::type ConfigImplDev::load(const ConfigStorageType::type &
 }
 
 template<>
-ConfigStorageType<double>::type ConfigImplDev::load(const ConfigStorageType::type &default_value)
+ConfigStorageType<double>::type ConfigImplDev<double>::load(const ConfigStorageType<double>::type &default_value)
 {
     QVariant var = _this->parent->settingsScope()->value("Config/double/" + QString::fromStdString(_this->name));
     if(!var.isValid())
@@ -44,17 +49,17 @@ ConfigStorageType<double>::type ConfigImplDev::load(const ConfigStorageType::typ
 }
 
 template<>
-ConfigStorageType<std::string>::type ConfigImplDev::load(const ConfigStorageType::type &default_value)
+ConfigStorageType<std::string>::type ConfigImplDev<std::string>::load(const ConfigStorageType<std::string>::type &default_value)
 {
     QVariant var = _this->parent->settingsScope()->value("Config/string/" + QString::fromStdString(_this->name));
     if(!var.isValid())
         return default_value;
     else
-        return var.toString();
+        return var.toString().toStdString();
 }
 
 template<>
-ConfigStorageType<std::list<std::string> >::type ConfigImplDev::load(const ConfigStorageType::type &default_value)
+ConfigStorageType<std::list<std::string> >::type ConfigImplDev<std::list<std::string> >::load(const ConfigStorageType<std::list<std::string> >::type &default_value)
 {
     QVariant var = _this->parent->settingsScope()->value("Config/list/" + QString::fromStdString(_this->name));
     if(!var.isValid())
@@ -64,19 +69,20 @@ ConfigStorageType<std::list<std::string> >::type ConfigImplDev::load(const Confi
 }
 
 template<typename T>
-bool ConfigImplDev::restartAfterChange() const
+bool ConfigImplDev<T>::restartAfterChange() const
 {
     return _this->restart_after_change;
 }
 
 template<>
-QWidget *ConfigImplDev<int>::init(int min, int max)
+void ConfigImplDev<int>::init(int min, int max)
 {
     QLineEdit *edit = new QLineEdit();
+    QIntValidator *valid = new QIntValidator(min, max);
 
-    edit->setValidator(QIntValidator(this->min, this->max));
-    connect(edit, &QLineEdit::textEdited,
-            this, [this](QString text)
+    edit->setValidator(valid);
+    QObject::connect(edit, &QLineEdit::textEdited,
+                     [this](QString text)
     {
         std::lock_guard<std::mutex> lock(_this->mtx);
 
@@ -87,13 +93,15 @@ QWidget *ConfigImplDev<int>::init(int min, int max)
 }
 
 template<>
-QWidget *ConfigImplDev<double>::init(double min, double max)
+void ConfigImplDev<double>::init(double min, double max)
 {
     QLineEdit *edit = new QLineEdit();
+    // 1000 is the default
+    QDoubleValidator *valid = new QDoubleValidator(min, max, 1000);
 
-    edit->setValidator(QDoubleValidator(this->min, this->max));
-    connect(edit, &QLineEdit::textEdited,
-            this, [this](QString text)
+    edit->setValidator(valid);
+    QObject::connect(edit, &QLineEdit::textEdited,
+                     [this](QString text)
     {
         std::lock_guard<std::mutex> lock(_this->mtx);
 
@@ -104,30 +112,32 @@ QWidget *ConfigImplDev<double>::init(double min, double max)
 }
 
 template<>
-void ConfigImplDev<std::string>::init(std::function<std::string (std::string)> checker)
+void ConfigImplDev<std::string>::init(std::function<bool (std::string&)> checker)
 {
     QLineEdit *edit = new QLineEdit();
 
     // TODO Add custom validator
-    connect(edit, &QLineEdit::textEdited,
-            this, [this](QString text)
+    QObject::connect(edit, &QLineEdit::textEdited,
+                     [this, checker](QString text)
     {
         std::lock_guard<std::mutex> lock(_this->mtx);
 
-        this->tmp_changed = true;
         this->tmp_val = text.toStdString();
+        this->tmp_changed = checker(this->tmp_val);
     });
     this->initMainWidget(edit);
 }
 
-template<typename T>
-void ConfigImplDev<std::list<std::string> >::init(const std::list<std::__cxx11::string> &possibilities)
+template<>
+void ConfigImplDev<std::list<std::string> >::init(const std::list<std::string> &possibilities)
 {
     QComboBox *combo = new QComboBox();
 
-    // TODO Add custom validator
-    connect(combo, &QComboBox::currentIndexChanged,
-            this, [combo, this](QString text)
+    for(const auto &entry : possibilities)
+        combo->addItem(QString::fromStdString(entry));
+
+    QObject::connect(combo, QOverload<int>::of(&QComboBox::currentIndexChanged),
+                     [combo, this](int)
     {
         std::lock_guard<std::mutex> lock(_this->mtx);
 
@@ -138,7 +148,7 @@ void ConfigImplDev<std::list<std::string> >::init(const std::list<std::__cxx11::
 }
 
 template<typename T>
-void ConfigImplDev::changed()
+void ConfigImplDev<T>::changed()
 {
     std::lock_guard<std::mutex> lock(_this->mtx);
 
@@ -150,13 +160,14 @@ void ConfigImplDev::changed()
     this->tmp_changed = false;
 
     _this->val = this->tmp_val;
+    this->save();
 
     if(_this->restart_after_change)
         _this->parent->restart();
 }
 
 template<typename T>
-void ConfigImplDev::initMainWidget(QWidget *sub_widget)
+void ConfigImplDev<T>::initMainWidget(QWidget *sub_widget)
 {
     QHBoxLayout *hlayout;
     QLabel *name_label;
@@ -170,3 +181,21 @@ void ConfigImplDev::initMainWidget(QWidget *sub_widget)
     hlayout->addWidget(sub_widget);
     this->main_widget->setLayout(hlayout);
 }
+
+template<>
+void ConfigImplDev<int>::save()
+{ _this->parent->settingsScope()->setValue("Config/int/" + QString::fromStdString(_this->name), _this->val); }
+
+template<>
+void ConfigImplDev<double>::save()
+{ _this->parent->settingsScope()->setValue("Config/double/" + QString::fromStdString(_this->name), _this->val); }
+
+template<>
+void ConfigImplDev<std::string>::save()
+{ _this->parent->settingsScope()->setValue("Config/string/" + QString::fromStdString(_this->name), QString::fromStdString(_this->val)); }
+
+template<>
+void ConfigImplDev<std::list<std::string> >::save()
+{ _this->parent->settingsScope()->setValue("Config/list/" + QString::fromStdString(_this->name), _this->val); }
+
+INSTANTIATE_CONFIG_IMPL

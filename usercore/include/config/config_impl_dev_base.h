@@ -5,13 +5,11 @@
 
 class QWidget;
 
-class ConfigImplDevBase : public QObject
+class ConfigImplDevBase
 {
 public:
-    virtual QWidget *widget(void) = 0;
+    virtual QWidget *widget(void) const = 0;
     virtual bool restartAfterChange(void) const = 0;
-
-public slots:
     virtual void changed(void) = 0;
 };
 

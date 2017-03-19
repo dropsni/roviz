@@ -13,7 +13,8 @@ struct OutputTag{};
 struct TrimTag{};
 struct FilePathTag{};
 
-typedef StrongTypedef<FilePathTag, std::string, nullptr> FilePath;
+// C++ doesn't allow us to do this without a pointer
+typedef StrongTypedef<FilePathTag, std::string*, nullptr> FilePath;
 
 #ifdef ROVIZ_EXPORT
 // Insert the typdefs for the exported case here
