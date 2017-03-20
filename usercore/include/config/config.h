@@ -8,6 +8,7 @@
 #include "config/config_p.h"
 #include "config/config_base.h"
 #include "config/config_storage_type.h"
+#include "config/file_path.h"
 
 class RovizItem;
 
@@ -19,6 +20,9 @@ public:
     Config(RovizItem *parent, const std::string &name, const typename ConfigStorageType<T>::type &default_value, double min, double max, bool restart_when_changed = false);
     Config(RovizItem *parent, const std::string &name, const typename ConfigStorageType<T>::type &default_value, std::function<bool (std::string&)> checker = [](std::string s){return s;}, bool restart_when_changed = false);
     Config(RovizItem *parent, const std::string &name, const typename ConfigStorageType<T>::type &default_index, const std::list<std::string> &possibilities, bool restart_when_changed = false);
+    Config(RovizItem *parent, const std::string &name, const typename ConfigStorageType<T>::type &default_index, bool restart_when_changed = false);
+    Config(RovizItem *parent, const std::string &name, const typename ConfigStorageType<T>::type &default_index, const std::string &filter, enum FileMode file_mode, bool restart_when_changed = false);
+
     ~Config();
 
     typename ConfigStorageType<T>::type value(void);

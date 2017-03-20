@@ -2,16 +2,23 @@
 #include "cv_camera_item.h"
 
 CvCameraItem::CvCameraItem()
-    : RovizItem("CvCamera")
+    : RovizItem("CvCamera"),
+      conf_res(this,
+               "Resolution",
+               2,
+               {
+                   "1920x1080",
+                   "1280x720",
+                   "640x480"
+               },
+               true),
+      conf_cam_id(this,
+                  "Camera",
+                  0,
+                  0, 1000) // Should be enough
+                  // TODO Make that safer
 {
     ROVIZ_INIT_ITEM(CvCamera);
-
-    this->res_list =
-    {
-        "1920x1080",
-        "1280x720",
-        "640x480"
-    };
 
     this->width_list =
     {
@@ -28,10 +35,8 @@ CvCameraItem::CvCameraItem()
     };
 
     this->output = this->addOutput<Image>("Camera Output");
-    this->res_index = 0;
-    this->cam_id = 0;
-    this->addConfig("Resolution", this->res_list, &this->res_index);
-    this->addConfig("Camera", &this->cam_id, [this](int a){return a >= 0 ? a : 0;});
+    this->addConfig(this->conf_cam_id);
+    this->addConfig(this->conf_res);
 }
 
 CvCameraItem::~CvCameraItem()
@@ -43,9 +48,11 @@ void CvCameraItem::thread()
 {
     cv::Mat frame;
 
-    this->cap.open(this->cam_id);
+    this->cap.open(this->conf_cam_id.value());
     if(!this->cap.isOpened())
         return;
+
+    // TODO Use resolution
 
     while(this->wait())
     {

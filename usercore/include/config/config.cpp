@@ -35,6 +35,20 @@ Config<std::list<std::string> >::Config(RovizItem *parent, const std::string &na
     _this->impl.init(possibilities);
 }
 
+template<>
+Config<bool>::Config(RovizItem *parent, const std::string &name, const ConfigStorageType<bool>::type &default_index, bool restart_when_changed)
+{
+    this->init(parent, name, default_index, restart_when_changed);
+    _this->impl.init();
+}
+
+template<>
+Config<FilePath>::Config(RovizItem *parent, const std::string &name, const ConfigStorageType<FilePath>::type &default_index, const std::string &filter, enum FilePath::Mode file_mode, bool restart_when_changed)
+{
+    this->init(parent, name, default_index, restart_when_changed);
+    _this->impl.init(filter, file_mode);
+}
+
 template<typename T>
 typename ConfigStorageType<T>::type Config<T>::value()
 {

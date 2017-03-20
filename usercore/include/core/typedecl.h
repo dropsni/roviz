@@ -11,10 +11,6 @@ class QSlider;
 struct InputTag{};
 struct OutputTag{};
 struct TrimTag{};
-struct FilePathTag{};
-
-// C++ doesn't allow us to do this without a pointer
-typedef StrongTypedef<FilePathTag, std::string*, nullptr> FilePath;
 
 #ifdef ROVIZ_EXPORT
 // Insert the typdefs for the exported case here

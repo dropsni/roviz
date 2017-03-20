@@ -389,6 +389,7 @@ protected:
     virtual void trimChanged(Trim trim, double value) override;
 
     void addConfig(const ConfigBase &config) override;
+    void addConfig(const ConfigBase *config);
 
 private:
     std::unique_ptr<RovizItemPrivate> _this;

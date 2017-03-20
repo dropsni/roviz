@@ -81,6 +81,11 @@ void RovizItem::addConfig(const ConfigBase &config)
     RovizItemBase::addConfig(config);
 }
 
+void RovizItem::addConfig(const ConfigBase *config)
+{
+    RovizItemBase::addConfig(*config);
+}
+
 void RovizItem::pushIn(StreamObject obj, Input in)
 {
     if(_this->in_queue.size() < MAX_QUEUE_SIZE)

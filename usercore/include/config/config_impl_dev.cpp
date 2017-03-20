@@ -10,8 +10,12 @@
 #include <QIntValidator>
 #include <QDoubleValidator>
 #include <QComboBox>
+#include <QCheckBox>
 #include <QVariant>
+#include <QFileDialog>
+#include <QPushButton>
 #include "helper/settings_scope.h"
+#include "gui/gui_manager.h"
 #include "config/config_p.h"
 #include "core/template_decl.h"
 #include "core/roviz_item.h"
@@ -66,6 +70,26 @@ ConfigStorageType<std::list<std::string> >::type ConfigImplDev<std::list<std::st
         return default_value;
     else
         return var.toInt();
+}
+
+template<>
+ConfigStorageType<bool>::type ConfigImplDev<bool>::load(const ConfigStorageType<bool>::type &default_value)
+{
+    QVariant var = _this->parent->settingsScope()->value("Config/bool/" + QString::fromStdString(_this->name));
+    if(!var.isValid())
+        return default_value;
+    else
+        return var.toBool();
+}
+
+template<>
+ConfigStorageType<FilePath>::type ConfigImplDev<FilePath>::load(const ConfigStorageType<FilePath>::type &default_value)
+{
+    QVariant var = _this->parent->settingsScope()->value("Config/file_path/" + QString::fromStdString(_this->name));
+    if(!var.isValid())
+        return default_value;
+    else
+        return var.toString();
 }
 
 template<typename T>
@@ -148,6 +172,60 @@ void ConfigImplDev<std::list<std::string> >::init(const std::list<std::string> &
 }
 
 template<typename T>
+void ConfigImplDev::init()
+{
+    QCheckBox *box = new QCheckBox();
+
+    QObject::connect(box, &QCheckBox::toggled,
+                     [this](bool checked)
+    {
+        std::lock_guard<std::mutex> lock(_this->mtx);
+
+        this->tmp_changed = true;
+        this->tmp_val = checked;
+    });
+    this->initMainWidget(box);
+}
+
+template<typename T>
+void ConfigImplDev::init(const std::string &filter, enum FilePath::Mode file_mode)
+{
+    QFileDialog::FileMode mode;
+
+    switch(file_mode)
+    {
+        case FilePath::AnyFile:       mode = QFileDialog::AnyFile; break;
+        case FilePath::ExistingFile:  mode = QFileDialog::ExistingFile; break;
+        case FilePath::MultipleFiles: mode = QFileDialog::ExistingFiles; break;
+        case FilePath::Directory:     mode = QFileDialog::Directory; break;
+    }
+
+    QHBoxLayout *hlayout = new QHBoxLayout();
+    QLineEdit *edit = new QLineEdit();
+    QPushButton *button = new QPushButton("File...");
+
+    hlayout->addWidget(edit);
+    hlayout->addWidget(button);
+
+    QObject::connect(button, &QPushButton::clicked,
+                     [this, mode, filter](void)
+    {
+        QFileDialog diag = new QFileDialog(GuiManager::instance()->widgetReference(),
+                                           "Select...",
+                                           "",
+                                           filter);
+        diag.setFileMode(mode);
+        if(!diag.exec())
+            return;
+
+        QStringList files = diag.selectedFiles();
+        _this->,
+    })
+
+
+}
+
+template<typename T>
 void ConfigImplDev<T>::changed()
 {
     std::lock_guard<std::mutex> lock(_this->mtx);
@@ -197,5 +275,13 @@ void ConfigImplDev<std::string>::save()
 template<>
 void ConfigImplDev<std::list<std::string> >::save()
 { _this->parent->settingsScope()->setValue("Config/list/" + QString::fromStdString(_this->name), _this->val); }
+
+template<>
+void ConfigImplDev<bool>::save()
+{ _this->parent->settingsScope()->setValue("Config/bool/" + QString::fromStdString(_this->name), _this->val); }
+
+template<>
+void ConfigImplDev<FilePath>::save()
+{ _this->parent->settingsScope()->setValue("Config/file_path/" + QString::fromStdString(_this->name), _this->val); }
 
 INSTANTIATE_CONFIG_IMPL

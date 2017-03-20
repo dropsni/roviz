@@ -2,6 +2,7 @@
 #define CVCAMERA_ITEM_H
 
 #include "core/roviz_item.h"
+#include "config/config.h"
 #include "streams/image_m.h"
 #include <opencv2/opencv.hpp>
 #include <opencv2/videoio.hpp>
@@ -20,9 +21,9 @@ protected:
 
 private:
     Output output;
-    int cam_id;
+    Config<std::list<std::string> > conf_res;
+    Config<int> conf_cam_id;
     cv::VideoCapture cap;
-    std::vector<std::string> res_list;
     std::vector<int> width_list, height_list;
     int res_index;
 };

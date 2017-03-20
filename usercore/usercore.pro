@@ -23,7 +23,8 @@ SOURCES +=  src/usercore.cpp \
     include/config/config_impl_dev.cpp \
     include/config/config_p.cpp \
     include/config/config_base.cpp \
-    include/config/config_impl_dev_base.cpp
+    include/config/config_impl_dev_base.cpp \
+    include/config/file_path.cpp
 
 HEADERS +=  include/usercore.h \
             include/bases/export_handling.h \
@@ -57,7 +58,8 @@ HEADERS +=  include/usercore.h \
     include/config/config_p.h \
     include/config/config_base.h \
     include/config/config_impl_dev_base.h \
-    include/config/config_storage_type.h
+    include/config/config_storage_type.h \
+    include/config/file_path.h
 
 RESOURCES   +=  resources.qrc
 LIBS        += -lopencv_core

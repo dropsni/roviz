@@ -5,6 +5,7 @@
 #include <QObject>
 #include "config/config_impl_dev_base.h"
 #include "config/config_storage_type.h"
+#include "config/file_path.h"
 
 class QWidget;
 class QHBoxLayout;
@@ -27,7 +28,8 @@ public:
     void init(double min, double max); // Double
     void init(std::function<bool (std::string&)> checker); // String
     void init(const std::list<std::string> &possibilities); // List TODO check 'API' version (possibilities)
-    // TODO File Path
+    void init(void); // Bool
+    void init(const std::string &filter, enum FilePath::Mode file_mode); // File path
 
     void changed(void) override;
 
