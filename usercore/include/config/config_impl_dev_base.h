@@ -8,6 +8,7 @@ class QWidget;
 class ConfigImplDevBase
 {
 public:
+    virtual ~ConfigImplDevBase() = default;
     virtual QWidget *widget(void) const = 0;
     virtual bool restartAfterChange(void) const = 0;
     virtual void changed(void) = 0;

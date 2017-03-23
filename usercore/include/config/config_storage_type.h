@@ -1,6 +1,8 @@
 #ifndef CONFIG_STORAGE_TYPE_H
 #define CONFIG_STORAGE_TYPE_H
 
+#include "file_path.h"
+
 template<typename T>
 class ConfigStorageType
 { public: typedef T type; };
@@ -11,6 +13,6 @@ class ConfigStorageType<std::list<std::string> >
 
 template<>
 class ConfigStorageType<FilePath>
-{ public: typedef int std::string; };
+{ public: typedef std::list<std::string> type; };
 
 #endif // CONFIG_STORAGE_TYPE_H

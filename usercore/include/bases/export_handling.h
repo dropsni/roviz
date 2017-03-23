@@ -33,6 +33,10 @@
     #define QT_PRESENT
     #define OPENCV_PRESENT
 
+    // Needed by some modules and I don't want to wrap an #ifdef around all
+    // of them.
+    #include <QObject>
+
     // Select the appropriate base class for the items here
     class RovizItemDevBase;
     typedef RovizItemDevBase RovizItemBase;

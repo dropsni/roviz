@@ -2,8 +2,9 @@
 #define FILE_PATH_H
 
 #include <string>
+#include "bases/export_handling.h"
 
-class FilePath
+class ROVIZ_EXPORT_CLASS FilePath
 {
 public:
     enum Mode
@@ -15,12 +16,12 @@ public:
     };
 
     FilePath(std::string path, bool is_dir = false);
-    std::string path(void);
-    bool isDir(void);
-    bool isFile(void);
+    std::string path(void) const;
+    bool isDir(void) const;
+    bool isFile(void) const;
 
 private:
-    std::string path;
+    std::string file_path;
     bool is_dir;
 };
 

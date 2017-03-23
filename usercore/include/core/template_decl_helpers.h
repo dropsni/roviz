@@ -36,13 +36,14 @@
 #define DO_FOR_ALL_CONFIG_TYPES(EXPR) \
     EXPR(int) \
     EXPR(double) \
+    EXPR(bool) \
     EXPR(std::string) \
-    EXPR(std::list<std::string>)
+    EXPR(std::list<std::string>) \
+    EXPR(FilePath)
 
 #define INSTANTIATE_CONFIG_P(T) \
     template class Config<T>;
 
-// I know, that's a stupid name...
 #define INSTANTIATE_CONFIG_PRIVATE_P(T) \
     template class ConfigPrivate<T>;
 

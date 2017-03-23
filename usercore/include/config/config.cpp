@@ -2,6 +2,7 @@
 #include "config.h"
 
 #include "core/template_decl.h"
+#include "config/file_path.h"
 
 template<>
 Config<int>::Config(RovizItem *parent, const std::string &name, const ConfigStorageType<int>::type &default_value, int min, int max, bool restart_when_changed)
@@ -43,10 +44,15 @@ Config<bool>::Config(RovizItem *parent, const std::string &name, const ConfigSto
 }
 
 template<>
-Config<FilePath>::Config(RovizItem *parent, const std::string &name, const ConfigStorageType<FilePath>::type &default_index, const std::string &filter, enum FilePath::Mode file_mode, bool restart_when_changed)
+Config<FilePath>::Config(RovizItem *parent, const std::string &name, const ConfigStorageType<FilePath>::type &default_index, enum FilePath::Mode file_mode, const std::string &filter, bool restart_when_changed)
 {
     this->init(parent, name, default_index, restart_when_changed);
     _this->impl.init(filter, file_mode);
+}
+
+template<typename T>
+Config<T>::~Config()
+{
 }
 
 template<typename T>

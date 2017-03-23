@@ -7,17 +7,17 @@ FilePath::FilePath(std::string path, bool is_dir)
     this->is_dir = is_dir;
 }
 
-std::string FilePath::path()
+std::string FilePath::path() const
 {
     return this->file_path;
 }
 
-bool FilePath::isDir()
+bool FilePath::isDir() const
 {
     return this->is_dir;
 }
 
-bool FilePath::isFile()
+bool FilePath::isFile() const
 {
     return !this->is_dir;
 }

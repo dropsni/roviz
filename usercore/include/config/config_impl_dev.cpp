@@ -85,11 +85,14 @@ ConfigStorageType<bool>::type ConfigImplDev<bool>::load(const ConfigStorageType<
 template<>
 ConfigStorageType<FilePath>::type ConfigImplDev<FilePath>::load(const ConfigStorageType<FilePath>::type &default_value)
 {
+    std::list<std::string> list;
     QVariant var = _this->parent->settingsScope()->value("Config/file_path/" + QString::fromStdString(_this->name));
     if(!var.isValid())
         return default_value;
     else
-        return var.toString();
+        for(const auto &path : var.toStringList())
+            list.push_back(path.toStdString());
+    return list;
 }
 
 template<typename T>
@@ -171,8 +174,8 @@ void ConfigImplDev<std::list<std::string> >::init(const std::list<std::string> &
     this->initMainWidget(combo);
 }
 
-template<typename T>
-void ConfigImplDev::init()
+template<>
+void ConfigImplDev<bool>::init()
 {
     QCheckBox *box = new QCheckBox();
 
@@ -187,8 +190,8 @@ void ConfigImplDev::init()
     this->initMainWidget(box);
 }
 
-template<typename T>
-void ConfigImplDev::init(const std::string &filter, enum FilePath::Mode file_mode)
+template<>
+void ConfigImplDev<FilePath>::init(const std::string &filter, enum FilePath::Mode file_mode)
 {
     QFileDialog::FileMode mode;
 
@@ -200,29 +203,32 @@ void ConfigImplDev::init(const std::string &filter, enum FilePath::Mode file_mod
         case FilePath::Directory:     mode = QFileDialog::Directory; break;
     }
 
+    QWidget *widget = new QWidget();
     QHBoxLayout *hlayout = new QHBoxLayout();
     QLineEdit *edit = new QLineEdit();
     QPushButton *button = new QPushButton("File...");
 
     hlayout->addWidget(edit);
     hlayout->addWidget(button);
+    widget->setLayout(hlayout);
 
     QObject::connect(button, &QPushButton::clicked,
                      [this, mode, filter](void)
     {
-        QFileDialog diag = new QFileDialog(GuiManager::instance()->widgetReference(),
-                                           "Select...",
-                                           "",
-                                           filter);
+        QFileDialog diag(GuiManager::instance()->widgetReference(),
+                         "Select...",
+                         "",
+                         QString::fromStdString(filter));
         diag.setFileMode(mode);
         if(!diag.exec())
             return;
 
         QStringList files = diag.selectedFiles();
-        _this->,
-    })
-
-
+        _this->val.clear();
+        for(const auto &file : files)
+            _this->val.push_back(file.toStdString());
+    });
+    this->initMainWidget(widget);
 }
 
 template<typename T>
@@ -282,6 +288,11 @@ void ConfigImplDev<bool>::save()
 
 template<>
 void ConfigImplDev<FilePath>::save()
-{ _this->parent->settingsScope()->setValue("Config/file_path/" + QString::fromStdString(_this->name), _this->val); }
+{
+    QStringList list;
+    for(const auto &path : _this->val)
+        list.append(QString::fromStdString(path));
+    _this->parent->settingsScope()->setValue("Config/file_path/" + QString::fromStdString(_this->name), list);
+}
 
 INSTANTIATE_CONFIG_IMPL

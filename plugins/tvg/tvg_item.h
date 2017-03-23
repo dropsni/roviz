@@ -1,6 +1,7 @@
 #ifndef TVG_ITEM_H
 #define TVG_ITEM_H
 
+#include "config/config.h"
 #include "core/roviz_item.h"
 #include "streams/image_m.h"
 #include "opencv2/opencv.hpp"
@@ -21,7 +22,7 @@ protected:
 
 private:
     Output output;
-    std::string vid_path;
+    Config<FilePath> conf_vid_path;
 };
 
 #endif // TVG_ITEM_H

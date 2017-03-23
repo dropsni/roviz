@@ -2,12 +2,18 @@
 #include "tvg_item.h"
 
 TVGItem::TVGItem()
-    : RovizItem("Test Video Generator")
+    : RovizItem("Test Video Generator"),
+      conf_vid_path(this,
+                    "Path to the video",
+                    {""},
+                    FilePath::ExistingFile,
+                    ".*",
+                    true)
 {
     ROVIZ_INIT_ITEM(TVG);
 
     this->output = this->addOutput<Image>("Output");
-    this->addConfig("Video file", &this->vid_path, CONFIG_IS_PATH);
+    this->addConfig(this->conf_vid_path);
 }
 
 TVGItem::~TVGItem()
@@ -19,7 +25,7 @@ void TVGItem::thread()
 {
     std::chrono::high_resolution_clock::time_point time_next_frame;
     cv::Mat out;
-    cv::VideoCapture cap(this->vid_path);
+    cv::VideoCapture cap(this->conf_vid_path.value().front());
     if(!cap.isOpened())
         return;
 

@@ -2,6 +2,7 @@
 #define TIG_ITEM_H
 
 #include "core/roviz_item.h"
+#include "config/file_path.h"
 #include "config/config.h"
 #include "streams//image_m.h"
 #include "opencv2/opencv.hpp"
@@ -22,8 +23,9 @@ protected:
 private:
     Output output;
     Image img;
-    Config<FilePath> conf_path;
     Config<bool> conf_load_grey;
+//    Config<Dummy> dummy;
+    Config<FilePath> conf_path;
 };
 
 #endif // TIG_ITEM_H
