@@ -1,6 +1,7 @@
 #ifndef PORTABLEIMAGEPRIVATE_H
 #define PORTABLEIMAGEPRIVATE_H
 
+#include <memory>
 #include <QImage>
 #include "streams/image.h"
 #include "streams/stream_object_p.h"
@@ -19,7 +20,7 @@ public:
     int w, h, bits, bytes, len;
     enum Image::Format f;
 
-    ~ImagePrivate() = default;
+    ~ImagePrivate();
     void init(int w, int h, enum Image::Format f);
 };
 

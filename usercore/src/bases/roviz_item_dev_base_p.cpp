@@ -94,6 +94,7 @@ void RovizItemDevBasePrivate::collapseBtnClicked()
     an->start();
 }
 
+// TODO Don't we already have that?
 void RovizItemDevBasePrivate::restartIfRunning()
 {
     if(_this->running())

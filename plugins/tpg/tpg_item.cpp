@@ -16,7 +16,8 @@ TPGItem::TPGItem()
     this->trim = this->addTrim("FPS", 1, 120);
 
     connect(&this->timer, &QTimer::timeout,
-            this, &TPGItem::timerExpired);
+            this, &TPGItem::timerExpired,
+            Qt::QueuedConnection);
 }
 
 TPGItem::~TPGItem()
@@ -36,6 +37,9 @@ void TPGItem::thread()
     double f = 0.0;
     unsigned char *dst;
 
+    if(this->test_pattern.isNull())
+        return;
+
     while(this->waitForCond([this]{return this->timer_expired;}))
     {
         this->mutex().lock();
@@ -43,10 +47,10 @@ void TPGItem::thread()
         this->mutex().unlock();
 
         const unsigned char *src = this->test_pattern.constBits();
-        this->out_img = ImageMutable(this->test_pattern.width(),
+        ImageMutable out_img = ImageMutable(this->test_pattern.width(),
                                      this->test_pattern.height(),
                                      Image::RGB888);
-        dst = this->out_img.data();
+        dst = out_img.data();
 
         for(qint32 i = 0; i < this->test_pattern.byteCount(); i++)
         {
@@ -59,7 +63,7 @@ void TPGItem::thread()
         if(f > 1.0)
             f = 0.0;
 
-        this->pushOut(this->out_img, this->output);
+        this->pushOut(out_img, this->output);
     }
 }
 

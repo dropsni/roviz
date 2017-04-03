@@ -32,6 +32,8 @@ class ROVIZ_EXPORT_CLASS SharedWindow : public QMainWindow
 {
 Q_OBJECT
 
+// TODO Add Qt::QueuedConnection?
+
 // Singleton
 Q_DISABLE_COPY(SharedWindow)
 

@@ -25,7 +25,8 @@ ImageMutable::ImageMutable(int w, int h, Image::Format f, std::initializer_list<
     : Image(false, sources)
 {
     _this->is_self_managed = true;
-    _this->data_ptr = new unsigned char[this->dataLength()];
+    _this->init(w, h, f); // Needs to be before the malloc!
+    _this->data_ptr = static_cast<unsigned char*>(std::malloc(this->dataLength()));
 
 #ifdef QT_PRESENT
     _this->qt_img = QImage(_this->data_ptr, this->width(), this->height(), QImage::Format_Grayscale8);
@@ -36,8 +37,6 @@ ImageMutable::ImageMutable(int w, int h, Image::Format f, std::initializer_list<
     // Only grayscale is supported for now...
     _this->cv_img = cv::Mat(this->height(), this->width(), CV_8UC1, _this->data_ptr);
 #endif
-
-    _this->init(w, h, f);
 }
 
 unsigned char *ImageMutable::data()

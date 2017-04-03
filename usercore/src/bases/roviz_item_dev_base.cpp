@@ -17,7 +17,7 @@
 #include "gui/slider_label.h"
 #include "bases/stream_base.h"
 #include "streams/stream.h"
-
+#include "opencv/cv.h"
 RovizItemDevBase::RovizItemDevBase(std::string type_name)
     : AbstractItem(QString::fromStdString(type_name)),
       _this(new RovizItemDevBasePrivate(this))
@@ -58,6 +58,7 @@ RovizItemDevBase::RovizItemDevBase(std::string type_name)
             _this.data(), &RovizItemDevBasePrivate::parentScopeChanged);
     _this->main_widget->hide();
     _this->config_present = false;
+    cv::setBreakOnError(true);
 }
 
 RovizItemDevBase::~RovizItemDevBase()

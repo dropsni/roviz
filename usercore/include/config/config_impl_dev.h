@@ -24,7 +24,6 @@ public:
     void load(void);
     bool restartAfterChange(void) const override;
 
-    // The only thing that's really needed by Config
     void init(int min, int max); // Int
     void init(double min, double max); // Double
     void init(std::function<bool (std::string&)> checker); // String

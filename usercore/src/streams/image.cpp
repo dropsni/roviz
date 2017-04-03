@@ -17,7 +17,7 @@ Image::Image(std::initializer_list<SourceID> sources)
     _this_base.reset(_this);
     this->initSources(sources);
 
-    _this->is_self_managed = true;
+    _this->is_self_managed = false;
     _this->data_ptr = nullptr;
 
     _this->init(0, 0, Image::NoFormat);

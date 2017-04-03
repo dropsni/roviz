@@ -1,6 +1,12 @@
 
 #include "streams/image_p.h"
 
+ImagePrivate::~ImagePrivate()
+{
+    if(this->is_self_managed)
+        std::free(this->data_ptr);
+}
+
 void ImagePrivate::init(int w, int h, Image::Format f)
 {
     this->w = w;

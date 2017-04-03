@@ -35,7 +35,10 @@ void TVGItem::thread()
     while(this->wait())
     {
         if(!cap.read(out))
+        {
             cap.set(CV_CAP_PROP_POS_FRAMES, 0);
+            cap.read(out);
+        }
 
         // Not just using += because that doesn't work well with pauses
         time_next_frame = std::chrono::high_resolution_clock::now() + frame_delay;

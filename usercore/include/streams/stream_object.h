@@ -39,7 +39,7 @@ protected:
     void initSources(std::initializer_list<SourceID> sources = {});
 
     // C++ doesn't allow this, just make sure the object implements such a function.
-//  virtual static StreamWidgetBase *constructWidget(void);
+//  virtual QWidget *initWidget(StreamBase *stream);
 };
 
 // This is the only place within the portable code that we need that. I'm not
