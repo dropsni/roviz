@@ -42,4 +42,5 @@ void TVGItem::thread()
         std::this_thread::sleep_until(time_next_frame);
         this->pushOut(Image(out), this->output);
     }
+    cap.release();
 }

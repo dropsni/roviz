@@ -57,6 +57,7 @@ RovizItemDevBase::RovizItemDevBase(std::string type_name)
     connect(this->settingsScope(), &SettingsScope::parentScopeChanged,
             _this.data(), &RovizItemDevBasePrivate::parentScopeChanged);
     _this->main_widget->hide();
+    _this->config_present = false;
 }
 
 RovizItemDevBase::~RovizItemDevBase()
@@ -95,8 +96,12 @@ void RovizItemDevBase::stop()
 
 void RovizItemDevBase::restart()
 {
-    this->stop();
-    this->start();
+    // Restarting doesn't mean starting it when it was stopped before
+    if(this->running())
+    {
+        this->stop();
+        this->start();
+    }
 }
 
 // The following two functions can't have the same name as in RovizItem because

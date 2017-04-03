@@ -82,15 +82,19 @@ template<>
 void ConfigImplDev<FilePath>::load(void)
 {
     QVariant var = _this->parent->settingsScope()->value("Config/file_path/" + QString::fromStdString(_this->name));
-    if(var.isValid())
-    {
-        _this->val.clear();
-        for(const auto &path : var.toStringList())
-            _this->val.push_back(path.toStdString());
-    }
-    QString str;
-    for(const auto &path : _this->val)
-        str += QString::fromStdString(path) + "; ";
+    if(!var.isValid())
+        return;
+
+    QStringList list = var.toStringList();
+    _this->val.clear();
+    for(const auto &path : list)
+        _this->val.push_back(path.toStdString());
+
+    // We don't want a ';' in the beginning
+    QString str = list.front();
+    list.pop_front();
+    for(const auto &path : list)
+        str += "; " + path;
     qobject_cast<QLineEdit*>(this->data_widget)->setText(str);
 }
 
@@ -215,6 +219,7 @@ void ConfigImplDev<FilePath>::init(const std::string &filter, enum FilePath::Mod
     hlayout->addWidget(edit);
     hlayout->addWidget(button);
     widget->setLayout(hlayout);
+    edit->setReadOnly(true);
 
     QObject::connect(button, &QPushButton::clicked,
                      [this, edit, mode, filter](void)
@@ -229,26 +234,17 @@ void ConfigImplDev<FilePath>::init(const std::string &filter, enum FilePath::Mod
 
         QStringList files = diag.selectedFiles();
         _this->val.clear();
+        edit->setText("");
+
+        // We don't want a ';' in the beginning
+        this->tmp_val.push_back(files.front().toStdString());
+        edit->setText(edit->text() + files.front());
+        files.pop_front();
+
         for(const auto &file : files)
         {
             this->tmp_val.push_back(file.toStdString());
             edit->setText(edit->text() + "; " + file);
-        }
-        this->tmp_changed = true;
-    });
-
-    QObject::connect(edit, &QLineEdit::editingFinished,
-                     [this, edit]()
-    {
-        QRegularExpression regex("((?:[^\\\\\\;]|\\\\.)*)");
-        auto it = regex.globalMatch(edit->text());
-
-        _this->val.clear();
-        while(it.hasNext())
-        {
-            std::string match = it.next().captured(1).toStdString();
-            if(!match.empty())
-                this->tmp_val.push_back(match);
         }
         this->tmp_changed = true;
     });
