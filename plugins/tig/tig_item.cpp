@@ -12,7 +12,7 @@ TIGItem::TIGItem()
                 "Path to the image",
                 {""},
                 FilePath::ExistingFile,
-                ".*",
+                "All Files (*)",
                 true)
 {
     ROVIZ_INIT_ITEM(TIG);

@@ -23,7 +23,7 @@ public:
     Config(RovizItem *parent, const std::string &name, const typename ConfigStorageType<T>::type &default_index, bool restart_when_changed = false);
     Config(RovizItem *parent, const std::string &name, const typename ConfigStorageType<T>::type &default_index, enum FilePath::Mode file_mode, const std::string &filter, bool restart_when_changed = false);
 
-    ~Config();
+    ~Config() = default;
 
     typename ConfigStorageType<T>::type value(void);
     bool changed(void);

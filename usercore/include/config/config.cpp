@@ -38,6 +38,7 @@ Config<std::list<std::string> >::Config(RovizItem *parent, const std::string &na
 
 template<>
 Config<bool>::Config(RovizItem *parent, const std::string &name, const ConfigStorageType<bool>::type &default_index, bool restart_when_changed)
+    : _this(new ConfigPrivate<bool>())
 {
     this->init(parent, name, default_index, restart_when_changed);
     _this->impl.init();
@@ -45,14 +46,10 @@ Config<bool>::Config(RovizItem *parent, const std::string &name, const ConfigSto
 
 template<>
 Config<FilePath>::Config(RovizItem *parent, const std::string &name, const ConfigStorageType<FilePath>::type &default_index, enum FilePath::Mode file_mode, const std::string &filter, bool restart_when_changed)
+    : _this(new ConfigPrivate<FilePath>())
 {
     this->init(parent, name, default_index, restart_when_changed);
     _this->impl.init(filter, file_mode);
-}
-
-template<typename T>
-Config<T>::~Config()
-{
 }
 
 template<typename T>
@@ -80,10 +77,11 @@ ConfigImplBase *Config<T>::getImplBase() const
 template<typename T>
 void Config<T>::init(RovizItem *parent, const std::string &name, const typename ConfigStorageType<T>::type &default_value, bool restart_when_changed)
 {
+    // We won't load the config values here, because settingsScope() is not
+    // valid yet.
     _this->parent = parent;
     _this->name = name;
-    _this->val = _this->impl.load(default_value);
-
+    _this->val = default_value;
     _this->changed = false;
     _this->restart_after_change = restart_when_changed;
 }

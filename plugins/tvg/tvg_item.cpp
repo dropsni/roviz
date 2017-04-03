@@ -7,7 +7,7 @@ TVGItem::TVGItem()
                     "Path to the video",
                     {""},
                     FilePath::ExistingFile,
-                    ".*",
+                    "All Files (*)",
                     true)
 {
     ROVIZ_INIT_ITEM(TVG);
@@ -37,7 +37,8 @@ void TVGItem::thread()
         if(!cap.read(out))
             cap.set(CV_CAP_PROP_POS_FRAMES, 0);
 
-        time_next_frame += frame_delay;
+        // Not just using += because that doesn't work well with pauses
+        time_next_frame = std::chrono::high_resolution_clock::now() + frame_delay;
         std::this_thread::sleep_until(time_next_frame);
         this->pushOut(Image(out), this->output);
     }

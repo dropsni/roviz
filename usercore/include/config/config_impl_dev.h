@@ -6,6 +6,7 @@
 #include "config/config_impl_dev_base.h"
 #include "config/config_storage_type.h"
 #include "config/file_path.h"
+#include "bases/export_handling.h"
 
 class QWidget;
 class QHBoxLayout;
@@ -15,12 +16,12 @@ template<typename T>
 class ConfigPrivate;
 
 template<typename T>
-class ConfigImplDev : public ConfigImplDevBase
+class ROVIZ_EXPORT_CLASS ConfigImplDev : public ConfigImplDevBase
 {
 public:
     ConfigImplDev(ConfigPrivate<T> *config);
     QWidget *widget() const override;
-    typename ConfigStorageType<T>::type load(const typename ConfigStorageType<T>::type &default_value);
+    void load(void);
     bool restartAfterChange(void) const override;
 
     // The only thing that's really needed by Config
@@ -35,14 +36,12 @@ public:
 
 private:
     ConfigPrivate<T> *_this;
-    QWidget *main_widget;
+    QWidget *main_widget, *data_widget;
     typename ConfigStorageType<T>::type tmp_val;
     bool tmp_changed;
 
     void initMainWidget(QWidget *sub_widget);
     void save(void);
-
-    // NOTE: Maybe the item doesn't have a SettingsScope yet in the constructor
 };
 
 #endif // CONFIG_IMPL_DEV_H

@@ -3,6 +3,7 @@
 
 #include <mutex>
 #include <QtGlobal>
+#include <QRegularExpression>
 #include <QWidget>
 #include <QHBoxLayout>
 #include <QLabel>
@@ -33,66 +34,64 @@ QWidget *ConfigImplDev<T>::widget() const
 }
 
 template<>
-ConfigStorageType<int>::type ConfigImplDev<int>::load(const ConfigStorageType<int>::type &default_value)
+void ConfigImplDev<int>::load(void)
 {
     QVariant var = _this->parent->settingsScope()->value("Config/int/" + QString::fromStdString(_this->name));
-    if(!var.isValid())
-        return default_value;
-    else
-        return var.toInt();
+    if(var.isValid())
+        _this->val =  var.toInt();
+    qobject_cast<QLineEdit*>(this->data_widget)->setText(QString::number(_this->val));
 }
 
 template<>
-ConfigStorageType<double>::type ConfigImplDev<double>::load(const ConfigStorageType<double>::type &default_value)
+void ConfigImplDev<double>::load(void)
 {
     QVariant var = _this->parent->settingsScope()->value("Config/double/" + QString::fromStdString(_this->name));
-    if(!var.isValid())
-        return default_value;
-    else
-        return var.toDouble();
+    if(var.isValid())
+        _this->val = var.toDouble();
+    qobject_cast<QLineEdit*>(this->data_widget)->setText(QString::number(_this->val));
 }
 
 template<>
-ConfigStorageType<std::string>::type ConfigImplDev<std::string>::load(const ConfigStorageType<std::string>::type &default_value)
+void ConfigImplDev<std::string>::load(void)
 {
     QVariant var = _this->parent->settingsScope()->value("Config/string/" + QString::fromStdString(_this->name));
-    if(!var.isValid())
-        return default_value;
-    else
-        return var.toString().toStdString();
+    if(var.isValid())
+        _this->val = var.toString().toStdString();
+    qobject_cast<QLineEdit*>(this->data_widget)->setText(QString::fromStdString(_this->val));
 }
 
 template<>
-ConfigStorageType<std::list<std::string> >::type ConfigImplDev<std::list<std::string> >::load(const ConfigStorageType<std::list<std::string> >::type &default_value)
+void ConfigImplDev<std::list<std::string> >::load(void)
 {
     QVariant var = _this->parent->settingsScope()->value("Config/list/" + QString::fromStdString(_this->name));
-    if(!var.isValid())
-        return default_value;
-    else
-        return var.toInt();
+    if(var.isValid())
+        _this->val = var.toInt();
+    qobject_cast<QComboBox*>(this->data_widget)->setCurrentIndex(_this->val);
 }
 
 template<>
-ConfigStorageType<bool>::type ConfigImplDev<bool>::load(const ConfigStorageType<bool>::type &default_value)
+void ConfigImplDev<bool>::load(void)
 {
     QVariant var = _this->parent->settingsScope()->value("Config/bool/" + QString::fromStdString(_this->name));
-    if(!var.isValid())
-        return default_value;
-    else
-        return var.toBool();
+    if(var.isValid())
+        _this->val = var.toBool();
+    qobject_cast<QCheckBox*>(this->data_widget)->setChecked(_this->val);
 }
 
 template<>
-ConfigStorageType<FilePath>::type ConfigImplDev<FilePath>::load(const ConfigStorageType<FilePath>::type &default_value)
+void ConfigImplDev<FilePath>::load(void)
 {
-    std::list<std::string> list;
     QVariant var = _this->parent->settingsScope()->value("Config/file_path/" + QString::fromStdString(_this->name));
-    if(!var.isValid())
-        return default_value;
-    else
+    if(var.isValid())
+    {
+        _this->val.clear();
         for(const auto &path : var.toStringList())
-            list.push_back(path.toStdString());
-    return list;
+            _this->val.push_back(path.toStdString());
+    }
+    QString str;
+    for(const auto &path : _this->val)
+        str += QString::fromStdString(path) + "; ";
+    qobject_cast<QLineEdit*>(this->data_widget)->setText(str);
 }
 
 template<typename T>
@@ -117,6 +116,7 @@ void ConfigImplDev<int>::init(int min, int max)
         this->tmp_val = text.toInt();
     });
     this->initMainWidget(edit);
+    this->data_widget = edit;
 }
 
 template<>
@@ -136,6 +136,7 @@ void ConfigImplDev<double>::init(double min, double max)
         this->tmp_val = text.toDouble();
     });
     this->initMainWidget(edit);
+    this->data_widget = edit;
 }
 
 template<>
@@ -153,6 +154,7 @@ void ConfigImplDev<std::string>::init(std::function<bool (std::string&)> checker
         this->tmp_changed = checker(this->tmp_val);
     });
     this->initMainWidget(edit);
+    this->data_widget = edit;
 }
 
 template<>
@@ -172,6 +174,7 @@ void ConfigImplDev<std::list<std::string> >::init(const std::list<std::string> &
         this->tmp_val = combo->currentIndex();
     });
     this->initMainWidget(combo);
+    this->data_widget = combo;
 }
 
 template<>
@@ -188,6 +191,7 @@ void ConfigImplDev<bool>::init()
         this->tmp_val = checked;
     });
     this->initMainWidget(box);
+    this->data_widget = box;
 }
 
 template<>
@@ -213,7 +217,7 @@ void ConfigImplDev<FilePath>::init(const std::string &filter, enum FilePath::Mod
     widget->setLayout(hlayout);
 
     QObject::connect(button, &QPushButton::clicked,
-                     [this, mode, filter](void)
+                     [this, edit, mode, filter](void)
     {
         QFileDialog diag(GuiManager::instance()->widgetReference(),
                          "Select...",
@@ -226,9 +230,31 @@ void ConfigImplDev<FilePath>::init(const std::string &filter, enum FilePath::Mod
         QStringList files = diag.selectedFiles();
         _this->val.clear();
         for(const auto &file : files)
-            _this->val.push_back(file.toStdString());
+        {
+            this->tmp_val.push_back(file.toStdString());
+            edit->setText(edit->text() + "; " + file);
+        }
+        this->tmp_changed = true;
     });
+
+    QObject::connect(edit, &QLineEdit::editingFinished,
+                     [this, edit]()
+    {
+        QRegularExpression regex("((?:[^\\\\\\;]|\\\\.)*)");
+        auto it = regex.globalMatch(edit->text());
+
+        _this->val.clear();
+        while(it.hasNext())
+        {
+            std::string match = it.next().captured(1).toStdString();
+            if(!match.empty())
+                this->tmp_val.push_back(match);
+        }
+        this->tmp_changed = true;
+    });
+
     this->initMainWidget(widget);
+    this->data_widget = edit;
 }
 
 template<typename T>

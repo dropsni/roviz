@@ -130,27 +130,37 @@ void RovizItemDevBasePrivate::parentScopeChanged(SettingsScope *old)
 
         SharedWindow::instance(_this->settingsScope()->parentScope())->addItem(_this);
     }
+
+    for(const auto &conf : this->config_impls)
+        conf->load();
 }
 
 void RovizItemDevBasePrivate::showConfigWindow()
 {
-    // Gets redone everytime the config window is shown to allow inserting/modifying configs on-the-fly
+    // Gets redone everytime the config window is shown to allow
+    // inserting/modifying configs on-the-fly
     QDialog *dialog = new QDialog(GuiManager::instance()->widgetReference());
-//    QVBoxLayout *main_layout = new QVBoxLayout();
+    QVBoxLayout *main_layout = new QVBoxLayout();
     QVBoxLayout *conf_layout = new QVBoxLayout();
-//    QHBoxLayout *button_layout = new QHBoxLayout();
-//    QPushButton *btn_ok = new QPushButton("Ok");
-//    QPushButton *btn_cancel = new QPushButton("Cancel");
+    QHBoxLayout *button_layout = new QHBoxLayout();
+    QPushButton *btn_ok = new QPushButton("Ok");
+    QPushButton *btn_cancel = new QPushButton("Cancel");
 
     for(auto &conf : this->config_impls)
         conf_layout->addWidget(conf->widget());
 
-//    button_layout->addWidget(btn_ok);
-//    button_layout->addWidget(btn_cancel);
-//    main_layout->addLayout(conf_layout);
-//    main_layout->addLayout(button_layout);
-//    dialog->setLayout(main_layout);
+    button_layout->addWidget(btn_ok);
+    button_layout->addWidget(btn_cancel);
+    main_layout->addLayout(conf_layout);
+    main_layout->addLayout(button_layout);
+    dialog->setLayout(main_layout);
     dialog->setLayout(conf_layout);
+
+    connect(btn_ok, &QPushButton::clicked,
+            dialog, &QDialog::accept);
+
+    connect(btn_cancel, &QPushButton::clicked,
+            dialog, &QDialog::reject);
 
     if(dialog->exec() == QDialog::Accepted)
         for(auto &conf : this->config_impls)
