@@ -2,18 +2,18 @@
 #include "tvg_item.h"
 
 TVGItem::TVGItem()
-    : RovizItem("Test Video Generator"),
-      conf_vid_path(this,
-                    "Path to the video",
-                    {""},
-                    FilePath::ExistingFile,
-                    "All Files (*)",
-                    true)
+    : RovizItem("Test Video Generator")
 {
     ROVIZ_INIT_ITEM(TVG);
 
     this->output = this->addOutput<Image>("Output");
-    this->addConfig(this->conf_vid_path);
+
+    this->conf_vid_path = this->addConfig<FilePath>(
+                "Path to the video",
+                {""},
+                FilePath::ExistingFile,
+                "All Files (*)",
+                true);
 }
 
 TVGItem::~TVGItem()

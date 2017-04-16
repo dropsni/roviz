@@ -76,16 +76,6 @@ void RovizItem::trimChanged(Trim, double)
 {
 }
 
-void RovizItem::addConfig(const ConfigBase &config)
-{
-    RovizItemBase::addConfig(config);
-}
-
-void RovizItem::addConfig(const ConfigBase *config)
-{
-    RovizItemBase::addConfig(*config);
-}
-
 void RovizItem::pushIn(StreamObject obj, Input in)
 {
     if(_this->in_queue.size() < MAX_QUEUE_SIZE)
@@ -200,6 +190,54 @@ template<class T>
 T RovizItem::next(Input in)
 {
     return T(_this->in_queue[in]->next());
+}
+
+template<>
+Config<int> RovizItem::addConfig<int>(const std::string &name, const ConfigStorageType<int>::type &default_value, int min, int max, bool restart_when_changed)
+{
+    Config<int> conf(this, name, default_value, min, max, restart_when_changed);
+    RovizItemBase::addConfig(conf);
+    return conf;
+}
+
+template<>
+Config<FilePath> RovizItem::addConfig<FilePath>(const std::string &name, const ConfigStorageType<FilePath>::type &default_value, FilePath::Mode file_mode, const std::string &filter, bool restart_when_changed)
+{
+    Config<FilePath> conf(this, name, default_value, file_mode, filter, restart_when_changed);
+    RovizItemBase::addConfig(conf);
+    return conf;
+}
+
+template<>
+Config<bool> RovizItem::addConfig<bool>(const std::string &name, const ConfigStorageType<bool>::type &default_value, bool restart_when_changed)
+{
+    Config<bool> conf(this, name, default_value, restart_when_changed);
+    RovizItemBase::addConfig(conf);
+    return conf;
+}
+
+template<>
+Config<std::list<std::string> > RovizItem::addConfig<std::list<std::string> >(const std::string &name, const ConfigStorageType<std::list<std::string> >::type &default_index, const std::list<std::string> &possibilities, bool restart_when_changed)
+{
+    Config<std::list<std::string> > conf(this, name, default_index, possibilities, restart_when_changed);
+    RovizItemBase::addConfig(conf);
+    return conf;
+}
+
+template<>
+Config<std::string> RovizItem::addConfig<std::string>(const std::string &name, const ConfigStorageType<std::string>::type &default_value, std::function<bool (std::string &)> checker, bool restart_when_changed)
+{
+    Config<std::string> conf(this, name, default_value, checker, restart_when_changed);
+    RovizItemBase::addConfig(conf);
+    return conf;
+}
+
+template<>
+Config<double> RovizItem::addConfig<double>(const std::string &name, const ConfigStorageType<double>::type &default_value, double min, double max, bool restart_when_changed)
+{
+    Config<double> conf(this, name, default_value, min, max, restart_when_changed);
+    RovizItemBase::addConfig(conf);
+    return conf;
 }
 
 INSTANTIATE_PORTABLE_ITEM

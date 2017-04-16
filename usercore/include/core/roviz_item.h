@@ -61,6 +61,7 @@
 #include <mutex>
 #include "bases/export_handling.h"
 #include "config/config_base.h"
+#include "config/config.h"
 #include "core/template_decl.h"
 #include "core/typedecl.h"
 #include "streams/stream_object.h"
@@ -388,8 +389,24 @@ protected:
      */
     virtual void trimChanged(Trim trim, double value) override;
 
-    void addConfig(const ConfigBase &config) override;
-    void addConfig(const ConfigBase *config);
+    // Returns config using move-semantics
+    template<class T>
+    Config<T> addConfig(const std::string &name, const typename ConfigStorageType<T>::type &default_value, int min, int max, bool restart_when_changed = false);
+
+    template<class T>
+    Config<T> addConfig(const std::string &name, const typename ConfigStorageType<T>::type &default_value, double min, double max, bool restart_when_changed = false);
+
+    template<class T>
+    Config<T> addConfig(const std::string &name, const typename ConfigStorageType<T>::type &default_value, std::function<bool (std::string&)> checker = [](std::string s){return s;}, bool restart_when_changed = false);
+
+    template<class T>
+    Config<T> addConfig(const std::string &name, const typename ConfigStorageType<T>::type &default_index, const std::list<std::string> &possibilities, bool restart_when_changed = false);
+
+    template<class T>
+    Config<T> addConfig(const std::string &name, const typename ConfigStorageType<T>::type &default_value, bool restart_when_changed = false);
+
+    template<class T>
+    Config<T> addConfig(const std::string &name, const typename ConfigStorageType<T>::type &default_value, enum FilePath::Mode file_mode, const std::string &filter, bool restart_when_changed = false);
 
 private:
     std::unique_ptr<RovizItemPrivate> _this;

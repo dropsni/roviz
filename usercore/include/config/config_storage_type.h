@@ -5,7 +5,7 @@
 
 template<typename T>
 class ConfigStorageType
-{ public: typedef T type; };
+{ public: typedef T type;};
 
 template<>
 class ConfigStorageType<std::list<std::string> >

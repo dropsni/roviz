@@ -24,7 +24,6 @@ private:
     Output output;
     Image img;
     Config<bool> conf_load_grey;
-//    Config<Dummy> dummy;
     Config<FilePath> conf_path;
 };
 

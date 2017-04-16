@@ -2,24 +2,18 @@
 #include "tig_item.h"
 
 TIGItem::TIGItem()
-    : RovizItem("Test Image Generator"),
-      conf_load_grey(this,
-                     "Load Image as greyscale",
-                     true,
-                     true),
-//      dummy(),
-      conf_path(this,
-                "Path to the image",
-                {""},
-                FilePath::ExistingFile,
-                "All Files (*)",
-                true)
+    : RovizItem("Test Image Generator")
 {
     ROVIZ_INIT_ITEM(TIG);
 
     this->output = this->addOutput<Image>("Output");
-    this->addConfig(this->conf_load_grey);
-    this->addConfig(this->conf_path);
+
+    this->conf_load_grey = this->addConfig<bool>("Load Image as greyscale", true, true);
+    this->conf_path = this->addConfig<FilePath>("Path to the image",
+                                               {""},
+                                               FilePath::ExistingFile,
+                                               "All Files (*)",
+                                               true);
 }
 
 TIGItem::~TIGItem()

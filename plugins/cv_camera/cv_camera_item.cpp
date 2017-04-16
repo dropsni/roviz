@@ -2,21 +2,7 @@
 #include "cv_camera_item.h"
 
 CvCameraItem::CvCameraItem()
-    : RovizItem("CvCamera"),
-      conf_res(this,
-               "Resolution",
-               2,
-               {
-                   "1920x1080",
-                   "1280x720",
-                   "640x480"
-               },
-               true),
-      conf_cam_id(this,
-                  "Camera",
-                  0,
-                  0, 1000) // Should be enough
-                  // TODO Make that safer
+    : RovizItem("CvCamera")
 {
     ROVIZ_INIT_ITEM(CvCamera);
 
@@ -35,8 +21,19 @@ CvCameraItem::CvCameraItem()
     };
 
     this->output = this->addOutput<Image>("Camera Output");
-    this->addConfig(this->conf_cam_id);
-    this->addConfig(this->conf_res);
+
+    this->conf_res = this->addConfig<std::list<std::string> >
+                ("Resolution",
+                 2,
+                 {
+                     "1920x1080",
+                     "1280x720",
+                     "640x480"
+                 },
+                 true);
+
+    // TODO Make that safer
+    this->conf_cam_id = this->addConfig<int>("Camera", 0, 0, 1000);
 }
 
 CvCameraItem::~CvCameraItem()
