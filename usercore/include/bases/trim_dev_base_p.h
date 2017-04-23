@@ -1,6 +1,8 @@
 #ifndef TRIM_DEV_BASE_P_H
 #define TRIM_DEV_BASE_P_H
 
+#include <functional>
+
 class QLayout;
 class QSlider;
 

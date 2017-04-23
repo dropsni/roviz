@@ -158,9 +158,9 @@ void RovizItemDevBase::pushOut(StreamObject obj, Output output)
         _this->out_widgets[output]->update();
 }
 
-Trim RovizItemDevBase::addTrim(std::string name, double min, double max, int steps, bool num_of_steps)
+Trim RovizItemDevBase::addTrim(std::string name, double min, double max, int steps, std::function<void (double)> notifier_func)
 {
-    Trim trim(name, min, max, steps, num_of_steps);
+    Trim trim(name, min, max, steps, notifier_func);
     QSlider *slider = trim.slider();
 
     // Because the settings are not available yet
@@ -174,19 +174,9 @@ Trim RovizItemDevBase::addTrim(std::string name, double min, double max, int ste
             slider->setValue(0);
     });
 
-    // Yes, we have to calculate that again because trim cannot be copied.
-    // IMPORTANT: If the calculation changes, change it here as well!
-    double factor = (max - min) / steps;
-
-    // We need to add the connections to a list because the application
-    // segfaults on exit if we don't disconnect them first in the destructor.
-    _this->trim_conns.append(
-        connect(slider, &QSlider::valueChanged,
-                [this, name, min, factor, slider](int value)
-    {
-        this->settingsScope()->setValue("Trim/" + QString::fromStdString(name), value);
-        emit this->trimChanged(min + factor * static_cast<double>(value));
-    }));
+    connect(trim.slider(), &QSlider::valueChanged,
+            [this, name](int value)
+            {this->settingsScope()->setValue("Trim/" + QString::fromStdString(name), value);});
 
     _this->main_control_layout->addLayout(trim.layout());
     _this->collapse_btn->show();
@@ -194,8 +184,12 @@ Trim RovizItemDevBase::addTrim(std::string name, double min, double max, int ste
     return trim;
 }
 
-void RovizItemDevBase::trimChanged(double)
+Trim RovizItemDevBase::addTrim(std::string name, double min, double max, double step_size, std::function<void (double)> notifier_func)
 {
+    // TODO Maybe we need a better cast from double to int
+    return this->addTrim(name, min, max,
+                         static_cast<int>((max - min) / step_size),
+                         notifier_func);
 }
 
 void RovizItemDevBase::addConfig(const ConfigBase &config)

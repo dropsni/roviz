@@ -1,8 +1,8 @@
 
 #include "trim.h"
 
-Trim::Trim(std::string name, double min, double max, int steps, bool num_of_steps)
-    : TrimDevBase(name, min, max, steps, num_of_steps)
+Trim::Trim(std::string name, double min, double max, int steps, std::function<void (double)> notifier_func)
+    : TrimBase(name, min, max, steps, notifier_func)
 {
 }
 

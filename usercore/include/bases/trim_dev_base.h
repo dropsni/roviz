@@ -13,7 +13,7 @@ class ROVIZ_EXPORT_CLASS TrimDevBase
 {
 public:
     TrimDevBase() = default;
-    TrimDevBase(std::string name, double min, double max, int steps, bool num_of_steps = true);
+    TrimDevBase(std::string name, double min, double max, int steps, std::function<void (double)> notifier_func = [](double){});
     virtual ~TrimDevBase() = default;
 
     // Don't allow copies
@@ -22,11 +22,14 @@ public:
 
     // Allow moving
     TrimDevBase(TrimDevBase &&trim);
-    TrimDevBase &operator =(TrimDevBase &&trim);
+    TrimDevBase &operator=(TrimDevBase &&trim);
 
     QLayout *layout(void) const;
     QSlider *slider(void) const;
     virtual double value(void) const;
+
+signals:
+    void valueChanged(double value);
 
 private:
     std::unique_ptr<TrimDevBasePrivate> _this;

@@ -64,8 +64,8 @@ protected:
     Output addOutputBase(std::string name);
 
     virtual void pushOut(StreamObject obj, Output output);
-    virtual Trim addTrim(std::string name, double min, double max, int steps, bool num_of_steps);
-    virtual void trimChanged(double value);
+    virtual Trim addTrim(std::string name, double min, double max, int steps, std::function<void (double)> notifier_func);
+    virtual Trim addTrim(std::string name, double min, double max, double step_size, std::function<void (double)> notifier_func);
     virtual void addConfig(const ConfigBase &config);
 
 public slots:

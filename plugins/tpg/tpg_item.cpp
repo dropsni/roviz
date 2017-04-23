@@ -13,7 +13,16 @@ TPGItem::TPGItem()
     this->test_pattern = this->test_pattern.convertToFormat(QImage::Format_RGB888);
 
     this->output = this->addOutput<Image>("Test Pattern Output");
-    this->trim = this->addTrim("FPS", 1, 120);
+    this->trim = this->addTrim("FPS", 1, 120, 0,
+        [this](double value)
+        {
+            std::lock_guard<std::mutex> g(this->mutex());
+
+            this->timeout = 1000 / value;
+            this->timer.stop();
+            this->timer_expired = false;
+            this->timer.start(this->timeout);
+        });
 
     connect(&this->timer, &QTimer::timeout,
             this, &TPGItem::timerExpired,
@@ -65,16 +74,6 @@ void TPGItem::thread()
 
         this->pushOut(out_img, this->output);
     }
-}
-
-void TPGItem::trimChanged(double value)
-{
-    std::lock_guard<std::mutex> g(this->mutex());
-
-    this->timeout = 1000 / value;
-    this->timer.stop();
-    this->timer_expired = false;
-    this->timer.start(this->timeout);
 }
 
 void TPGItem::timerExpired()

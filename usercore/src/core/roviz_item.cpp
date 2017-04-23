@@ -72,8 +72,9 @@ std::mutex &RovizItem::mutex() const
     return _this->mtx;
 }
 
-void RovizItem::trimChanged(double)
+Trim RovizItem::addTrim(std::string name, double min, double max, double step_size, std::function<void (double)> notifier_func)
 {
+    return RovizItemBase::addTrim(name, min, max, step_size, notifier_func);
 }
 
 void RovizItem::pushIn(StreamObject obj, Input in)
@@ -108,9 +109,9 @@ bool RovizItem::waitForInput(Input in)
     return !_this->is_stopped;
 }
 
-Trim RovizItem::addTrim(std::string name, double min, double max, int steps, bool num_of_steps)
+Trim RovizItem::addTrim(std::string name, double min, double max, int steps, std::function<void (double)> notifier_func)
 {
-    return RovizItemBase::addTrim(name, min, max, steps, num_of_steps);
+    return RovizItemBase::addTrim(name, min, max, steps, notifier_func);
 }
 
 void RovizItem::pause()
