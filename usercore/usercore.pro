@@ -24,7 +24,10 @@ SOURCES +=  src/usercore.cpp \
     include/config/config_p.cpp \
     include/config/config_base.cpp \
     include/config/config_impl_dev_base.cpp \
-    include/config/file_path.cpp
+    include/config/file_path.cpp \
+    include/core/trim.cpp \
+    include/bases/trim_dev_base_p.cpp \
+    include/bases/trim_dev_base.cpp
 
 HEADERS +=  include/usercore.h \
             include/bases/export_handling.h \
@@ -59,7 +62,10 @@ HEADERS +=  include/usercore.h \
     include/config/config_base.h \
     include/config/config_impl_dev_base.h \
     include/config/config_storage_type.h \
-    include/config/file_path.h
+    include/config/file_path.h \
+    include/core/trim.h \
+    include/bases/trim_dev_base_p.h \
+    include/bases/trim_dev_base.h
 
 RESOURCES   +=  resources.qrc
 LIBS        += -lopencv_core

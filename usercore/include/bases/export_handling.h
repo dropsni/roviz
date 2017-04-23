@@ -45,6 +45,10 @@
     class ConfigImplDevBase;
     typedef ConfigImplDevBase ConfigImplBase;
 
+    // Select the appropriate base class for the trim here
+    class TrimDevBase;
+    typedef TrimDevBase TrimBase;
+
     // Even though we use a #define below, this is still needed. Somehow.
     template<typename>
     class ConfigImplDev;

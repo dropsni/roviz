@@ -8,8 +8,8 @@ CannyItem::CannyItem()
 
     this->input = this->addInput<Image>("Input");
     this->output = this->addOutput<Image>("Output");
-    this->thres = this->addTrim("Threshold 1", 1, 100, 100);
-    this->ratio = this->addTrim("Ratio", 1, 10, 100);
+    this->trim_thres = this->addTrim("Threshold 1", 1, 100);
+    this->trim_ratio = this->addTrim("Ratio", 1, 10, 90);
 }
 
 CannyItem::~CannyItem()
@@ -28,8 +28,8 @@ void CannyItem::thread()
         if(in.format() != Image::Gray8)
             continue;
 
-        t1 = this->trimValue(thres);
-        t2 = t1 * this->trimValue(ratio);
+        t1 = this->trim_thres.value();
+        t2 = t1 * this->trim_ratio.value();
         cv::Canny(in.toCv(), out, t1, t2);
         this->pushOut(Image(out), this->output);
     }

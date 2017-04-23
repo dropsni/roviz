@@ -26,7 +26,7 @@ public:
 private:
     void starting(void) override;
     void thread(void) override;
-    void trimChanged(Trim trim, double value) override;
+    void trimChanged(double value) override;
 
     QImage test_pattern;
     QTimer timer;

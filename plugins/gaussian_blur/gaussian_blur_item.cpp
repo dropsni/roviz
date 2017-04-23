@@ -8,7 +8,7 @@ GaussianBlurItem::GaussianBlurItem()
 
     this->input = this->addInput<Image>("Input");
     this->output = this->addOutput<Image>("Output");
-    this->trim = this->addTrim("Blur Factor", 0.1, 10, 100);
+    this->trim = this->addTrim("Blur Factor", 0, 10, 100);
 }
 
 GaussianBlurItem::~GaussianBlurItem()
@@ -25,7 +25,7 @@ void GaussianBlurItem::thread()
         cv::GaussianBlur(img.toCv(),
                          out,
                          cv::Size(0, 0),
-                         this->trimValue(this->trim));
+                         this->trim.value());
         this->pushOut(Image(out, {img.id()}), this->output);
     }
 }

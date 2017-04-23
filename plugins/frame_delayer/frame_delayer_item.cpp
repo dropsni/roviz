@@ -8,20 +8,12 @@ FrameDelayerItem::FrameDelayerItem()
 
     this->input = this->addInput<Image>("Input");
     this->output = this->addOutput<Image>("Output");
-    this->delay_trim = this->addTrim("Delay (Frames)", 1, 10);
-    this->delay = 1;
+    this->trim_delay = this->addTrim("Delay (Frames)", 1, 10);
 }
 
 FrameDelayerItem::~FrameDelayerItem()
 {
     this->stop();
-}
-
-void FrameDelayerItem::starting()
-{
-    std::lock_guard<std::mutex> g(this->mtx);
-
-    this->delay = this->trimValue(this->delay_trim);
 }
 
 void FrameDelayerItem::thread()
@@ -32,7 +24,7 @@ void FrameDelayerItem::thread()
         std::lock_guard<std::mutex> g(this->mtx);
 
         this->queue.push(this->newest<Image>(this->input));
-        if(this->delay >= this->queue.size())
+        if(this->trim_delay.value() >= this->queue.size())
             continue;
 
         this->pushOut(this->queue.front(), this->output);
@@ -40,11 +32,10 @@ void FrameDelayerItem::thread()
     }
 }
 
-void FrameDelayerItem::trimChanged(void *, int value)
+void FrameDelayerItem::trimChanged(void *, int)
 {
     std::lock_guard<std::mutex> g(this->mtx);
 
-    this->delay = value;
     // Clear queue
     std::queue<Image>().swap(this->queue);
 }

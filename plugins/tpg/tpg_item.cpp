@@ -27,7 +27,7 @@ TPGItem::~TPGItem()
 
 void TPGItem::starting()
 {
-    this->timeout = 1000 / this->trimValue(this->trim);
+    this->timeout = 1000 / this->trim.value();
     this->timer_expired = false;
     this->timer.start(this->timeout);
 }
@@ -67,7 +67,7 @@ void TPGItem::thread()
     }
 }
 
-void TPGItem::trimChanged(Trim, double value)
+void TPGItem::trimChanged(double value)
 {
     std::lock_guard<std::mutex> g(this->mutex());
 

@@ -349,35 +349,13 @@ protected:
      * @param name Name of the value
      * @param min Minimum value
      * @param max Maximum value
-     * @return Handle to the trim value
-     *
-     * Adds a trim value with whole-number steps. See addTrim().
-     *
-     * \sa addTrim
-     * \sa trimValue
-     * \sa trimChanged
-     */
-    Trim addTrim(std::string name, int min, int max) override;
-
-    /**
-     * @brief Add a trim value
-     * @param name Name of the value
-     * @param min Minimum value
-     * @param max Maximum value
      * @param steps Number of steps between min and max
      * @return Handle to the trim value
      *
      * A trim value is a value, that can be adjusted (trimmed) at runtime. The
      * user can changed it e.g. through a slider on a GUI.
      */
-    Trim addTrim(std::string name, double min, double max, int steps) override;
-
-    /**
-     * @brief Get the value of a trim value
-     * @param trim Handle to the trim value returned from addTrim()
-     * @return The value the trim value currently has
-     */
-    double trimValue(Trim trim) const override;
+    Trim addTrim(std::string name, double min, double max, int steps = 0, bool num_of_steps = true) override;
 
     /**
      * @brief Called, when the trim value changed
@@ -387,7 +365,7 @@ protected:
      * This function will be called in the main thread, _not_ the thread that
      * the thread() function lives in.
      */
-    virtual void trimChanged(Trim trim, double value) override;
+    virtual void trimChanged(double value) override;
 
     // Returns config using move-semantics
     template<class T>

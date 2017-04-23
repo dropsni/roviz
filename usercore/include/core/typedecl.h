@@ -10,14 +10,12 @@ class QSlider;
 
 struct InputTag{};
 struct OutputTag{};
-struct TrimTag{};
 
 #ifdef ROVIZ_EXPORT
 // Insert the typdefs for the exported case here
 #else
 typedef StrongTypedef<InputTag, ItemInput*, nullptr> Input;
 typedef StrongTypedef<OutputTag, ItemOutput*, nullptr> Output;
-typedef StrongTypedef<TrimTag, QSlider*, nullptr> Trim;
 
 class RovizItem;
 /**

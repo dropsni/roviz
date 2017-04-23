@@ -20,16 +20,14 @@ public:
     ~FrameDelayerItem();
 
 protected:
-    void starting(void) override;
     void thread(void) override;
     void trimChanged(void *trim, int value);
 
 private:
     Input input;
     Output output;
-    Trim delay_trim;
+    Trim trim_delay;
     std::queue<Image> queue;
-    unsigned int delay;
     std::mutex mtx;
 };
 

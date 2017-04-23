@@ -65,6 +65,9 @@ RovizItemDevBase::~RovizItemDevBase()
 {
     if(this->settingsScope()->parentScope() != nullptr)
         SharedWindow::instance(this->settingsScope()->parentScope())->removeItem(this);
+
+    for(auto &conn : _this->trim_conns)
+        disconnect(conn);
 }
 
 QWidget *RovizItemDevBase::widget()
@@ -155,51 +158,43 @@ void RovizItemDevBase::pushOut(StreamObject obj, Output output)
         _this->out_widgets[output]->update();
 }
 
-Trim RovizItemDevBase::addTrim(std::string name, int min, int max)
+Trim RovizItemDevBase::addTrim(std::string name, double min, double max, int steps, bool num_of_steps)
 {
-    return this->addTrim(name, min, max, (max - min) + 1);
-}
+    Trim trim(name, min, max, steps, num_of_steps);
+    QSlider *slider = trim.slider();
 
-Trim RovizItemDevBase::addTrim(std::string name, double min, double max, int steps)
-{
-    QSlider *slider = new QSlider();
-    QVBoxLayout *layout = new QVBoxLayout();
-    SliderLabel *label = new SliderLabel(min, max, steps, QString::fromStdString(name));
+    // Because the settings are not available yet
+    connect(this->settingsScope(), &SettingsScope::parentScopeChanged,
+            [this, slider, name]()
+    {
+        QVariant var = this->settingsScope()->value("Trim/" + QString::fromStdString(name));
+        if(var.isValid())
+            slider->setValue(var.toInt());
+        else
+            slider->setValue(0);
+    });
 
-    slider->setMinimum(0);
-    slider->setMaximum(steps - 1);
-    slider->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-    slider->setFixedWidth(50);
-    layout->addWidget(new QLabel(QString::fromStdString(name)));
-    layout->addWidget(slider);
-    layout->addWidget(label);
-    layout->setAlignment(Qt::AlignCenter | Qt::AlignHCenter);
-    _this->main_control_layout->addLayout(layout);
+    // Yes, we have to calculate that again because trim cannot be copied.
+    // IMPORTANT: If the calculation changes, change it here as well!
+    double factor = (max - min) / steps;
 
-    connect(slider, &QSlider::valueChanged,
-            _this.data(), &RovizItemDevBasePrivate::trimChangedSlot);
+    // We need to add the connections to a list because the application
+    // segfaults on exit if we don't disconnect them first in the destructor.
+    _this->trim_conns.append(
+        connect(slider, &QSlider::valueChanged,
+                [this, name, min, factor, slider](int value)
+    {
+        this->settingsScope()->setValue("Trim/" + QString::fromStdString(name), value);
+        emit this->trimChanged(min + factor * static_cast<double>(value));
+    }));
 
+    _this->main_control_layout->addLayout(trim.layout());
     _this->collapse_btn->show();
 
-    // TODO Why?
-//    slider->setObjectName(QString::fromStdString(name));
-    _this->sliders.append(slider);
-    _this->slider_to_label.insert(slider, label);
-    return Trim(slider);
+    return trim;
 }
 
-double RovizItemDevBase::trimValue(Trim trim) const
-{
-    QSlider *s;
-
-    s = static_cast<QSlider*>(trim);
-    if(s)
-        return _this->slider_to_label[s]->value();
-    else
-        return 0.0f;
-}
-
-void RovizItemDevBase::trimChanged(Trim, double)
+void RovizItemDevBase::trimChanged(double)
 {
 }
 

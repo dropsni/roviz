@@ -56,19 +56,6 @@ void RovizItemDevBasePrivate::inputStateChanged()
     this->in_mappers.insert(in, map);
 }
 
-void RovizItemDevBasePrivate::trimChangedSlot(int value)
-{
-    QSlider *s;
-    SliderLabel *sl;
-
-    s = static_cast<QSlider*>(sender());
-    sl = this->slider_to_label[s];
-    sl->setValue(value);
-    _this->settingsScope()->setValue(QString("Sliders/") + sl->name(), value);
-
-    _this->trimChanged(Trim(s), sl->value());
-}
-
 void RovizItemDevBasePrivate::collapseBtnClicked()
 {
     QPropertyAnimation *an = new QPropertyAnimation(this->control_base, "maximumWidth");

@@ -20,7 +20,7 @@ protected:
 private:
     Input input;
     Output output;
-    Trim thres, ratio;
+    Trim trim_thres, trim_ratio;
 };
 
 #endif // CANNY_ITEM_H

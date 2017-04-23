@@ -23,14 +23,15 @@ public:
     Config(RovizItem *parent, const std::string &name, const typename ConfigStorageType<T>::type &default_index, const std::list<std::string> &possibilities, bool restart_when_changed = false);
     Config(RovizItem *parent, const std::string &name, const typename ConfigStorageType<T>::type &default_value, bool restart_when_changed = false);
     Config(RovizItem *parent, const std::string &name, const typename ConfigStorageType<T>::type &default_value, enum FilePath::Mode file_mode, const std::string &filter, bool restart_when_changed = false);
+    ~Config() = default;
 
     // Don't allow copies
     Config(const Config &config) = delete;
+    Config &operator=(const Config &config) = delete;
 
     // Allow moving
     Config(Config &&config);
     Config &operator=(Config &&config);
-    ~Config() = default;
 
     typename ConfigStorageType<T>::type value(void);
     bool changed(void);

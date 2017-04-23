@@ -32,6 +32,7 @@ public:
     QList<ConfigImplDevBase*> config_impls;
     QWidget *control_base;
     QImage default_image;
+    QList<QMetaObject::Connection> trim_conns;
     bool config_present, conf_loaded;
 
     RovizItemDevBasePrivate(RovizItemDevBase *q);
@@ -41,12 +42,6 @@ public slots:
      * @brief The input was connected or disconnected
      */
     void inputStateChanged(void);
-
-    /**
-     * @brief Wrapper that calls trimChanged()
-     * @param value The new trim value
-     */
-    void trimChangedSlot(int value);
 
     /**
      * @brief (Un)collapses all trim sliders

@@ -8,6 +8,7 @@
 #include "item/abstract_item.h"
 #include "bases/export_handling.h"
 #include "core/typedecl.h"
+#include "core/trim.h"
 #include "config/config_base.h"
 #include "streams/stream_object.h"
 
@@ -63,10 +64,8 @@ protected:
     Output addOutputBase(std::string name);
 
     virtual void pushOut(StreamObject obj, Output output);
-    virtual Trim addTrim(std::string name, int min, int max);
-    virtual Trim addTrim(std::string name, double min, double max, int steps);
-    virtual double trimValue(Trim trim) const;
-    virtual void trimChanged(Trim trim, double value);
+    virtual Trim addTrim(std::string name, double min, double max, int steps, bool num_of_steps);
+    virtual void trimChanged(double value);
     virtual void addConfig(const ConfigBase &config);
 
 public slots:
