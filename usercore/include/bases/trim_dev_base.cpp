@@ -9,13 +9,15 @@
 #include "gui/slider_label.h"
 #include "core/roviz_item.h"
 
-// TODO Implement num_of_steps
-TrimDevBase::TrimDevBase(std::string name, double min, double max, int steps, std::function<void (double)> notifier_func)
+TrimDevBase::TrimDevBase(RovizItem *item, std::string name, double min, double max, int steps, std::function<void (double)> notifier_func)
     : _this(new TrimDevBasePrivate())
 {
     QLabel *label_name = new QLabel(QString::fromStdString(name));
     QLabel *label_value = new QLabel();
 
+    _this->loaded = false;
+    _this->name = name;
+    _this->item = item;
     if(steps <= 0)
         steps = max - min;
 
@@ -37,11 +39,15 @@ TrimDevBase::TrimDevBase(std::string name, double min, double max, int steps, st
     {
         t->val = min + (factor * static_cast<double>(value));
         label_value->setText(QString::number(t->val));
+        t->item->settingsScope()->setValue("Trim/" + QString::fromStdString(t->name), value);
         notifier_func(t->val);
     });
 
+    QObject::connect(_this->item->settingsScope(), &SettingsScope::parentScopeChanged,
+                     [t](){t->load();});
+
     // TODO Why?
-    //    slider->setObjectName(QString::fromStdString(name));
+//    slider->setObjectName(QString::fromStdString(name));
 }
 
 TrimDevBase::TrimDevBase(TrimDevBase &&trim)
@@ -60,11 +66,6 @@ TrimDevBase &TrimDevBase::operator=(TrimDevBase &&trim)
 QLayout *TrimDevBase::layout() const
 {
     return _this->main_layout;
-}
-
-QSlider *TrimDevBase::slider() const
-{
-    return _this->main_slider;
 }
 
 double TrimDevBase::value() const

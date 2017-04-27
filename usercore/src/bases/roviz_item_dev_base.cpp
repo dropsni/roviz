@@ -158,38 +158,12 @@ void RovizItemDevBase::pushOut(StreamObject obj, Output output)
         _this->out_widgets[output]->update();
 }
 
-Trim RovizItemDevBase::addTrim(std::string name, double min, double max, int steps, std::function<void (double)> notifier_func)
+Trim RovizItemDevBase::addTrimBase(Trim trim)
 {
-    Trim trim(name, min, max, steps, notifier_func);
-    QSlider *slider = trim.slider();
-
-    // Because the settings are not available yet
-    connect(this->settingsScope(), &SettingsScope::parentScopeChanged,
-            [this, slider, name]()
-    {
-        QVariant var = this->settingsScope()->value("Trim/" + QString::fromStdString(name));
-        if(var.isValid())
-            slider->setValue(var.toInt());
-        else
-            slider->setValue(0);
-    });
-
-    connect(trim.slider(), &QSlider::valueChanged,
-            [this, name](int value)
-            {this->settingsScope()->setValue("Trim/" + QString::fromStdString(name), value);});
-
     _this->main_control_layout->addLayout(trim.layout());
     _this->collapse_btn->show();
 
     return trim;
-}
-
-Trim RovizItemDevBase::addTrim(std::string name, double min, double max, double step_size, std::function<void (double)> notifier_func)
-{
-    // TODO Maybe we need a better cast from double to int
-    return this->addTrim(name, min, max,
-                         static_cast<int>((max - min) / step_size),
-                         notifier_func);
 }
 
 void RovizItemDevBase::addConfig(const ConfigBase &config)
@@ -202,4 +176,4 @@ void RovizItemDevBase::start()
 {
 }
 
-INSTANTIATE_PORTABLE_BASE
+INSTANTIATE_ROVIZ_BASE

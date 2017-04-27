@@ -8,12 +8,13 @@
 
 class QLayout;
 class QSlider;
+class RovizItem;
 
 class ROVIZ_EXPORT_CLASS TrimDevBase
 {
 public:
     TrimDevBase() = default;
-    TrimDevBase(std::string name, double min, double max, int steps, std::function<void (double)> notifier_func = [](double){});
+    TrimDevBase(RovizItem *item, std::string name, double min, double max, int steps, std::function<void (double)> notifier_func = [](double){});
     virtual ~TrimDevBase() = default;
 
     // Don't allow copies
@@ -25,7 +26,6 @@ public:
     TrimDevBase &operator=(TrimDevBase &&trim);
 
     QLayout *layout(void) const;
-    QSlider *slider(void) const;
     virtual double value(void) const;
 
 signals:

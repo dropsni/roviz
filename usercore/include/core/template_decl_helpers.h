@@ -16,22 +16,22 @@
     #define INIT_STREAM_CPP(T, color)
 #endif
 
-#define INSTANTIATE_PORTABLE_ITEM_P(T) \
+#define INSTANTIATE_ROVIZ_ITEM_P(T) \
     template Input RovizItem::addInput<T>(std::string name); \
     template Output RovizItem::addOutput<T>(std::string name); \
     template T RovizItem::next<T>(Input in); \
     template T RovizItem::newest<T>(Input in);
 
 // The '##' is needed to prevent expansion
-#define INSTANTIATE_PORTABLE_ITEM \
-    DO_FOR_ALL_STREAMS(INSTANTIATE_PORTABLE_ITEM##_P)
+#define INSTANTIATE_ROVIZ_ITEM \
+    DO_FOR_ALL_STREAMS(INSTANTIATE_ROVIZ_ITEM##_P)
 
-#define INSTANTIATE_PORTABLE_BASE_P(T) \
+#define INSTANTIATE_ROVIZ_BASE_P(T) \
     template Input RovizItemBase::addInputBase<T>(std::string name); \
     template Output RovizItemBase::addOutputBase<T>(std::string name);
 
-#define INSTANTIATE_PORTABLE_BASE \
-    DO_FOR_ALL_STREAMS(INSTANTIATE_PORTABLE_BASE##_P)
+#define INSTANTIATE_ROVIZ_BASE \
+    DO_FOR_ALL_STREAMS(INSTANTIATE_ROVIZ_BASE##_P)
 
 #define DO_FOR_ALL_CONFIG_TYPES(EXPR) \
     EXPR(int) \

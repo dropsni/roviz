@@ -1,8 +1,8 @@
 
 #include "trim.h"
 
-Trim::Trim(std::string name, double min, double max, int steps, std::function<void (double)> notifier_func)
-    : TrimBase(name, min, max, steps, notifier_func)
+Trim::Trim(RovizItem *item, std::string name, double min, double max, int steps, std::function<void (double)> notifier_func)
+    : TrimBase(item, name, min, max, steps, notifier_func)
 {
 }
 

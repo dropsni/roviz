@@ -74,7 +74,10 @@ std::mutex &RovizItem::mutex() const
 
 Trim RovizItem::addTrim(std::string name, double min, double max, double step_size, std::function<void (double)> notifier_func)
 {
-    return RovizItemBase::addTrim(name, min, max, step_size, notifier_func);
+    // The cast is still needed because lround returns a long and not an int
+    return this->addTrim(name, min, max,
+                         static_cast<int>(std::lround((max - min) / step_size)),
+                         notifier_func);
 }
 
 void RovizItem::pushIn(StreamObject obj, Input in)
@@ -111,7 +114,11 @@ bool RovizItem::waitForInput(Input in)
 
 Trim RovizItem::addTrim(std::string name, double min, double max, int steps, std::function<void (double)> notifier_func)
 {
-    return RovizItemBase::addTrim(name, min, max, steps, notifier_func);
+    // We need to create that here to avoid force-casting RovizItemBase to
+    // RovizItem when giving the Trim the 'this' pointer.
+    Trim trim(this, name, min, max, steps, notifier_func);
+
+    return RovizItemBase::addTrimBase(std::move(trim));
 }
 
 void RovizItem::pause()
@@ -127,6 +134,11 @@ void RovizItem::unpause()
 
     _this->is_paused = false;
     this->wake();
+}
+
+Trim RovizItem::addTrimBase(Trim trim)
+{
+    return RovizItemBase::addTrimBase(std::move(trim));
 }
 
 void RovizItem::start()
@@ -231,4 +243,4 @@ Config<double> RovizItem::addConfig<double>(const std::string &name, const Confi
     return conf;
 }
 
-INSTANTIATE_PORTABLE_ITEM
+INSTANTIATE_ROVIZ_ITEM

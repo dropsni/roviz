@@ -355,8 +355,8 @@ protected:
      * A trim value is a value, that can be adjusted (trimmed) at runtime. The
      * user can changed it e.g. through a slider on a GUI.
      */
-    Trim addTrim(std::string name, double min, double max, int steps = 0, std::function<void (double)> notifier_func = [](double){}) override;
-    Trim addTrim(std::string name, double min, double max, double step_size, std::function<void (double)> notifier_func = [](double){}) override;
+    Trim addTrim(std::string name, double min, double max, int steps = 0, std::function<void (double)> notifier_func = [](double){});
+    Trim addTrim(std::string name, double min, double max, double step_size, std::function<void (double)> notifier_func = [](double){});
 
     // Returns config using move-semantics
     template<class T>
@@ -427,6 +427,8 @@ private:
      * \sa pause
      */
     void unpause(void) override;
+
+    Trim addTrimBase(Trim trim) override;
     ///@}
 };
 

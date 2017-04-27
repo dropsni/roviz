@@ -6,11 +6,13 @@
 #include "bases/export_handling.h"
 #include "bases/trim_dev_base.h"
 
+class RovizItem;
+
 class ROVIZ_EXPORT_CLASS Trim : public TrimBase
 {
 public:
     Trim() = default;
-    Trim(std::string name, double min, double max, int steps = 0, std::function<void (double)> notifier_func = [](double){});
+    Trim(RovizItem *item, std::string name, double min, double max, int steps = 0, std::function<void (double)> notifier_func = [](double){});
     ~Trim() = default;
 
     // Don't allow copies
