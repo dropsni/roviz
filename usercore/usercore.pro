@@ -18,7 +18,6 @@ SOURCES +=  src/usercore.cpp \
             src/gui/dock_widget_signaling.cpp \
             src/gui/image_widget.cpp \
             src/gui/shared_window.cpp \
-            src/gui/slider_label.cpp \
             src/streams/image.cpp \
             src/streams/image_m.cpp \
             src/streams/image_p.cpp \
@@ -53,7 +52,6 @@ HEADERS +=  include/usercore.h \
             include/gui/dock_widget_signaling.h \
             include/gui/image_widget.h \
             include/gui/shared_window.h \
-            include/gui/slider_label.h \
             include/streams/all_streams.h \
             include/streams/image.h \
             include/streams/image_m.h \
