@@ -1,5 +1,5 @@
 
-#include "trim_dev_base.h"
+#include "backend_dev/trim_dev_base.h"
 
 #include <QObject>
 #include <QWidget>

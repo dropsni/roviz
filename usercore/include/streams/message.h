@@ -3,11 +3,12 @@
 
 #include <string>
 #include <initializer_list>
+#include "core/export_handling.h"
 #include "streams/stream_object.h"
+#include ROVIZ_STREAM_BASE_INCLUDE
 
 class QWidget;
 class MessagePrivate;
-class StreamBase;
 
 class Message : public StreamObject
 {

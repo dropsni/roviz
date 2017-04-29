@@ -1,7 +1,7 @@
 #ifndef CONFIG_STORAGE_TYPE_H
 #define CONFIG_STORAGE_TYPE_H
 
-#include "file_path.h"
+#include "config/file_path.h"
 
 template<typename T>
 class ConfigStorageType

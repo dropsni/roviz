@@ -4,7 +4,7 @@
 #include <memory>
 #include <vector>
 #include "core/template_decl.h"
-#include "bases/export_handling.h"
+#include "core/export_handling.h"
 
 struct SrcTreeNode;
 class StreamObjectPrivate;

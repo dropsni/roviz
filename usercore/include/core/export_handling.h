@@ -24,9 +24,11 @@
     #define ROVIZ_INIT_ITEM(name)
     #define OPENCV_PRESENT
 #else
-    #define ROVIZ_BASE_INCLUDE        "bases/roviz_item_dev_base.h"
-    #define ROVIZ_BASE_INCLUDE_P      "bases/roviz_item_dev_base_p.h"
-    #define ROVIZ_CONFIG_IMPL_INCLUDE "config/config_impl_dev.h"
+    #define ROVIZ_BASE_INCLUDE        "backend_dev/roviz_item_dev_base.h"
+    #define ROVIZ_BASE_INCLUDE_P      "backend_dev/roviz_item_dev_base_p.h"
+    #define ROVIZ_STREAM_BASE_INCLUDE "backend_dev/stream_dev_base.h"
+    #define ROVIZ_CONFIG_IMPL_INCLUDE "backend_dev/config_impl_dev.h"
+    #define ROVIZ_TRIM_BASE_INCLUDE   "backend_dev/trim_dev_base.h"
     #define ROVIZ_EXPORT_CLASS        Q_DECL_EXPORT
     #define ROVIZ_INVOKABLE           Q_INVOKABLE
     #define ROVIZ_INIT_ITEM(name)     {this->setImage(QImage(":/logo_"#name".png"));}
@@ -40,6 +42,10 @@
     // Select the appropriate base class for the items here
     class RovizItemDevBase;
     typedef RovizItemDevBase RovizItemBase;
+
+    // Select the appropriate base class for streams here
+    class StreamDevBase;
+    typedef StreamDevBase StreamBase;
 
     // Select the appropriate implementation of the configs
     class ConfigImplDevBase;

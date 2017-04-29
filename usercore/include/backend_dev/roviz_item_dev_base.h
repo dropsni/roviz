@@ -6,7 +6,7 @@
 #include <QScopedPointer>
 #include <QMenu>
 #include "item/abstract_item.h"
-#include "bases/export_handling.h"
+#include "core/export_handling.h"
 #include "core/typedecl.h"
 #include "core/trim.h"
 #include "config/config_base.h"

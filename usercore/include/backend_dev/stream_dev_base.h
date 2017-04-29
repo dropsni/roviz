@@ -1,17 +1,17 @@
-#ifndef STREAM_BASE_H
-#define STREAM_BASE_H
+#ifndef STREAM_DEV_BASE_H
+#define STREAM_DEV_BASE_H
 
 #include <QObject>
 #include <QWidget>
 #include "streams/stream_object.h"
 
-class StreamBase : public QObject
+class StreamDevBase : public QObject
 {
 Q_OBJECT
 
 public:
-    StreamBase() = default;
-    virtual ~StreamBase() = default;
+    StreamDevBase() = default;
+    virtual ~StreamDevBase() = default;
     QWidget *widget(void);
 
 protected:
@@ -21,4 +21,4 @@ signals:
     void newObject(StreamObject obj);
 };
 
-#endif // STREAM_BASE_H
+#endif // STREAM_DEV_BASE_H

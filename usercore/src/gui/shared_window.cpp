@@ -16,7 +16,7 @@
 #include <QToolButton>
 #include <QCloseEvent>
 #include "helper/settings_scope.h"
-#include "bases/roviz_item_dev_base.h"
+#include "backend_dev/roviz_item_dev_base.h"
 #include "gui/dock_widget_signaling.h"
 
 QMap<SettingsScope*, SharedWindow*> SharedWindow::inst;

@@ -1,6 +1,6 @@
 
-#include "bases/roviz_item_dev_base.h"
-#include "bases/roviz_item_dev_base_p.h"
+#include "backend_dev/roviz_item_dev_base.h"
+#include "backend_dev/roviz_item_dev_base_p.h"
 
 #include <QString>
 #include <QWidget>
@@ -13,11 +13,11 @@
 #include "item/item_input.h"
 #include "helper/settings_scope.h"
 #include "gui/gui_manager.h"
-#include "bases/stream_to_input_mapper.h"
-#include "config/config_impl_dev_base.h"
+#include "backend_dev/stream_to_input_mapper.h"
+#include "backend_dev/config_impl_dev_base.h"
 #include "gui/shared_window.h"
 #include "gui/slider_label.h"
-#include "bases/stream_base.h"
+#include "backend_dev/stream_dev_base.h"
 
 RovizItemDevBasePrivate::RovizItemDevBasePrivate(RovizItemDevBase *q)
 {

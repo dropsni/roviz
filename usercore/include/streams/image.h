@@ -2,8 +2,9 @@
 #define PORTABLEIMAGE_H
 
 #include <initializer_list>
-#include "bases/export_handling.h"
+#include "core/export_handling.h"
 #include "streams/stream_object.h"
+#include ROVIZ_STREAM_BASE_INCLUDE
 
 #ifdef QT_PRESENT
     #include <QImage>
@@ -14,7 +15,6 @@
 #endif
 
 class ImagePrivate;
-class StreamBase;
 
 /**
  * @brief A portable image class with smart memory management

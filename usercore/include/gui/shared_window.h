@@ -7,7 +7,7 @@
 #include <QMap>
 #include <QByteArray>
 #include <QIcon>
-#include "bases/export_handling.h"
+#include "core/export_handling.h"
 
 class RovizItemDevBase;
 class QCloseEvent;

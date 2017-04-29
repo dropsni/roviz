@@ -3,7 +3,7 @@
 
 #include <string>
 #include <mutex>
-#include "bases/export_handling.h"
+#include "core/export_handling.h"
 #include ROVIZ_CONFIG_IMPL_INCLUDE
 
 class RovizItem;

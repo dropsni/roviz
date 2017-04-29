@@ -42,7 +42,7 @@
  * -# Now you're ready to go!
  */
 
-#include "bases/export_handling.h"
+#include "core/export_handling.h"
 #include "core/template_decl_helpers.h"
 
 // Including the header here leads to a circular inclusion

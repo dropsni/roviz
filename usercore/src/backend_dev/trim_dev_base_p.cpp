@@ -1,5 +1,5 @@
 
-#include "trim_dev_base_p.h"
+#include "backend_dev/trim_dev_base_p.h"
 
 #include <QVariant>
 #include <QSlider>

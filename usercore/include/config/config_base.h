@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-#include "bases/export_handling.h"
+#include "core/export_handling.h"
 
 class ROVIZ_EXPORT_CLASS ConfigBase
 {

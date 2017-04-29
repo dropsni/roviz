@@ -3,10 +3,10 @@
 
 #include <functional>
 #include <QObject>
-#include "config/config_impl_dev_base.h"
+#include "backend_dev/config_impl_dev_base.h"
 #include "config/config_storage_type.h"
 #include "config/file_path.h"
-#include "bases/export_handling.h"
+#include "core/export_handling.h"
 
 class QWidget;
 class QHBoxLayout;

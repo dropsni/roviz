@@ -3,7 +3,6 @@
 #include "streams/message_p.h"
 
 #include <QWidget>
-#include <bases/stream_base.h>
 
 Message::Message(const StreamObject &base)
 {

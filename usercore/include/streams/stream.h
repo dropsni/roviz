@@ -1,7 +1,8 @@
 #ifndef STREAM_H
 #define STREAM_H
 
-#include "bases/stream_base.h"
+#include "core/export_handling.h"
+#include ROVIZ_STREAM_BASE_INCLUDE
 
 template<class T>
 class Stream : public StreamBase

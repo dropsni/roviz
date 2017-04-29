@@ -2,7 +2,7 @@
 #define STREAMTOINPUTMAPPER_H
 
 #include <QObject>
-#include "bases/export_handling.h"
+#include "core/export_handling.h"
 #include "core/typedecl.h"
 #include "streams/stream_object.h"
 

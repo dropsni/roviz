@@ -3,8 +3,8 @@
 
 #include <string>
 #include <functional>
-#include "bases/export_handling.h"
-#include "bases/trim_dev_base.h"
+#include "core/export_handling.h"
+#include ROVIZ_TRIM_BASE_INCLUDE
 
 class RovizItem;
 

@@ -59,7 +59,7 @@
 #include <memory>
 #include <functional>
 #include <mutex>
-#include "bases/export_handling.h"
+#include "core/export_handling.h"
 #include "config/config_base.h"
 #include "config/config.h"
 #include "core/template_decl.h"

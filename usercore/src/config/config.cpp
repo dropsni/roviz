@@ -1,5 +1,5 @@
 
-#include "config.h"
+#include "config/config.h"
 
 #include "core/template_decl.h"
 #include "config/file_path.h"

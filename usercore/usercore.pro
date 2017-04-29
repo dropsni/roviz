@@ -1,13 +1,20 @@
 include(usercore.pri)
 
 SOURCES +=  src/usercore.cpp \
-            src/bases/roviz_item_dev_base.cpp \
-            src/bases/roviz_item_dev_base_p.cpp \
-            src/bases/stream_base.cpp \
-            src/bases/stream_to_input_mapper.cpp \
+            src/backend_dev/config_impl_dev.cpp \
+            src/backend_dev/roviz_item_dev_base.cpp \
+            src/backend_dev/roviz_item_dev_base_p.cpp \
+            src/backend_dev/stream_to_input_mapper.cpp \
+            src/backend_dev/trim_dev_base.cpp \
+            src/backend_dev/trim_dev_base_p.cpp \
+            src/backend_dev/stream_dev_base.cpp \
+            src/config/config.cpp \
+            src/config/config_p.cpp \
+            src/config/file_path.cpp \
             src/core/input_queue.cpp \
             src/core/roviz_item.cpp \
             src/core/template_decl.cpp \
+            src/core/trim.cpp \
             src/gui/dock_widget_signaling.cpp \
             src/gui/image_widget.cpp \
             src/gui/shared_window.cpp \
@@ -18,29 +25,30 @@ SOURCES +=  src/usercore.cpp \
             src/streams/message.cpp \
             src/streams/message_m.cpp \
             src/streams/stream.cpp \
-            src/streams/stream_object.cpp \
-    include/config/config.cpp \
-    include/config/config_impl_dev.cpp \
-    include/config/config_p.cpp \
-    include/config/config_base.cpp \
-    include/config/config_impl_dev_base.cpp \
-    include/config/file_path.cpp \
-    include/core/trim.cpp \
-    include/bases/trim_dev_base_p.cpp \
-    include/bases/trim_dev_base.cpp
+            src/streams/stream_object.cpp
 
 HEADERS +=  include/usercore.h \
-            include/bases/export_handling.h \
-            include/bases/roviz_item_dev_base.h \
-            include/bases/roviz_item_dev_base_p.h \
-            include/bases/stream_base.h \
-            include/bases/stream_to_input_mapper.h \
+            include/backend_dev/config_impl_dev.h \
+            include/backend_dev/config_impl_dev_base.h \
+            include/backend_dev/roviz_item_dev_base.h \
+            include/backend_dev/roviz_item_dev_base_p.h \
+            include/backend_dev/stream_to_input_mapper.h \
+            include/backend_dev/trim_dev_base.h \
+            include/backend_dev/trim_dev_base_p.h \
+            include/backend_dev/stream_dev_base.h \
+            include/config/config.h \
+            include/config/config_base.h \
+            include/config/config_p.h \
+            include/config/config_storage_type.h \
+            include/config/file_path.h \
+            include/core/export_handling.h \
             include/core/input_queue.h \
             include/core/roviz_item.h \
             include/core/roviz_item_p.h \
             include/core/strong_typedef.h \
             include/core/template_decl.h \
             include/core/template_decl_helpers.h \
+            include/core/trim.h \
             include/core/typedecl.h \
             include/gui/dock_widget_signaling.h \
             include/gui/image_widget.h \
@@ -55,17 +63,7 @@ HEADERS +=  include/usercore.h \
             include/streams/message_p.h \
             include/streams/stream.h \
             include/streams/stream_object.h \
-            include/streams/stream_object_p.h \
-    include/config/config.h \
-    include/config/config_impl_dev.h \
-    include/config/config_p.h \
-    include/config/config_base.h \
-    include/config/config_impl_dev_base.h \
-    include/config/config_storage_type.h \
-    include/config/file_path.h \
-    include/core/trim.h \
-    include/bases/trim_dev_base_p.h \
-    include/bases/trim_dev_base.h
+            include/streams/stream_object_p.h
 
 RESOURCES   +=  resources.qrc
 LIBS        += -lopencv_core

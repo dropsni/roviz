@@ -3,8 +3,8 @@
 
 #include <string>
 #include <memory>
-#include "bases/export_handling.h"
-#include "bases/trim_dev_base_p.h"
+#include "backend_dev/trim_dev_base_p.h"
+#include "core/export_handling.h"
 
 class QLayout;
 class QSlider;

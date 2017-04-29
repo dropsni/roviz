@@ -4,7 +4,7 @@
 #include <QRectF>
 #include <QImage>
 #include <QLabel>
-#include "bases/export_handling.h"
+#include "core/export_handling.h"
 #include "streams/image.h"
 #include "streams/stream_object.h"
 

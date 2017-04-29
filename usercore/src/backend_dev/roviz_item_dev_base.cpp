@@ -1,6 +1,6 @@
 
-#include "bases/roviz_item_dev_base.h"
-#include "bases/roviz_item_dev_base_p.h"
+#include "backend_dev/roviz_item_dev_base.h"
+#include "backend_dev/roviz_item_dev_base_p.h"
 
 #include <QWidget>
 #include <QLabel>
@@ -15,9 +15,10 @@
 #include "core/template_decl.h"
 #include "gui/shared_window.h"
 #include "gui/slider_label.h"
-#include "bases/stream_base.h"
+#include "backend_dev/stream_dev_base.h"
 #include "streams/stream.h"
 #include "opencv/cv.h"
+
 RovizItemDevBase::RovizItemDevBase(std::string type_name)
     : AbstractItem(QString::fromStdString(type_name)),
       _this(new RovizItemDevBasePrivate(this))
