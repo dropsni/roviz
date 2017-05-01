@@ -14,7 +14,6 @@
 #include "item/item_output.h"
 #include "core/template_decl.h"
 #include "gui/shared_window.h"
-#include "gui/slider_label.h"
 #include "backend_dev/stream_dev_base.h"
 #include "streams/stream.h"
 #include "opencv/cv.h"

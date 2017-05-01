@@ -16,7 +16,6 @@
 #include "backend_dev/stream_to_input_mapper.h"
 #include "backend_dev/config_impl_dev_base.h"
 #include "gui/shared_window.h"
-#include "gui/slider_label.h"
 #include "backend_dev/stream_dev_base.h"
 
 RovizItemDevBasePrivate::RovizItemDevBasePrivate(RovizItemDevBase *q)
@@ -96,28 +95,7 @@ void RovizItemDevBasePrivate::parentScopeChanged(SettingsScope *old)
         SharedWindow::instance(old)->removeItem(_this);
 
     if(_this->settingsScope()->parentScope() != nullptr)
-    {
-        if(old == nullptr)
-        {
-            for(auto &setting_name : _this->settingsScope()->allSettings().keys())
-            {
-                if(setting_name.left(8) != "Sliders/")
-                    continue;
-
-                trim_name = setting_name.mid(8);
-                for(auto &trim : this->slider_to_label.keys())
-                {
-                    if(this->slider_to_label[trim]->name() == trim_name)
-                    {
-                        trim->setValue(_this->settingsScope()->value(setting_name).toInt());
-                        break;
-                    }
-                }
-            }
-        }
-
         SharedWindow::instance(_this->settingsScope()->parentScope())->addItem(_this);
-    }
 
     for(const auto &conf : this->config_impls)
         conf->load();

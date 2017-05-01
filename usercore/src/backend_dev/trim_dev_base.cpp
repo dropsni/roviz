@@ -5,8 +5,8 @@
 #include <QWidget>
 #include <QSlider>
 #include <QVBoxLayout>
+#include <QLabel>
 #include "helper/settings_scope.h"
-#include "gui/slider_label.h"
 #include "core/roviz_item.h"
 
 TrimDevBase::TrimDevBase(RovizItem *item, std::string name, double min, double max, int steps, std::function<void (double)> notifier_func)

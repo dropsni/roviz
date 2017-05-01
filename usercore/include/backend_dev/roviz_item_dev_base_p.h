@@ -27,8 +27,6 @@ public:
     QHBoxLayout *main_layout, *main_image_layout, *main_control_layout;
     QMap<Output, QWidget*> out_widgets;
     QMap<ItemInput*, StreamToInputMapper*> in_mappers;
-    QList<QSlider*> sliders;
-    QMap<QSlider*, SliderLabel*> slider_to_label;
     QList<ConfigImplDevBase*> config_impls;
     QWidget *control_base;
     QImage default_image;
