@@ -14,7 +14,18 @@ struct OutputTag{};
 #ifdef ROVIZ_EXPORT
 // Insert the typdefs for the exported case here
 #else
+/**
+ * @brief Input of an RovizItem
+ *
+ * \ingroup roviz_core
+ */
 typedef StrongTypedef<InputTag, ItemInput*, nullptr> Input;
+
+/**
+ * @brief Output of an RovizItem
+ *
+ * \ingroup roviz_core
+ */
 typedef StrongTypedef<OutputTag, ItemOutput*, nullptr> Output;
 
 class RovizItem;

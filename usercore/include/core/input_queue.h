@@ -11,7 +11,7 @@
  *
  * Used to queue streams that arrive at item inputs.
  *
- * \ingroup roviz_framework
+ * \ingroup roviz_core
  */
 class ROVIZ_EXPORT_CLASS InputQueue
 {

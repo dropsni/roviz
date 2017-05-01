@@ -16,22 +16,33 @@ Message::Message(std::initializer_list<SourceID> sources)
     this->initSources(sources);
 }
 
-const Message::Entry &Message::entry(unsigned int index) const
+const Message::Entry &Message::entry(const std::string &name) const
 {
-    if(index > _this->entries.size())
-        return _this->default_entry;
+    for(const auto &e : _this->entries)
+        if(e.name == name)
+            return e;
 
-    return _this->entries[index];
+    // Return something invalid if nothing's found
+    return _this->default_entry;
 }
 
 const Message::Entry &Message::at(int index) const
 {
-    return this->entry(index);
+    if(index < this->size() - 1)
+        return _this->entries[index];
+
+    // Return something invalid if the index is out of bounds
+    return _this->default_entry;
 }
 
 const Message::Entry &Message::operator[](int index) const
 {
     return _this->entries[index];
+}
+
+int Message::size() const
+{
+    return _this->entries.size();
 }
 
 #ifndef ROVIZ_EXPORT

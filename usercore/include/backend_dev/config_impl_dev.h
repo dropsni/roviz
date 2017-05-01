@@ -15,22 +15,89 @@ class QLabel;
 template<typename T>
 class ConfigPrivate;
 
+/**
+ * @brief Dev implementation of the config interface
+ *
+ * Implements the saving of configs using itemframeworks settingsScope().
+ *
+ * \sa Config
+ * \sa ConfigPrivate
+ * \sa ConfigImplDevBase
+ * \ingroup roviz_backend_dev
+ */
 template<typename T>
 class ROVIZ_EXPORT_CLASS ConfigImplDev : public ConfigImplDevBase
 {
 public:
+    /**
+     * @param config Private data of the config
+     */
     ConfigImplDev(ConfigPrivate<T> *config);
+
+    /**
+     * @return The QWidget associated with this config
+     *
+     * Every config has a widget that is used to adjust the value. This function
+     * returns the widget for this config.
+     */
     QWidget *widget() const override;
+
+    /**
+     * @brief Load the config from the settingsScope().
+     */
     void load(void);
+
+    /**
+     * @return true, if the item should be restarted when a config changes,
+     * false otherwise.
+     */
     bool restartAfterChange(void) const override;
 
-    void init(int min, int max); // Int
-    void init(double min, double max); // Double
-    void init(std::function<bool (std::string&)> checker); // String
-    void init(const std::list<std::string> &possibilities); // List TODO check 'API' version (possibilities)
-    void init(void); // Bool
-    void init(const std::string &filter, enum FilePath::Mode file_mode); // File path
+    /**
+     * @brief Initialize the config (int)
+     *
+     * \sa Config
+     */
+    void init(int min, int max);
 
+    /**
+     * @brief Initialize the config (double)
+     *
+     * \sa Config
+     */
+    void init(double min, double max);
+
+    /**
+     * @brief Initialize the config (string)
+     *
+     * \sa Config
+     */
+    void init(std::function<bool (std::string&)> checker);
+
+    /**
+     * @brief Initialize the config (list)
+     *
+     * \sa Config
+     */
+    void init(const std::list<std::string> &possibilities); // TODO check 'API' version (possibilities)
+
+    /**
+     * @brief Initialize the config (bool)
+     *
+     * \sa Config
+     */
+    void init(void);
+
+    /**
+     * @brief Initialize the config (file path)
+     *
+     * \sa Config
+     */
+    void init(const std::string &filter, enum FilePath::Mode file_mode);
+
+    /**
+     * @brief Called, when the config changes are applied
+     */
     void changed(void) override;
 
 private:

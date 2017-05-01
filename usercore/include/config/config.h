@@ -12,17 +12,38 @@
 
 class RovizItem;
 
+/**
+ * @brief Storage for the configuration of an item
+ *
+ * You can store configurations that you rarely change using this class. Always
+ * use the RovizItem::addConfig functions to construct a Config!
+ *
+ * \ingroup roviz_interface
+ * \ingroup roviz_core
+ */
 template<typename T>
 class ROVIZ_EXPORT_CLASS Config : public ConfigBase
 {
 public:
+    /**
+     * @brief Constructs an empty config, do not use manually
+     */
     Config();
+
+    /**
+     * @name Config interface
+     *
+     * Look at RovizItem::addConfig for an explanation of the parameters.
+     * Never use those directly, always use RovizItem::addConfig!
+     */
+    ///@{
     Config(RovizItem *parent, const std::string &name, const typename ConfigStorageType<T>::type &default_value, int min, int max, bool restart_when_changed = false);
     Config(RovizItem *parent, const std::string &name, const typename ConfigStorageType<T>::type &default_value, double min, double max, bool restart_when_changed = false);
     Config(RovizItem *parent, const std::string &name, const typename ConfigStorageType<T>::type &default_value, std::function<bool (std::string&)> checker = [](std::string s){return s;}, bool restart_when_changed = false);
     Config(RovizItem *parent, const std::string &name, const typename ConfigStorageType<T>::type &default_index, const std::list<std::string> &possibilities, bool restart_when_changed = false);
     Config(RovizItem *parent, const std::string &name, const typename ConfigStorageType<T>::type &default_value, bool restart_when_changed = false);
     Config(RovizItem *parent, const std::string &name, const typename ConfigStorageType<T>::type &default_value, enum FilePath::Mode file_mode, const std::string &filter, bool restart_when_changed = false);
+    ///@}
     ~Config() = default;
 
     // Don't allow copies
@@ -33,16 +54,28 @@ public:
     Config(Config &&config);
     Config &operator=(Config &&config);
 
+    /**
+     * @brief Get the current value stored in the config
+     * @return The value with the appropriate type
+     */
     typename ConfigStorageType<T>::type value(void);
+
+    /**
+     * @brief Check, wether the value stored in the config has changed since it
+     * was last accessed.
+     * @return true, if the value changed, false otherwise
+     */
     bool changed(void);
 
     // TODO Make private and friend?
+    /**
+     * @brief Get the implementation base
+     * @return Pointer to the implementation
+     */
     ConfigImplBase *getImplBase(void) const override;
 
 private:
     std::unique_ptr<ConfigPrivate<T> > _this;
-
-    void init(RovizItem *parent, const std::string &name, const typename ConfigStorageType<T>::type &default_value, bool restart_when_changed);
 };
 
 #endif // CONFIG_H

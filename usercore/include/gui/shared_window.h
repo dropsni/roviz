@@ -26,13 +26,11 @@ class QWidget;
  * items on the scene in one aggregated window. It also handles the
  * start/pause/stop mechanism.
  *
- * \ingroup roviz_framework
+ * \ingroup roviz_core
  */
 class ROVIZ_EXPORT_CLASS SharedWindow : public QMainWindow
 {
 Q_OBJECT
-
-// TODO Add Qt::QueuedConnection?
 
 // Singleton
 Q_DISABLE_COPY(SharedWindow)

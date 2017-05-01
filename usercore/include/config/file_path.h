@@ -4,6 +4,17 @@
 #include <string>
 #include "core/export_handling.h"
 
+/**
+ * @brief Class used as a tag for file paths
+ *
+ * A string and a file path are basically the same thing, but they have
+ * different meanings and widgets for a config. You can use this as the type
+ * for a config and you'll get a nice file-selector widget. The value of the
+ * config will be a string list (because you can select multiple file).
+ *
+ * \ingroup roviz_interface
+ * \ingroup roviz_core
+ */
 class ROVIZ_EXPORT_CLASS FilePath
 {
 public:
@@ -14,15 +25,6 @@ public:
         MultipleFiles,
         Directory
     };
-
-    FilePath(std::string path, bool is_dir = false);
-    std::string path(void) const;
-    bool isDir(void) const;
-    bool isFile(void) const;
-
-private:
-    std::string file_path;
-    bool is_dir;
 };
 
 #endif // FILE_PATH_H

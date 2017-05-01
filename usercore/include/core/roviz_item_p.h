@@ -9,6 +9,11 @@
 #include "core/input_queue.h"
 #include "config/config_base.h"
 
+/**
+ * @brief Private part of RovizItem
+ *
+ * \ingroup roviz_core
+ */
 class RovizItemPrivate
 {
 public:

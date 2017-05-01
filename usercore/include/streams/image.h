@@ -28,7 +28,9 @@ class ImagePrivate;
  * manipulate each others data. You can also directly convert Qt images
  * (QImage) and OpenCV images (cv::Mat) to Images.
  *
- * \ingroup roviz_framework
+ * \ingroup roviz_interface
+ * \ingroup roviz_streams
+ * \ingroup roviz_core
  */
 class ROVIZ_EXPORT_CLASS Image : public StreamObject
 {

@@ -13,7 +13,7 @@ class QShowEvent;
  *
  * This is a normal QDockWidget, but it emits signals when closed/shown.
  *
- * \ingroup roviz_framework
+ * \ingroup roviz_core
  */
 class DockWidgetSignaling : public QDockWidget
 {

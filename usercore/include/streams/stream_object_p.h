@@ -3,6 +3,11 @@
 
 #include "stream_object.h"
 
+/**
+ * @brief Private part of the StreamObject class
+ *
+ * \ingroup roviz_core
+ */
 class StreamObjectPrivate
 {
 public:

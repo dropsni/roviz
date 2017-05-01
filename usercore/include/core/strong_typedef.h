@@ -5,6 +5,8 @@
  * @brief A strong typedef that doesn't allow much casting around
  *
  * From http://www.ilikebigbits.com/blog/2014/5/6/type-safe-identifiers-in-c
+ *
+ * \ingroup roviz_core
  */
 template<class Tag, class Impl, Impl default_value>
 class StrongTypedef

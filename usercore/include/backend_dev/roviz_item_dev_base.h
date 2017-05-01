@@ -22,7 +22,8 @@ class RovizItemDevBasePrivate;
 
 /**
  * @brief Base class that binds RovizItem to the itemframework/Qt
- * \ingroup roviz_framework
+ *
+ * \ingroup roviz_backend_dev
  */
 class ROVIZ_EXPORT_CLASS RovizItemDevBase : public AbstractItem
 {
@@ -30,6 +31,9 @@ class ROVIZ_EXPORT_CLASS RovizItemDevBase : public AbstractItem
     friend class RovizItemDevBasePrivate;
 
 public:
+    /**
+     * @param type_name Name of the item
+     */
     explicit RovizItemDevBase(std::string type_name);
     virtual ~RovizItemDevBase();
 
@@ -77,7 +81,16 @@ protected slots:
     ///@}
 
 protected:
+    /**
+     * @brief Opens the item in the SharedWindow
+     */
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override;
+
+    /**
+     * @brief Show the 'Configure' option in the context menu if the item has
+     * configs
+     * @param menu The context menu
+     */
     void contextMenuPrepare(QMenu &menu) const override;
 
 private:

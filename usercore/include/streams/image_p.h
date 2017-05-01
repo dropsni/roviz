@@ -6,6 +6,11 @@
 #include "streams/image.h"
 #include "streams/stream_object_p.h"
 
+/**
+ * @brief Private part of the Image class
+ *
+ * \ingroup roviz_core
+ */
 class ImagePrivate : public StreamObjectPrivate
 {
 public:
@@ -21,6 +26,13 @@ public:
     enum Image::Format f;
 
     ~ImagePrivate();
+
+    /**
+     * @brief Initialize some generic properties
+     * @param w Width
+     * @param h Height
+     * @param f Format
+     */
     void init(int w, int h, enum Image::Format f);
 };
 

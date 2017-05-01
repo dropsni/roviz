@@ -5,6 +5,12 @@
 
 class QWidget;
 
+/**
+ * @brief Base class of ConfigImplDev that doesn't depend on the type of the
+ * config
+ *
+ * \ingroup roviz_backend_dev
+ */
 class ConfigImplDevBase
 {
 public:

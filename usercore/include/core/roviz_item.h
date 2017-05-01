@@ -2,53 +2,12 @@
 #define PORTABLEITEM_H
 
 /**
- * \defgroup roviz_framework Roviz Framework
- *
- * The roviz framework is optimized to easily manipulate image/video streams
- * within the itemframework. It is completely decoupled from Qt and items that
- * are carefully written can therefore directly run on e.g. embedded hardware.
- * To achieve this portability, the base class of all items, RovizItem, is
- * written portably in pure C++. Depending on how the user compiles the program,
- * RovizItem gets a different base class. To use it with the itemframework, it
- * has RovizItemDevBase as the base class. This is the base class intended for
- * development. A more stripped down framework that would run in some kind of
- * production environment might be called RovizItemProdBase, but this class
- * heavily depends on the use case, which is why it doesn't exist yes. Items
- * that are for simulation/development purposes only, like test image generators
- * and the like, can be flagged as non-exportable by inheriting from
- * RovizItemNoExport, which provides the same interface, but won't be available
- * in production.
- *
- * Items also have a start/pause/stop mechanism that is triggered externally.
- * When an item is started, it gets its own thread where it can process all
- * the data. Pause will make the thread wait, but preserves the state the
- * item currently has. Stop will stop the thread and the item will fall
- * back to its initial state.
- *
- * There are trim values and configs to customize the item. Trim values are
- * nummeric values that can be adjusted at runtime. Adjusting them can for
- * example happen with a slider on a GUI (which RovizItemDevBase provides).
- * Configs on the other hand are not meant to change often. Everytime a config
- * changes, the item is automatically restarted. The advantage of them, is that
- * there are more data types available for configs. They can be used for static
- * values, like frame sizes, that you most likely only have to set once and can
- * forget about afterwards.
- *
- * The robot framework also provides message streams for control data. Once
- * the desired information is extracted from images, these messages could
- * be used to control other applications. They could also be a second
- * source of information that isn't as ressource intensive as images.
- *
- * If you want to write an item using the roviz framework, have a look at
- * RovizItem to get started.
- */
-
-/**
  * \defgroup roviz_plugins Robot Plugins
  *
  * Plugins for the roviz framework.
  *
- * \ingroup roviz_framework
+ * \ingroup roviz_interface
+ * \ingroup roviz_core
  */
 
 // TODO If one thread alone can't handle all data, spawn more threads
@@ -101,7 +60,7 @@ class ROVIZ_EXPORT_CLASS RovizItem : public RovizItemBase
 
 public:
     /**
-     * @param typeName The name of the item
+     * @param type_name The name of the item
      */
     explicit RovizItem(std::string type_name);
     virtual ~RovizItem();
@@ -114,9 +73,9 @@ protected:
      * change during runtime. After the call to this function, the item has
      * to be in a clean, fresh state. The item is not allowed to have any
      * information of the previous "session" or thread run left. That would
-     * defy the purpose of the start/stop mechanism. The inputs/outputs are
-     * preserved, you can set them in the constructor. The thread doesn't run
-     * yet at this point.
+     * defy the purpose of the start/stop mechanism. The inputs/outputs and
+     * trims/configs are preserved, you can set them in the constructor. The
+     * thread doesn't run yet at this point.
      *
      * \sa stopped
      */
@@ -356,24 +315,94 @@ protected:
      * user can changed it e.g. through a slider on a GUI.
      */
     Trim addTrim(std::string name, double min, double max, int steps = 0, std::function<void (double)> notifier_func = [](double){});
+
+    /**
+     * @brief Add a trim value
+     * @param name Name of the value
+     * @param min Minimum value
+     * @param max Maximum value
+     * @param step_size Indicates, how much lies between two steps
+     * @return Handle to the trim value
+     *
+     * Overloaded function
+     *
+     * Example for step_size: min = 1, max = 10, step_size = 0.1 => 90 steps
+     * between min and max.
+     */
     Trim addTrim(std::string name, double min, double max, double step_size, std::function<void (double)> notifier_func = [](double){});
 
-    // Returns config using move-semantics
+    /**
+     * @brief Add a config for an integer value
+     * @param name Name of the config
+     * @param default_value Default value if nothing is saved in the config file
+     * @param min Lowest possible value
+     * @param max Highest possible value
+     * @param restart_when_changed If true, the item will be restarted when
+     * changes to the config are applied
+     * @return The newly created config
+     */
     template<class T>
     Config<T> addConfig(const std::string &name, const typename ConfigStorageType<T>::type &default_value, int min, int max, bool restart_when_changed = false);
 
+    /**
+     * @brief Add a config for a floating point (double) value
+     * @param name Name of the config
+     * @param default_value Default value if nothing is saved in the config file
+     * @param min Lowest possible value
+     * @param max Highest possible value
+     * @param restart_when_changed If true, the item will be restarted when
+     * changes to the config are applied
+     * @return The newly created config
+     */
     template<class T>
     Config<T> addConfig(const std::string &name, const typename ConfigStorageType<T>::type &default_value, double min, double max, bool restart_when_changed = false);
 
+    /**
+     * @brief Add a config for a string value
+     * @param name Name of the config
+     * @param default_value Default value if nothing is saved in the config file
+     * @param checker Function that checks if a string is a valid possible
+     * input. Returns true, if it's valid, false otherwise.
+     * @param restart_when_changed If true, the item will be restarted when
+     * changes to the config are applied
+     * @return The newly created config
+     */
     template<class T>
     Config<T> addConfig(const std::string &name, const typename ConfigStorageType<T>::type &default_value, std::function<bool (std::string&)> checker = [](std::string s){return s;}, bool restart_when_changed = false);
 
+    /**
+     * @brief Add a config for a list of strings
+     * @param name Name of the config
+     * @param default_index Default index if nothing is saved in the config file
+     * @param possibilities A list of all possible values
+     * @param restart_when_changed If true, the item will be restarted when
+     * changes to the config are applied
+     * @return The newly created config
+     */
     template<class T>
     Config<T> addConfig(const std::string &name, const typename ConfigStorageType<T>::type &default_index, const std::list<std::string> &possibilities, bool restart_when_changed = false);
 
+    /**
+     * @brief Add a config for a boolean value
+     * @param name Name of the config
+     * @param default_value Default value if nothing is saved in the config file
+     * @param restart_when_changed If true, the item will be restarted when
+     * changes to the config are applied
+     * @return The newly created config
+     */
     template<class T>
     Config<T> addConfig(const std::string &name, const typename ConfigStorageType<T>::type &default_value, bool restart_when_changed = false);
 
+    /**
+     * @brief Add a config for an integer value
+     * @param name Name of the config
+     * @param default_value Default value if nothing is saved in the config file
+     * @param file_mode Determines, what can be selected (see FilePath::Mode)
+     * @param filter Filter the allowed file types
+     * @param restart_when_changed If true, the item will be restarted when
+     * changes to the config are applied
+     * @return The newly created config
+     */
     template<class T>
     Config<T> addConfig(const std::string &name, const typename ConfigStorageType<T>::type &default_value, enum FilePath::Mode file_mode, const std::string &filter, bool restart_when_changed = false);
 

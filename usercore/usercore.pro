@@ -10,7 +10,6 @@ SOURCES +=  src/usercore.cpp \
             src/backend_dev/stream_dev_base.cpp \
             src/config/config.cpp \
             src/config/config_p.cpp \
-            src/config/file_path.cpp \
             src/core/input_queue.cpp \
             src/core/roviz_item.cpp \
             src/core/template_decl.cpp \

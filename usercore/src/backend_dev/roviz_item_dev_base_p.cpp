@@ -80,13 +80,6 @@ void RovizItemDevBasePrivate::collapseBtnClicked()
     an->start();
 }
 
-// TODO Don't we already have that?
-void RovizItemDevBasePrivate::restartIfRunning()
-{
-    if(_this->running())
-        _this->restart();
-}
-
 void RovizItemDevBasePrivate::parentScopeChanged(SettingsScope *old)
 {
     QString trim_name;

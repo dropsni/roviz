@@ -1,10 +1,6 @@
 #ifndef TEMPLATE_DECL_HELPERS_H
 #define TEMPLATE_DECL_HELPERS_H
 
-#define STREAM_COLOR_GREEN  Qt::green
-#define STREAM_COLOR_RED    Qt::red
-#define STREAM_COLOR_YELLOW Qt::yellow
-
 #ifndef ROVIZ_EXPORT
     #define INIT_STREAM_CPP(T, color) \
         STARTUP_ADD_COMPONENT(StreamInit##T) \

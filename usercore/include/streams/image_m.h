@@ -4,12 +4,14 @@
 #include "streams/image.h"
 
 /**
- * @brief The mutable version PortableImage
+ * @brief The mutable version Image
  *
  * You can manipulate the image data in this class, but it will be always
  * converted to the non-mutable version before it is sent to an item.
  *
- * \ingroup robot_framework
+ * \ingroup roviz_interface
+ * \ingroup roviz_streams
+ * \ingroup roviz_core
  */
 class ROVIZ_EXPORT_CLASS ImageMutable : public Image
 {

@@ -16,6 +16,11 @@ class StreamToInputMapper;
 class RovizItemDevBase;
 class ConfigImplDevBase;
 
+/**
+ * @brief Privale part of RovizItemDevBase
+ *
+ * \ingroup roviz_backend_dev
+ */
 class RovizItemDevBasePrivate : public QObject
 {
     Q_OBJECT
@@ -47,17 +52,18 @@ public slots:
     void collapseBtnClicked(void);
 
     /**
-     * @brief Restarts the item operation if the item is running
-     */
-    void restartIfRunning(void);
-
-    /**
-     * @brief Adds the item to the shared window (cannot be done in
-     * the constructor, because the SettingsScope is still parentless.
+     * @brief Adds the item to the shared window and loads the configs (cannot
+     * be done in the constructor, because the SettingsScope is still
+     * parentless)
      * @param Old SettingsScope
      */
     void parentScopeChanged(SettingsScope *old);
 
+    /**
+     * @brief Show the config window
+     *
+     * \sa Config
+     */
     void showConfigWindow(void);
 };
 

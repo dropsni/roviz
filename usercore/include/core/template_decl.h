@@ -34,12 +34,17 @@
  *    by using the macro INIT_STREAM_CPP(YourClass, YOUR_COLOR) in the
  *    streams/template_decl.cpp file. The color is a Qt color, some are
  *    portably predefined in streams/template_decl_helpers.h, but you can also
- *    use a custom color. See the Qt documentaion for that.
+ *    use a custom color. See the Qt documentaion for that. But to keep things
+ *    exportable, you should add a new #define for your new color in
+ *    core/export_handling.h instead of using it directly.
  * -# Include your class in streams/all_streams.h
  *    If a file needs to include all stream object it will include
  *    streams/all_streams.h. Just add a line where you include the header of
  *    your class.
  * -# Now you're ready to go!
+ *
+ * \ingroup roviz_stream_dev
+ * \ingroup roviz_core
  */
 
 #include "core/export_handling.h"
@@ -54,7 +59,7 @@ class Message;
 
 // The MOC is not smart enough to handle it if its encapsulated
 // within the macro. If you want to add a stream, copy one of the
-// classes below and name it StreamInit*YOUR_TYPE*.
+// classes below and name it StreamInit*YOUR_CLASS*.
 
 // PortableImage stream
 class Q_DECL_EXPORT StreamInitImage : public QObject \

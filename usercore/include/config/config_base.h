@@ -5,6 +5,11 @@
 
 #include "core/export_handling.h"
 
+/**
+ * @brief Base class of Config that doesn't depend on the type
+ *
+ * \ingroup roviz_core
+ */
 class ROVIZ_EXPORT_CLASS ConfigBase
 {
 public:

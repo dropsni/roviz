@@ -4,6 +4,11 @@
 #include "message.h"
 #include "streams/stream_object_p.h"
 
+/**
+ * @brief Private part of the Message class
+ *
+ * \ingroup roviz_core
+ */
 class MessagePrivate : public StreamObjectPrivate
 {
 public:

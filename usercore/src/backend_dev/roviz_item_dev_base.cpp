@@ -66,6 +66,7 @@ RovizItemDevBase::~RovizItemDevBase()
     if(this->settingsScope()->parentScope() != nullptr)
         SharedWindow::instance(this->settingsScope()->parentScope())->removeItem(this);
 
+    // There are signals that are triggered during destruction
     for(auto &conn : _this->trim_conns)
         disconnect(conn);
 }
@@ -78,7 +79,7 @@ QWidget *RovizItemDevBase::widget()
 
 void RovizItemDevBase::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
-    // Opens the shared window on a double click
+    // In case AbstractItem also implements this
     AbstractItem::mouseDoubleClickEvent(event);
     SharedWindow::instance(this->settingsScope()->parentScope())->load();
     _this->main_widget->parentWidget()->show();

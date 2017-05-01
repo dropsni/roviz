@@ -127,8 +127,7 @@ template<>
 void ConfigImplDev<double>::init(double min, double max)
 {
     QLineEdit *edit = new QLineEdit();
-    // 1000 is the default
-    QDoubleValidator *valid = new QDoubleValidator(min, max, 1000);
+    QDoubleValidator *valid = new QDoubleValidator(min, max, 1000); // 1000 is the default
 
     edit->setValidator(valid);
     QObject::connect(edit, &QLineEdit::textEdited,
@@ -148,7 +147,6 @@ void ConfigImplDev<std::string>::init(std::function<bool (std::string&)> checker
 {
     QLineEdit *edit = new QLineEdit();
 
-    // TODO Add custom validator
     QObject::connect(edit, &QLineEdit::textEdited,
                      [this, checker](QString text)
     {

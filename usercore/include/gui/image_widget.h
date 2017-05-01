@@ -20,7 +20,7 @@ class QResizeEvent;
  * This widget automatically scales the image it is supposed to display to the
  * correct size.
  *
- * \ingroup roviz_framework
+ * \ingroup roviz_core
  */
 class ROVIZ_EXPORT_CLASS ImageWidget : public QLabel
 {
@@ -46,6 +46,11 @@ private:
     Image image; // To keep a reference, prevents deletion
     QRectF image_rect;
 
+    /**
+     * @brief Recalculates the image dimensions after a resize
+     * @param w The new width of the bounding rect
+     * @param h The new height of the bounding rect
+     */
     void recalcImageRect(double w, double h);
 };
 
